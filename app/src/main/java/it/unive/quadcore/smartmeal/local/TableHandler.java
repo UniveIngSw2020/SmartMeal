@@ -1,6 +1,10 @@
-package it.unive.quadcore.smartmeal.comunication;
+package it.unive.quadcore.smartmeal.local;
 
 import java.util.Set;
+
+import it.unive.quadcore.smartmeal.model.Customer;
+import it.unive.quadcore.smartmeal.model.ManagerTable;
+import it.unive.quadcore.smartmeal.model.Table;
 
 public abstract class TableHandler {
     // Visibile solo alla classe Locale (private o package-private)

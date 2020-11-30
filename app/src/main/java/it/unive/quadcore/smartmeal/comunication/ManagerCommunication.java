@@ -4,6 +4,9 @@ import java.util.Collection;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
+import it.unive.quadcore.smartmeal.model.Table;
+import it.unive.quadcore.smartmeal.model.WaiterNotification;
+
 public abstract class ManagerCommunication {
     public static ManagerCommunication getInstance() {
         throw new UnsupportedOperationException("Not implemented yet");

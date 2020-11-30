@@ -1,4 +1,4 @@
-package it.unive.quadcore.smartmeal.comunication;
+package it.unive.quadcore.smartmeal.storage;
 
 public final class CustomerStorage {
 

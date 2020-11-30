@@ -1,4 +1,4 @@
-package it.unive.quadcore.smartmeal.comunication;
+package it.unive.quadcore.smartmeal.model;
 
 public abstract class Table {
     // possibile costruttore package-private chiamato da un'altra classe

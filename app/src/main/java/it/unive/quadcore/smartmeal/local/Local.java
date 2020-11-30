@@ -1,7 +1,12 @@
-package it.unive.quadcore.smartmeal.comunication;
+package it.unive.quadcore.smartmeal.local;
 
 import java.util.Set;
 import java.util.SortedSet;
+
+import it.unive.quadcore.smartmeal.model.Customer;
+import it.unive.quadcore.smartmeal.model.ManagerTable;
+import it.unive.quadcore.smartmeal.model.Table;
+import it.unive.quadcore.smartmeal.model.WaiterNotification;
 
 public abstract class Local {
     public static Local getInstance() {

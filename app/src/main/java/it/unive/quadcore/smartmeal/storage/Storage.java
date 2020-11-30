@@ -1,4 +1,6 @@
-package it.unive.quadcore.smartmeal.comunication;
+package it.unive.quadcore.smartmeal.storage;
+
+import it.unive.quadcore.smartmeal.model.LocalDescription;
 
 public final class Storage {
 

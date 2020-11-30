@@ -1,6 +1,8 @@
-package it.unive.quadcore.smartmeal.comunication;
+package it.unive.quadcore.smartmeal.storage;
 
 import java.util.Set;
+
+import it.unive.quadcore.smartmeal.model.ManagerTable;
 
 public final class ManagerStorage {
 

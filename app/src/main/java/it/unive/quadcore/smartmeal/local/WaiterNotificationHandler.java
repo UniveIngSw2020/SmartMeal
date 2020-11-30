@@ -1,6 +1,8 @@
-package it.unive.quadcore.smartmeal.comunication;
+package it.unive.quadcore.smartmeal.local;
 
 import java.util.SortedSet;
+
+import it.unive.quadcore.smartmeal.model.WaiterNotification;
 
 public abstract class WaiterNotificationHandler {
     public abstract void addNotification(WaiterNotification waiterNotification);

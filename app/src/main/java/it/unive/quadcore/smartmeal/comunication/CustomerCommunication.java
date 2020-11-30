@@ -3,6 +3,9 @@ package it.unive.quadcore.smartmeal.comunication;
 import java.util.Collection;
 import java.util.function.Consumer;
 
+import it.unive.quadcore.smartmeal.model.Customer;
+import it.unive.quadcore.smartmeal.model.Table;
+
 public abstract class CustomerCommunication {
 
     public static CustomerCommunication getInstance() {

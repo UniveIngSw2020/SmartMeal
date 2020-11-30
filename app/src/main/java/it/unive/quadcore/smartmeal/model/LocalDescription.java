@@ -1,4 +1,4 @@
-package it.unive.quadcore.smartmeal.comunication;
+package it.unive.quadcore.smartmeal.model;
 
 import android.location.Location;
 import android.media.Image;
