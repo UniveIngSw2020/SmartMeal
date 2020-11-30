@@ -1,4 +1,4 @@
-package it.unive.quadcore.smartmeal.comunication;
+package it.unive.quadcore.smartmeal.communication;
 
 import java.io.Serializable;
 
