@@ -8,14 +8,20 @@ import it.unive.quadcore.smartmeal.model.ManagerTable;
 import it.unive.quadcore.smartmeal.model.Table;
 import it.unive.quadcore.smartmeal.model.WaiterNotification;
 
-//
-
 public abstract class Local {
+
+    //campo di tipo Local per singleton
+    //campi di tipo Tablehandler e WaiterNotificationHandler
+
+    //instanziamento del campo Local per verifica del singleton
     public static Local getInstance() {
         throw new UnsupportedOperationException("Not implemented yet");
     }
 
+    //instanziamento dei campi (sia tablehandler che waiternotificationhandler),
     public abstract void createRoom();
+
+    //
     public abstract SortedSet<WaiterNotification> getWaiterNotificationList();
     public abstract void removeWaiterNotification(WaiterNotification waiterNotification);
     public abstract Set<ManagerTable> getFreeTableList();
