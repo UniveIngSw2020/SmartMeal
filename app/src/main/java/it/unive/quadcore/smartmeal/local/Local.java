@@ -8,6 +8,8 @@ import it.unive.quadcore.smartmeal.model.ManagerTable;
 import it.unive.quadcore.smartmeal.model.Table;
 import it.unive.quadcore.smartmeal.model.WaiterNotification;
 
+//
+
 public abstract class Local {
     public static Local getInstance() {
         throw new UnsupportedOperationException("Not implemented yet");
