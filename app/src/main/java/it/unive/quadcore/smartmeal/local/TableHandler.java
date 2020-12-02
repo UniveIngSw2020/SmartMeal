@@ -14,8 +14,8 @@ public abstract class TableHandler {
     // eventuale mappa tra Customer e Table (o viceversa)
 
     // TODO : pensare come risolvere problema generic
-    public abstract Set<ManagerTable> getFreeManagerTableList();
-    public abstract Set<Table> getFreeTableList();
+    //public abstract Set<ManagerTable> getFreeManagerTableList();
+    public abstract <T extends Table> Set<T> getFreeTableList();
     public abstract void changeCustomerTable(Customer customer, Table newTable);
     public abstract void assignTable(Customer customer, Table table);
     public abstract void freeTable(Table table);

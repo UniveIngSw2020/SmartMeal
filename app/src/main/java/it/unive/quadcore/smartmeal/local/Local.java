@@ -90,7 +90,7 @@ public class Local {
         if(!roomState) // La stanza non è aperta
             throw new RoomStateException(roomState);
 
-        return tableHandler.getFreeManagerTableList();
+        return tableHandler.getFreeTableList();
     }
     public void changeCustomerTable(Customer customer, Table newTable) throws RoomStateException {
         if(!roomState) // La stanza non è aperta
