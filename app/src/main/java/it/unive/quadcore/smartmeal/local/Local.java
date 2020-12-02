@@ -10,6 +10,9 @@ import it.unive.quadcore.smartmeal.model.ManagerTable;
 import it.unive.quadcore.smartmeal.model.Table;
 import it.unive.quadcore.smartmeal.model.WaiterNotification;
 
+// TODO : gestione RACE CONDITION
+// In realtà nella versione base (un solo dispositivo gestore) non ce ne dovrebbero essere di tali problemi
+
 // CLasse locale (usata dal codice di gestione dell'interfaccia grafica)
 public class Local {
     // Singletone

@@ -7,6 +7,9 @@ import it.unive.quadcore.smartmeal.model.Customer;
 import it.unive.quadcore.smartmeal.model.WaiterNotification;
 import it.unive.quadcore.smartmeal.storage.ManagerStorage;
 
+// TODO : gestione RACE CONDITION
+// Si può semplicemente mettere tutti i metodi syncrhonized
+
 // Classe visibile solo a Local
 class WaiterNotificationHandler {
 
