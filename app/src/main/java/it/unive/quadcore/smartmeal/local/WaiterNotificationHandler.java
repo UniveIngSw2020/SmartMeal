@@ -61,7 +61,7 @@ class WaiterNotificationHandler {
     // Ritorna la lista di notifiche. Se tale lista è vuota, ritorna un'eccezione.
     // E' un metodo visibile solo a Local.
     SortedSet<WaiterNotification> getNotificationList() throws WaiterNotificationException {
-        if(notificationList==null || notificationList.isEmpty())
+        if(notificationList==null || notificationList.isEmpty()) // Controllo a null non servirebbe
             throw new WaiterNotificationException("The notification list is empty");
         return notificationList;
     }
