@@ -1,17 +1,10 @@
 package it.unive.quadcore.smartmeal.storage;
 
-public final class CustomerStorage {
+public final class CustomerStorage extends Storage {
 
     /**
      * Rende non instanziabile questa classe.
      */
     private CustomerStorage() {}
 
-    public static String getName() {
-        throw new UnsupportedOperationException("Not implemented yet");
-    }
-
-    public static void setName(String name) {
-        throw new UnsupportedOperationException("Not implemented yet");
-    }
 }

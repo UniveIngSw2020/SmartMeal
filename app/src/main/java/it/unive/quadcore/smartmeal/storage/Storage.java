@@ -2,21 +2,30 @@ package it.unive.quadcore.smartmeal.storage;
 
 import it.unive.quadcore.smartmeal.model.LocalDescription;
 
-public final class Storage {
+class Storage {
 
     /**
      * Rende non instanziabile questa classe.
      */
-    private Storage() {}
+    Storage() {}
 
     public static ApplicationMode getApplicationMode() {
         throw new UnsupportedOperationException("Not implemented yet");
     }
+
     public static void setApplicationMode(ApplicationMode applicationMode) {
         throw new UnsupportedOperationException("Not implemented yet");
     }
 
     public static LocalDescription getLocalDescription() {
+        throw new UnsupportedOperationException("Not implemented yet");
+    }
+
+    public static String getName() {
+        throw new UnsupportedOperationException("Not implemented yet");
+    }
+
+    public static void setName(String name) {
         throw new UnsupportedOperationException("Not implemented yet");
     }
 }

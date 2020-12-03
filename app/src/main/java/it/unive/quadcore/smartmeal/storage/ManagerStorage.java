@@ -4,7 +4,7 @@ import java.util.Set;
 
 import it.unive.quadcore.smartmeal.model.ManagerTable;
 
-public final class ManagerStorage {
+public final class ManagerStorage extends Storage {
 
     /**
      * Rende non instanziabile questa classe.
