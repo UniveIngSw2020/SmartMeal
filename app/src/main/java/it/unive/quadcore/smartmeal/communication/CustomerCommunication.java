@@ -1,7 +1,8 @@
 package it.unive.quadcore.smartmeal.communication;
 
+import androidx.core.util.Consumer;
+
 import java.util.Collection;
-import java.util.function.Consumer;
 
 import it.unive.quadcore.smartmeal.model.Customer;
 import it.unive.quadcore.smartmeal.model.Table;
