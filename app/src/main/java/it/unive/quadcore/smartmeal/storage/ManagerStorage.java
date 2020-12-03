@@ -14,4 +14,9 @@ public final class ManagerStorage {
     public static Set<ManagerTable> getTables() {
         throw new UnsupportedOperationException("Not implemented yet");
     }
+
+    // Ritorna il numero massimo di notifiche in coda di uno stesso utente
+    public static int getMaxNotificationNumber(){
+        throw new UnsupportedOperationException("Not implemented yet");
+    }
 }
