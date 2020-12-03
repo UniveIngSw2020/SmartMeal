@@ -1,5 +1,7 @@
 package it.unive.quadcore.smartmeal.local;
 
+import android.app.Activity;
+
 import java.util.Collection;
 import java.util.Set;
 import java.util.SortedSet;
@@ -41,7 +43,7 @@ public class Local {
     }
 
     // Creazione stanza virtuale
-    public void createRoom() throws RoomStateException {
+    public void createRoom(Activity activity) throws RoomStateException {
 
         if(roomState) // Stanza virtuale già aperta
             throw new RoomStateException(roomState);
@@ -67,7 +69,7 @@ public class Local {
         managerCommunication.onSelectTable( (customer,table) -> tableHandler.assignTable(customer,table));
 
         // Dico di avviare la stanza al gestore comunicazione
-        managerCommunication.startRoom();
+        managerCommunication.startRoom(activity);
 
         // Setto la stanza come aperta
         roomState = true;
