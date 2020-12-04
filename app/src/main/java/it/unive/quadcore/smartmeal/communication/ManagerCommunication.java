@@ -20,15 +20,19 @@ import com.google.android.gms.nearby.connection.PayloadTransferUpdate;
 import com.google.android.gms.nearby.connection.Strategy;
 
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
-import java.util.Collection;
+import java.io.ObjectOutputStream;
+import java.util.HashSet;
 import java.util.Objects;
 
 import it.unive.quadcore.smartmeal.model.Customer;
 import it.unive.quadcore.smartmeal.model.Table;
 import it.unive.quadcore.smartmeal.model.WaiterNotification;
 import it.unive.quadcore.smartmeal.storage.ManagerStorage;
+
+import static it.unive.quadcore.smartmeal.communication.RequestType.FREE_TABLE_LIST;
 
 public abstract class ManagerCommunication {
     private static final String TAG = "ManagerCommunication";
@@ -38,7 +42,7 @@ public abstract class ManagerCommunication {
 
 
     @Nullable
-    private Supplier<Collection<Table>> onRequestFreeTableListCallback;
+    private Supplier<HashSet<? extends Table>> onRequestFreeTableListCallback;
 
 
     // TODO
@@ -65,15 +69,15 @@ public abstract class ManagerCommunication {
                     // TODO continuare
                     switch (requestType) {
                         case FREE_TABLE_LIST:
-                            handleFreeTableListRequest();
+                            handleFreeTableListRequest(activity, endpointId);
                             break;
                         default:
                             throw new UnsupportedOperationException("Not implemented yet");
                     }
 
                 } catch (IOException e) {
-                    Log.wtf(TAG, "Unexpected IOException: " + e);
-                    throw new AssertionError("Unexpected IOException");
+                    Log.wtf(TAG, "Unexpected input IOException: " + e);
+                    throw new AssertionError("Unexpected input IOException");
                 } catch (ClassNotFoundException | ClassCastException e) {
                     Log.wtf(TAG, "Payload was not a Message: " + e);
                     throw new AssertionError("Payload was not a Message");
@@ -128,13 +132,23 @@ public abstract class ManagerCommunication {
         };
     }
 
-    private void handleFreeTableListRequest() {
+    private void handleFreeTableListRequest(Activity activity, String toEndpointId) {
         Objects.requireNonNull(onRequestFreeTableListCallback);
+        Message response = new Message(FREE_TABLE_LIST, onRequestFreeTableListCallback.get());
+        sendMessage(activity, toEndpointId, response);
+    }
 
-//        Collection<Table> freeTableList = onRequestFreeTableListCallback.get();
-//        Message newMessage = new Message(FREE_TABLE_LIST, freeTableList);
-//
-//        Nearby.send(newMessage);
+    private void sendMessage(Activity activity, String toEndpointId, Message response) {
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        try {
+            ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
+            objectOutputStream.writeObject(response);
+            Payload filePayload = Payload.fromBytes(outputStream.toByteArray());
+            Nearby.getConnectionsClient(activity).sendPayload(toEndpointId, filePayload);
+        } catch (IOException e) {
+            Log.wtf(TAG, "Unexpected output IOException: " + e);
+            throw new AssertionError("Unexpected output IOException");
+        }
     }
 
 
@@ -167,7 +181,9 @@ public abstract class ManagerCommunication {
 
     public abstract void onNotifyWaiter(Consumer<WaiterNotification> consumer);
     public abstract void onSelectTable(BiConsumer<Customer,Table> consumer); // TODO : dire agli altri
-    public abstract void onRequestFreeTableList(Supplier<Collection<Table>> supplier);
+    public void onRequestFreeTableList(Supplier<HashSet<? extends Table>> supplier) {
+        onRequestFreeTableListCallback = supplier;
+    }
 
     public abstract void reportException(Exception exception);
 
