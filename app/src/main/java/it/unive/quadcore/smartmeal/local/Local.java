@@ -2,7 +2,7 @@ package it.unive.quadcore.smartmeal.local;
 
 import android.app.Activity;
 
-import java.util.HashSet;
+import java.util.Set;
 import java.util.SortedSet;
 
 import it.unive.quadcore.smartmeal.communication.ManagerCommunication;
@@ -65,7 +65,14 @@ public class Local {
                 });
         // TODO : pensare come risolvere problema generic
         managerCommunication.onRequestFreeTableList( () -> tableHandler.getFreeTableList());
-        managerCommunication.onSelectTable( (customer,table) -> tableHandler.assignTable(customer,table));
+        managerCommunication.onSelectTable( (customer,table) -> {
+            try{
+                tableHandler.assignTable(customer,table);
+            }
+            catch( TableException e){
+                managerCommunication.reportException(e);
+            }
+        });
 
         // Dico di avviare la stanza al gestore comunicazione
         managerCommunication.startRoom(activity);
@@ -87,19 +94,19 @@ public class Local {
 
         waiterNotificationHandler.removeNotification(waiterNotification);
     }
-    public HashSet<ManagerTable> getFreeTableList() throws RoomStateException {
+    public Set<ManagerTable> getFreeTableList() throws RoomStateException {
         if(!roomState) // La stanza non è aperta
             throw new RoomStateException(roomState);
 
         return tableHandler.getFreeTableList();
     }
-    public void changeCustomerTable(Customer customer, Table newTable) throws RoomStateException {
+    public void changeCustomerTable(Customer customer, Table newTable) throws RoomStateException, TableException {
         if(!roomState) // La stanza non è aperta
             throw new RoomStateException(roomState);
 
         tableHandler.changeCustomerTable(customer,newTable);
     }
-    public void assignTable(Customer customer, Table table) throws RoomStateException {
+    public void assignTable(Customer customer, Table table) throws RoomStateException, TableException {
         if(!roomState) // La stanza non è aperta
             throw new RoomStateException(roomState);
 
