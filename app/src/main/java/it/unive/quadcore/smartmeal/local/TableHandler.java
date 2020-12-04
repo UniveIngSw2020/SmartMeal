@@ -1,6 +1,7 @@
 package it.unive.quadcore.smartmeal.local;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 import java.util.SortedSet;
@@ -17,7 +18,7 @@ import it.unive.quadcore.smartmeal.storage.ManagerStorage;
 public abstract class TableHandler {
     private Map<Customer,ManagerTable> customerTableMap ;
 
-    private TreeSet<ManagerTable> freeTableList ; // SortedSet
+    private TreeSet<ManagerTable> freeTableList ; // TODO : SortedSet
 
     // eventuale mappa tra Customer e Table (o viceversa)
 
@@ -38,7 +39,7 @@ public abstract class TableHandler {
         ManagerTable manTable = (ManagerTable)newTable ;
 
         if(!customerTableMap.containsKey(customer))
-            throw new TableException("You don't have a table");
+            throw new TableException("This customer has alredy a table");
 
         if(!freeTableList.contains(manTable))
             throw new TableException("This table is alredy assigned");
@@ -57,12 +58,38 @@ public abstract class TableHandler {
             throw new TableException("This table is alredy assigned");
 
         if(customerTableMap.containsKey(customer))
-            throw new TableException("You have alredy a table");
+            throw new TableException("This customer has alredy a table");
 
         customerTableMap.put(customer, manTable);
 
         freeTableList.remove(table);
     }
-    public abstract void freeTable(Table table);
-    public abstract Table getTable(Customer customer);
+    public void freeTable(Table table) throws TableException {
+        ManagerTable managerTable = (ManagerTable)table;
+        if(freeTableList.contains(managerTable))
+            throw new TableException("This table isn't assigned");
+
+        /*Customer customer = null;
+        for(Customer supp : customerTableMap.keySet()){
+            if(customerTableMap.get(supp).equals(managerTable))
+                customer = supp ;
+        }*/
+        Iterator<Customer> it = customerTableMap.keySet().iterator();
+        boolean found = false;
+        Customer customer = null;
+        while(it.hasNext() && !found){
+            customer = it.next();
+            if(customerTableMap.get(customer).equals(managerTable))
+                found = true;
+        }
+        customerTableMap.remove(customer);
+
+        freeTableList.add(managerTable);
+    }
+    public Table getTable(Customer customer) throws TableException {
+        if(!customerTableMap.containsKey(customer))
+            throw new TableException("This customer doesn't have a table assigned");
+
+        return customerTableMap.get(customer);
+    }
 }

@@ -45,7 +45,7 @@ public class Local {
     public void createRoom(Activity activity) throws RoomStateException {
 
         if(roomState) // Stanza virtuale già aperta
-            throw new RoomStateException(roomState);
+            throw new RoomStateException(true);
 
         // Creazione oggetti che gestiscono i tavoli e le notifiche cameriere
         //tableHandler = new TableHandler(); // TODO : rimuovere commento quando si implementa TableHandler
@@ -84,50 +84,50 @@ public class Local {
 
     public SortedSet<WaiterNotification> getWaiterNotificationList() throws RoomStateException, WaiterNotificationException {
         if(!roomState) // La stanza non è aperta
-            throw new RoomStateException(roomState);
+            throw new RoomStateException(false);
 
         return waiterNotificationHandler.getNotificationList();
     }
     public void removeWaiterNotification(WaiterNotification waiterNotification) throws RoomStateException, WaiterNotificationException {
         if(!roomState) // La stanza non è aperta
-            throw new RoomStateException(roomState);
+            throw new RoomStateException(false);
 
         waiterNotificationHandler.removeNotification(waiterNotification);
     }
     public Set<ManagerTable> getFreeTableList() throws RoomStateException {
         if(!roomState) // La stanza non è aperta
-            throw new RoomStateException(roomState);
+            throw new RoomStateException(false);
 
         return tableHandler.getFreeTableList();
     }
     public void changeCustomerTable(Customer customer, Table newTable) throws RoomStateException, TableException {
         if(!roomState) // La stanza non è aperta
-            throw new RoomStateException(roomState);
+            throw new RoomStateException(false);
 
         tableHandler.changeCustomerTable(customer,newTable);
     }
     public void assignTable(Customer customer, Table table) throws RoomStateException, TableException {
         if(!roomState) // La stanza non è aperta
-            throw new RoomStateException(roomState);
+            throw new RoomStateException(false);
 
         tableHandler.assignTable(customer,table);
     }
-    public void freeTable(Table table) throws RoomStateException {
+    public void freeTable(Table table) throws RoomStateException, TableException {
         if(!roomState) // La stanza non è aperta
-            throw new RoomStateException(roomState);
+            throw new RoomStateException(false);
 
         tableHandler.freeTable(table);
     }
-    public Table getTable(Customer customer) throws RoomStateException {
+    public Table getTable(Customer customer) throws RoomStateException, TableException {
         if(!roomState) // La stanza non è aperta
-            throw new RoomStateException(roomState);
+            throw new RoomStateException(false);
 
         return tableHandler.getTable(customer);
     }
 
     public void closeRoom() throws RoomStateException {
         if(!roomState) // La stanza non è aperta
-            throw new RoomStateException(roomState);
+            throw new RoomStateException(false);
 
         // Metto a null
         tableHandler = null;
