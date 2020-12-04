@@ -1,6 +1,6 @@
 package it.unive.quadcore.smartmeal.local;
 
-import java.util.Set;
+import java.util.HashSet;
 
 import it.unive.quadcore.smartmeal.model.Customer;
 import it.unive.quadcore.smartmeal.model.ManagerTable;
@@ -15,7 +15,7 @@ public abstract class TableHandler {
 
     // TODO : pensare come risolvere problema generic
     //public abstract Set<ManagerTable> getFreeManagerTableList();
-    public abstract <T extends Table> Set<T> getFreeTableList();
+    public abstract HashSet<ManagerTable> getFreeTableList();
     public abstract void changeCustomerTable(Customer customer, Table newTable);
     public abstract void assignTable(Customer customer, Table table);
     public abstract void freeTable(Table table);

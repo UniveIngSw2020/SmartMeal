@@ -2,8 +2,7 @@ package it.unive.quadcore.smartmeal.local;
 
 import android.app.Activity;
 
-import java.util.Collection;
-import java.util.Set;
+import java.util.HashSet;
 import java.util.SortedSet;
 
 import it.unive.quadcore.smartmeal.communication.ManagerCommunication;
@@ -88,7 +87,7 @@ public class Local {
 
         waiterNotificationHandler.removeNotification(waiterNotification);
     }
-    public Set<ManagerTable> getFreeTableList() throws RoomStateException {
+    public HashSet<ManagerTable> getFreeTableList() throws RoomStateException {
         if(!roomState) // La stanza non è aperta
             throw new RoomStateException(roomState);
 
