@@ -33,7 +33,8 @@ public abstract class TableHandler {
     // TODO : pensare come risolvere problema generic
     //public abstract Set<ManagerTable> getFreeManagerTableList();
     public TreeSet<ManagerTable> getFreeTableList(){
-        return freeTableList ;
+
+        return new TreeSet<>(freeTableList) ;
     }
     public void changeCustomerTable(Customer customer, Table newTable) throws TableException {
         ManagerTable manTable = (ManagerTable)newTable ;

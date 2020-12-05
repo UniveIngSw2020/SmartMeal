@@ -66,6 +66,6 @@ class WaiterNotificationHandler {
     SortedSet<WaiterNotification> getNotificationList() throws WaiterNotificationException {
         if(notificationList==null || notificationList.isEmpty()) // Controllo a null non servirebbe
             throw new WaiterNotificationException("The notification list is empty");
-        return notificationList;
+        return new TreeSet<>(notificationList);
     }
 }
