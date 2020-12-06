@@ -68,6 +68,8 @@ public class Local {
             try {
                 return tableHandler.getFreeTableList();
             } catch (TableException e) { // Eccezione : la lista di tavoli liberi è vuota
+                // TODO : forwardare l'eccezione? in alternativa tale eccezione nel metodo getFreeTableList si potrebbe proprio
+                // non mettere
                 managerCommunication.reportException(e); // Forwardo l'eccezione al customer
                 return null; // Oppure new TreeSet<>();
             }
@@ -106,7 +108,7 @@ public class Local {
 
     // Ritorna la lista di tavoli liberi
     // TODO : Tale metodo potrebbe non servire
-    public Set<ManagerTable> getFreeTableList() throws RoomStateException, TableException { // SortedSet ?
+    public Set<ManagerTable> getFreeTableList() throws RoomStateException, TableException { // TODO : SortedSet ?
         if(!roomState) // La stanza non è aperta
             throw new RoomStateException(false);
 
