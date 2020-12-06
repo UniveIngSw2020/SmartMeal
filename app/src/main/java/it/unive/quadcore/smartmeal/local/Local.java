@@ -48,7 +48,7 @@ public class Local {
             throw new RoomStateException(true);
 
         // Creazione oggetti che gestiscono i tavoli e le notifiche cameriere
-        //tableHandler = new TableHandler(); // TODO : rimuovere commento quando si implementa TableHandler
+        tableHandler = new TableHandler();
         waiterNotificationHandler = new WaiterNotificationHandler();
 
         // Creazione oggetto comunicazione

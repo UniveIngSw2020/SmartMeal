@@ -16,7 +16,7 @@ public abstract class CustomerCommunication {
     // eventualmente prendere callback con costruttore
 
 
-    public abstract void joinRoom(Customer customer);
+    public abstract void joinRoom(Customer customer); // TODO : prende una String (o anche nulla)
     public abstract void notifyWaiter();
     public abstract void selectTable(Table table);
     public abstract void requestFreeTableList(Consumer<Collection<Table>> consumer);
