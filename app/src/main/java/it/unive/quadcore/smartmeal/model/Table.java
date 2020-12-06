@@ -1,6 +1,6 @@
 package it.unive.quadcore.smartmeal.model;
 
-public abstract class Table {
+public abstract class Table { // implements Comparable
     // possibile costruttore package-private chiamato da un'altra classe
 
     // eventuale array esterno di tavoli (classe che si occupa di istanziare i tavoli

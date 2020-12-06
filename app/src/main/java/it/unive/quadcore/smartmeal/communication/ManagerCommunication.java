@@ -24,7 +24,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.util.HashSet;
+import java.util.TreeSet;
 import java.util.Objects;
 
 import it.unive.quadcore.smartmeal.model.Customer;
@@ -43,7 +43,7 @@ public abstract class ManagerCommunication {
     //TODO: create field activity;
 
     @Nullable
-    private Supplier<HashSet<? extends Table>> onRequestFreeTableListCallback;
+    private Supplier<TreeSet<? extends Table>> onRequestFreeTableListCallback;
 
 
     // TODO
@@ -182,7 +182,7 @@ public abstract class ManagerCommunication {
 
     public abstract void onNotifyWaiter(Consumer<WaiterNotification> consumer);
     public abstract void onSelectTable(BiConsumer<Customer,Table> consumer); // TODO : dire agli altri
-    public void onRequestFreeTableList(Supplier<HashSet<? extends Table>> supplier) {
+    public void onRequestFreeTableList(Supplier<TreeSet<? extends Table>> supplier) {
         onRequestFreeTableListCallback = supplier;
     }
 
