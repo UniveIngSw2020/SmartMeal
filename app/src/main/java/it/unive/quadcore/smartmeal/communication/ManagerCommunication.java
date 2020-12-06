@@ -40,6 +40,7 @@ public abstract class ManagerCommunication {
     private static final Strategy STRATEGY = Strategy.P2P_STAR;
     private static final String SERVICE_ID = "it.unive.quadcore.smartmeal";
 
+    //TODO: create field activity;
 
     @Nullable
     private Supplier<HashSet<? extends Table>> onRequestFreeTableListCallback;
