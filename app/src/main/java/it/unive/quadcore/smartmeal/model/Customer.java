@@ -2,6 +2,7 @@ package it.unive.quadcore.smartmeal.model;
 
 import java.util.Objects;
 
+// Creato dentro ManagerCommunication. In pratica usato solo lato gestore.
 public class Customer {
 
     // id
