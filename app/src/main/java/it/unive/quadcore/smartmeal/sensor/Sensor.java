@@ -1,6 +1,6 @@
 package it.unive.quadcore.smartmeal.sensor;
 
-public class Sensor {
-    // TODO
-    // probabilmente avrà un metodo onShakeDetected(callback)
+public abstract class Sensor {
+    public abstract void onShakeDetected(Runnable onShakeDetectedCallback);
+    public abstract void onEntrance(Runnable onEntranceCallback);
 }
