@@ -4,6 +4,8 @@ import it.unive.quadcore.smartmeal.model.LocalDescription;
 
 class Storage {
 
+    // TODO aggiungere metodi per impostazioni
+
     /**
      * Rende non instanziabile questa classe.
      */

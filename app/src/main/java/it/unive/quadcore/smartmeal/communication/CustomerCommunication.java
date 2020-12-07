@@ -40,7 +40,7 @@ public abstract class CustomerCommunication {
     @Nullable
     private String managerEndpointId;
     @Nullable
-    private Activity activity;
+    private Activity activity;                  // TODO assegnare valore
     @Nullable
     private Consumer<Collection<Table>> freeTableListCallback;
 
@@ -206,6 +206,9 @@ public abstract class CustomerCommunication {
         freeTableListCallback = consumer;
         sendMessage(managerEndpointId, new Message(RequestType.FREE_TABLE_LIST, null)); //TODO content
     }
+
+
+    // TODO onCloseRoom(callback) per gestire evento generato dal closeRoom gestore
 
     public abstract void leaveRoom();
     public abstract boolean isConnected();
