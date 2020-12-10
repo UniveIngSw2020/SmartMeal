@@ -19,7 +19,7 @@ public abstract class Table implements Comparable<Table>{ // TODO : Togliere l'a
         return id ;
     }
 
-    // Comparo rispetto l'id. Ordinamento naturale di Table
+    // Comparo rispetto l'id (ordine lessicografico). Ordinamento naturale di Table
     public int compareTo(Table other){
         return id.compareTo(other.id) ;
     }
