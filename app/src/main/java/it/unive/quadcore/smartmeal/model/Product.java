@@ -1,5 +1,7 @@
 package it.unive.quadcore.smartmeal.model;
 
+import androidx.annotation.NonNull;
+
 import java.util.Objects;
 
 public class Product implements Comparable<Product>{
@@ -29,7 +31,7 @@ public class Product implements Comparable<Product>{
         return category;
     }
 
-
+    @NonNull
     @Override
     public String toString() {
         return "Product{" +
@@ -57,7 +59,7 @@ public class Product implements Comparable<Product>{
     // (lessicografico)
     @Override
     public int compareTo(Product o) {
-        if(category.equals(o.category))
+        if(category==o.category)
             return name.compareTo(o.name);
         return category.compareTo(o.category);
     }

@@ -1,5 +1,7 @@
 package it.unive.quadcore.smartmeal.model;
 
+import androidx.annotation.NonNull;
+
 import java.util.Objects;
 
 public abstract class Table implements Comparable<Table>{ // TODO : Togliere l'abstract ?
@@ -38,6 +40,7 @@ public abstract class Table implements Comparable<Table>{ // TODO : Togliere l'a
         return Objects.hash(id);
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "Table{" +

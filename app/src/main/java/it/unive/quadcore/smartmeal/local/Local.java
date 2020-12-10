@@ -63,7 +63,6 @@ public class Local {
                         managerCommunication.reportException(e); // Forwardo l'eccezione al customer
                     }
                 });
-        // TODO : pensare come risolvere problema generic
         managerCommunication.onRequestFreeTableList( () -> { // Callback da eseguire quando arriva richiesta lista tavoli liberi
             try {
                 return tableHandler.getFreeTableList();
@@ -107,7 +106,6 @@ public class Local {
     }
 
     // Ritorna la lista di tavoli liberi
-    // TODO : Tale metodo potrebbe non servire
     public Set<ManagerTable> getFreeTableList() throws RoomStateException, TableException { // TODO : SortedSet ?
         if(!roomState) // La stanza non è aperta
             throw new RoomStateException(false);

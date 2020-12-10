@@ -1,5 +1,7 @@
 package it.unive.quadcore.smartmeal.model;
 
+import androidx.annotation.NonNull;
+
 import java.util.Objects;
 
 // Creato dentro ManagerCommunication. In pratica usato solo lato gestore.
@@ -37,6 +39,7 @@ public class Customer {
         return Objects.hash(id);
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "Customer{" +

@@ -3,6 +3,8 @@ package it.unive.quadcore.smartmeal.model;
 import android.location.Location;
 import android.media.Image;
 
+import androidx.annotation.NonNull;
+
 public class LocalDescription {
 
     private final String name;
@@ -34,6 +36,7 @@ public class LocalDescription {
         return menu;
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "LocalDescription{" +

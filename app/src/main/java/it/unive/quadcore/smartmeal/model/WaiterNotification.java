@@ -1,5 +1,7 @@
 package it.unive.quadcore.smartmeal.model;
 
+import androidx.annotation.NonNull;
+
 import java.util.Date;
 import java.util.Objects;
 
@@ -53,6 +55,7 @@ public class WaiterNotification implements Comparable<WaiterNotification> {
         return Objects.hash(dateTime, customer);
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "WaiterNotification{" +
