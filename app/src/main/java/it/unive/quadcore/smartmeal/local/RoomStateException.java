@@ -8,7 +8,7 @@ public class RoomStateException extends Exception{ // possibilità di fare Unche
 
     // Costruttore visiible solo a Local
     RoomStateException(boolean roomState){
-        super("Illegal room state : this operation is not allowed in a room that is "+(roomState?"opened.":"closed."));
+        super("This operation is not allowed in a room that is "+(roomState?"opened.":"closed."));
         this.roomState = roomState;
     }
 

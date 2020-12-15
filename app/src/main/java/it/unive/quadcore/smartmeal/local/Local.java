@@ -6,6 +6,7 @@ import java.util.Set;
 import java.util.SortedSet;
 
 import it.unive.quadcore.smartmeal.communication.ManagerCommunication;
+import it.unive.quadcore.smartmeal.communication.ManagerCommunicationSTUB;
 import it.unive.quadcore.smartmeal.model.Customer;
 import it.unive.quadcore.smartmeal.model.ManagerTable;
 import it.unive.quadcore.smartmeal.model.Table;
@@ -52,7 +53,7 @@ public class Local {
         waiterNotificationHandler = new WaiterNotificationHandler();
 
         // Creazione oggetto comunicazione
-        managerCommunication = ManagerCommunication.getInstance();
+        managerCommunication = ManagerCommunicationSTUB.getInstance(); // TODO : ricambiare a MAnagerCOmmunication
 
         // Passo le varie callback all gestore della comunicazione
         managerCommunication.onNotifyWaiter( // Callback da eseguire quando arriva notifica cameriere
@@ -82,11 +83,21 @@ public class Local {
             }
         });
 
+        // TODO : avvisare gli altri
+        managerCommunication.onCustomerLeftRoom( customer -> {
+            try{
+                tableHandler.freeTable(tableHandler.getTable(customer));
+            }catch( TableException e){
+                managerCommunication.reportException(e);
+            }
+        });
+
         // Dico di avviare la stanza al gestore comunicazione
         managerCommunication.startRoom(activity);
 
         // Setto la stanza come aperta
         roomState = true;
+
     }
 
     // Ritorna la lista delle chiamate cameriere
@@ -153,6 +164,14 @@ public class Local {
         return tableHandler.getTable(customer);
     }
 
+    // TODO : avvisare gli altri
+    public Customer getCustomerByTable(Table table) throws RoomStateException, TableException {
+        if(!roomState) // La stanza non è aperta
+            throw new RoomStateException(false);
+
+        return tableHandler.getCustomer(table);
+    }
+
     // Chiude la stanza virtuale
     public void closeRoom() throws RoomStateException {
         if(!roomState) // La stanza non è aperta
@@ -169,5 +188,10 @@ public class Local {
         managerCommunication = null;
 
         roomState = false;
+    }
+
+    // TODO : rimuovere ciò. Solo per testing
+    public void testing(){
+        ((ManagerCommunicationSTUB)managerCommunication).begin();
     }
 }

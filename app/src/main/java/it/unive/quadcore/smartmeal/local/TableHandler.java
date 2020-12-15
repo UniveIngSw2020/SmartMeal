@@ -143,6 +143,38 @@ class TableHandler {
     // Libera un tavolo
     synchronized void freeTable(Table table) throws TableException {
 
+        /* // Il tavolo specificato non è un tavolo corretto per il locale
+        if(!tablesMap.containsKey(table))
+            throw new TableException("The selected table doesn't exist");
+        ManagerTable managerTable = tablesMap.get(table) ;
+
+        // Tavolo non è occupato da nessun cliente
+        if(freeTableList.contains(managerTable))
+            throw new TableException("This table isn't assigned");*/
+
+        Customer customer = getCustomer(table); // Controllo se tavolo esiste e se è occupato
+        ManagerTable managerTable = tablesMap.get(table) ;
+
+        // Rimuovo questa associazione dalla mappa
+        customerTableMap.remove(customer);
+
+        // Il tavolo ora è libero
+        freeTableList.add(managerTable);
+    }
+
+    // Ritorna il tavolo occupato da un certo cliente
+    // ManagerTable o Table ?
+    synchronized ManagerTable getTable(Customer customer) throws TableException {
+        // Cliente non ha un tavolo
+        if(!customerTableMap.containsKey(customer))
+            throw new TableException("This customer doesn't have a table assigned");
+
+        // Ritorno tavolo occupato (posso ritornarlo direttamente senza copiarlo perchè è immutable)
+        return customerTableMap.get(customer);
+    }
+
+    // Ritorna il cliente che occupa un certo tavolo
+    synchronized Customer getCustomer(Table table) throws TableException {
         // Il tavolo specificato non è un tavolo corretto per il locale
         if(!tablesMap.containsKey(table))
             throw new TableException("The selected table doesn't exist");
@@ -167,21 +199,7 @@ class TableHandler {
             if(customerTableMap.get(customer).equals(managerTable))
                 found = true;
         }
-        // Rimuovo questa associazione dalla mappa
-        customerTableMap.remove(customer);
 
-        // Il tavolo ora è libero
-        freeTableList.add(managerTable);
-    }
-
-    // Ritorna il tavolo occupato da un certo cliente
-    // ManagerTable o Table ?
-    synchronized ManagerTable getTable(Customer customer) throws TableException {
-        // Cliente non ha un tavolo
-        if(!customerTableMap.containsKey(customer))
-            throw new TableException("This customer doesn't have a table assigned");
-
-        // Ritorno tavolo occupato (posso ritornarlo direttamente senza copiarlo perchè è immutable)
-        return customerTableMap.get(customer);
+        return customer;
     }
 }

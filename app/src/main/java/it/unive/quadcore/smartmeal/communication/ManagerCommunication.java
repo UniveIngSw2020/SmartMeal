@@ -186,6 +186,9 @@ public abstract class ManagerCommunication {
         onRequestFreeTableListCallback = supplier;
     }
 
+    // TODO : avvisare
+    public abstract void onCustomerLeftRoom(Consumer<Customer> consumer);
+
     public abstract void reportException(Exception exception);
 
     public abstract void closeRoom();
