@@ -34,6 +34,6 @@ public final class ManagerStorage extends Storage {
     // Ritorna il numero massimo di notifiche in coda di uno stesso utente
     public static int getMaxNotificationNumber(){
         //throw new UnsupportedOperationException("Not implemented yet");
-        return 10;
+        return 5;
     }
 }

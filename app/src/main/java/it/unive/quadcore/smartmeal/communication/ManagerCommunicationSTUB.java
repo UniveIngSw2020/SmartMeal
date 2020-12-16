@@ -23,6 +23,8 @@ public class ManagerCommunicationSTUB extends ManagerCommunication{
 
     private Consumer<Customer> consumerCustomerLeft ;
 
+    private Consumer<WaiterNotification> consumerNotifyWaiter ;
+
     public static ManagerCommunicationSTUB getInstance(){
         if(instance==null)
             instance = new ManagerCommunicationSTUB();
@@ -37,7 +39,7 @@ public class ManagerCommunicationSTUB extends ManagerCommunication{
     }
     @Override
     public void onNotifyWaiter(Consumer<WaiterNotification> consumer) {
-
+        consumerNotifyWaiter = consumer;
     }
 
     @Override
@@ -65,7 +67,7 @@ public class ManagerCommunicationSTUB extends ManagerCommunication{
     }
 
     // Per testing
-    public void begin(){
+    public void beginTableHandler(){
         Customer client = new Customer(112,"Enrico");
         TreeSet<? extends Table> freeTables = supplierFreeTables.get();
         Table table = freeTables.first();
@@ -91,5 +93,23 @@ public class ManagerCommunicationSTUB extends ManagerCommunication{
         /*Customer client4 = new Customer(112,"Andrea");
         Table table4 = freeTables.first();
         consumerSelectTable.accept(client4,table4);*/
+    }
+
+    public void beginWaiterNotificationHandler(){
+        Customer client = new Customer(112,"Enrico");
+        WaiterNotification notification1 = new WaiterNotification(client);
+        consumerNotifyWaiter.accept(notification1);
+
+        WaiterNotification notification2 = new WaiterNotification(client);
+        consumerNotifyWaiter.accept(notification2);
+
+        Customer client2 = new Customer(113,"Matteo");
+        WaiterNotification notification3 = new WaiterNotification(client2);
+        consumerNotifyWaiter.accept(notification3);
+
+        consumerNotifyWaiter.accept(notification1); // Eccezione : notifica che esiste già
+
+       /* for(int i=0;i<5;i++) // Eccezione : superato numeo massimo notitifiche
+            consumerNotifyWaiter.accept(new WaiterNotification(client)); */
     }
 }

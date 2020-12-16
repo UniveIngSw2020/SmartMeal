@@ -83,7 +83,6 @@ public class Local {
             }
         });
 
-        // TODO : avvisare gli altri
         managerCommunication.onCustomerLeftRoom( customer -> {
             try{
                 tableHandler.freeTable(tableHandler.getTable(customer));
@@ -164,7 +163,6 @@ public class Local {
         return tableHandler.getTable(customer);
     }
 
-    // TODO : avvisare gli altri
     public Customer getCustomerByTable(Table table) throws RoomStateException, TableException {
         if(!roomState) // La stanza non è aperta
             throw new RoomStateException(false);
@@ -191,7 +189,11 @@ public class Local {
     }
 
     // TODO : rimuovere ciò. Solo per testing
-    public void testing(){
-        ((ManagerCommunicationSTUB)managerCommunication).begin();
+    public void testingTableHandler(){
+        ((ManagerCommunicationSTUB)managerCommunication).beginTableHandler();
+    }
+
+    public void testingWaiterNotificationHandler(){
+        ((ManagerCommunicationSTUB)managerCommunication).beginWaiterNotificationHandler();
     }
 }
