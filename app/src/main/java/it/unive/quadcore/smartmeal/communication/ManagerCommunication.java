@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.util.Log;
 
 import androidx.annotation.Nullable;
+import androidx.arch.core.util.Function;
 import androidx.core.util.Consumer;
 import androidx.core.util.Supplier;
 
@@ -24,9 +25,14 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.TreeSet;
 import java.util.Objects;
+import java.util.function.BiFunction;
 
+import it.unive.quadcore.smartmeal.communication.response.Response;
+import it.unive.quadcore.smartmeal.local.TableException;
+import it.unive.quadcore.smartmeal.local.WaiterNotificationException;
 import it.unive.quadcore.smartmeal.model.Customer;
 import it.unive.quadcore.smartmeal.model.Table;
 import it.unive.quadcore.smartmeal.model.WaiterNotification;
@@ -43,7 +49,7 @@ public abstract class ManagerCommunication {
     //TODO: create field activity;
 
     @Nullable
-    private Supplier<TreeSet<? extends Table>> onRequestFreeTableListCallback;
+    private Supplier<Response<TreeSet<? extends Table>, ? extends TableException>> onRequestFreeTableListCallback;
 
 
     // TODO
@@ -159,7 +165,7 @@ public abstract class ManagerCommunication {
 
     // eventualmente prendere callback con costruttore
 
-
+    // TODO probabilmente andranno aggiunte callback onSuccess e onFail
     public void startRoom(Activity activity) {
 
         final ConnectionLifecycleCallback connectionLifecycleCallback = connectionLifecycleCallback(activity);
@@ -180,9 +186,9 @@ public abstract class ManagerCommunication {
                 });
     }
 
-    public abstract void onNotifyWaiter(Consumer<WaiterNotification> consumer);
-    public abstract void onSelectTable(BiConsumer<Customer,Table> consumer); // TODO : dire agli altri
-    public void onRequestFreeTableList(Supplier<TreeSet<? extends Table>> supplier) {
+    public abstract void onNotifyWaiter(Function<WaiterNotification, Response<Serializable, ? extends WaiterNotificationException>> consumer);
+    public abstract void onSelectTable(BiFunction<Customer, Table, Response<Serializable, ? extends TableException>> consumer);
+    public void onRequestFreeTableList(Supplier<Response<TreeSet<? extends Table>, ? extends TableException>> supplier) {
         onRequestFreeTableListCallback = supplier;
     }
 

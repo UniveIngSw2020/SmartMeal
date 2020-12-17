@@ -27,7 +27,11 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.SortedSet;
+import java.util.TreeSet;
 
+import it.unive.quadcore.smartmeal.communication.response.Response;
+import it.unive.quadcore.smartmeal.local.TableException;
+import it.unive.quadcore.smartmeal.local.WaiterNotificationException;
 import it.unive.quadcore.smartmeal.model.Table;
 import it.unive.quadcore.smartmeal.storage.CustomerStorage;
 
@@ -42,7 +46,7 @@ public abstract class CustomerCommunication {
     @Nullable
     private Activity activity;                  // TODO assegnare valore
     @Nullable
-    private Consumer<Collection<Table>> freeTableListCallback;
+    private Consumer<Response<TreeSet<Table>, ? extends TableException>> freeTableListCallback;
 
     public static CustomerCommunication getInstance() {
         throw new UnsupportedOperationException("Not implemented yet");
@@ -182,7 +186,7 @@ public abstract class CustomerCommunication {
 
     private void handleFreeTableListResponse(Serializable content) {
         // if (content instanceof SortedSet) TODO pensarci
-        freeTableListCallback.accept((SortedSet<Table>) content);
+        freeTableListCallback.accept((Response<TreeSet<Table>, TableException>) content);
     }
 
     private void sendMessage(String toEndpointId, Message response) {
@@ -199,10 +203,10 @@ public abstract class CustomerCommunication {
     }
 
 
-    public abstract void notifyWaiter();
-    public abstract void selectTable(Table table);
+    public abstract void notifyWaiter(Consumer<Response<Serializable, ? extends WaiterNotificationException>> onResponse);
+    public abstract void selectTable(Table table, Consumer<Response<Serializable, ? extends TableException>> onResponse);
 
-    public void requestFreeTableList(Consumer<Collection<Table>> consumer){
+    public void requestFreeTableList(Consumer<Response<TreeSet<Table>, ? extends TableException>> consumer){
         freeTableListCallback = consumer;
         sendMessage(managerEndpointId, new Message(RequestType.FREE_TABLE_LIST, null)); //TODO content
     }
