@@ -18,9 +18,9 @@ class Storage {
 
     protected static Activity activity ; //
 
-    // Shared Preferences
-    private static SharedPreferences defSharedPref ;
-    protected static SharedPreferences sharedPref;
+    // Shared Preferences. La prima di deafult, ovvero si mettono i settings dell'applicazione. La seconda di uso generico.
+    private static SharedPreferences defaultSharedPreferences;
+    protected static SharedPreferences sharedPreferences;
     /**
      * Rende non instanziabile questa classe.
      */
@@ -33,10 +33,10 @@ class Storage {
         Storage.activity = activity;
 
         // Shared Preference di deafult. Usata per i settings dell'applicazione.
-        defSharedPref = PreferenceManager.getDefaultSharedPreferences(activity);
+        defaultSharedPreferences = PreferenceManager.getDefaultSharedPreferences(activity);
 
-        // Shared Preference per nome e tavoli.
-        sharedPref = activity.getSharedPreferences("SharedPreference" , Context.MODE_PRIVATE);
+        // Shared Preference di uso generico.
+        sharedPreferences = activity.getSharedPreferences("SharedPreference" , Context.MODE_PRIVATE); // TODO : rimpiazzare con stringa di res
 
         initialized=true;
     }
@@ -45,7 +45,7 @@ class Storage {
         if(!initialized)
             throw new StorageException("The storage hasn't been initialize yet");
 
-        String applicationModeString = defSharedPref.getString("ApplicationMode",null); // TODO : rimpiazzare con stringa di res
+        String applicationModeString = defaultSharedPreferences.getString("ApplicationMode",null); // TODO : rimpiazzare con stringa di res
         if(applicationModeString==null)
             throw new StorageException("The application mode was not found in storage");
 
@@ -62,7 +62,7 @@ class Storage {
         if(!initialized)
             throw new StorageException("The storage hasn't been initialize yet");
 
-        SharedPreferences.Editor editor = defSharedPref.edit();
+        SharedPreferences.Editor editor = defaultSharedPreferences.edit();
 
         String applicationModeString = applicationMode.name(); // toString in alternativa
         editor.putString("ApplicationMode",applicationModeString); // TODO : rimpiazzare con stringa di res
@@ -77,7 +77,7 @@ class Storage {
         if(!initialized)
             throw new StorageException("The storage hasn't been initialize yet");
 
-        String name = sharedPref.getString("Name",null); // TODO : rimpiazzare con stringa di res
+        String name = sharedPreferences.getString("Name",null); // TODO : rimpiazzare con stringa di res
         if(name==null)
             throw new StorageException("The name was not found in storage");
 
@@ -88,7 +88,7 @@ class Storage {
         if(!initialized)
             throw new StorageException("The storage hasn't been initialize yet");
 
-        SharedPreferences.Editor editor = sharedPref.edit();
+        SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString("Name", name); // TODO : rimpiazzare con stringa di res
         editor.apply();
 
