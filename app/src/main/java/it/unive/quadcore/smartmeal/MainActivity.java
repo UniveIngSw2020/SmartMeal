@@ -17,7 +17,9 @@ import it.unive.quadcore.smartmeal.model.LocalDescription;
 import it.unive.quadcore.smartmeal.model.ManagerTable;
 import it.unive.quadcore.smartmeal.model.Table;
 import it.unive.quadcore.smartmeal.model.WaiterNotification;
+import it.unive.quadcore.smartmeal.storage.ApplicationMode;
 import it.unive.quadcore.smartmeal.storage.ManagerStorage;
+import it.unive.quadcore.smartmeal.storage.StorageException;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -26,13 +28,14 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        /*
         Local local = Local.getInstance();
 
         try {
             local.createRoom(this);
         }catch(RoomStateException e){
             e.printStackTrace();
-        }
+        }*/
 
         /* TESTING TABLE HANDLER
         local.testingTableHandler();
@@ -123,10 +126,25 @@ public class MainActivity extends AppCompatActivity {
         } */
 
 
-        /* TESTING LOCAL DESCRIPTION/MENU/PRODUCT/MONEY
+        /* TESTING STORAGE */
 
-        LocalDescription description = ManagerStorage.getLocalDescription(); */
+        ManagerStorage.initializeStorage(this);
 
+        //ManagerStorage.setName("Enrico");
+
+        try {
+            String name = ManagerStorage.getName();
+        }catch(StorageException e){
+            e.printStackTrace();
+        }
+
+        ManagerStorage.setApplicationMode(ApplicationMode.CUSTOMER);
+
+        try {
+            ApplicationMode applicationMode = ManagerStorage.getApplicationMode();
+        }catch(StorageException e){
+            e.printStackTrace();
+        }
 
     }
 }
