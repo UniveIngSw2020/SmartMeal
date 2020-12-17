@@ -45,7 +45,7 @@ class Storage {
         if(!initialized)
             throw new StorageException("The storage hasn't been initialize yet");
 
-        String applicationModeString = defSharedPref.getString("ApplicationMode",null);
+        String applicationModeString = defSharedPref.getString("ApplicationMode",null); // TODO : rimpiazzare con stringa di res
         if(applicationModeString==null)
             throw new StorageException("The application mode was not found in storage");
 
@@ -65,7 +65,7 @@ class Storage {
         SharedPreferences.Editor editor = defSharedPref.edit();
 
         String applicationModeString = applicationMode.name(); // toString in alternativa
-        editor.putString("ApplicationMode",applicationModeString);
+        editor.putString("ApplicationMode",applicationModeString); // TODO : rimpiazzare con stringa di res
         editor.apply();
     }
 
@@ -77,7 +77,7 @@ class Storage {
         if(!initialized)
             throw new StorageException("The storage hasn't been initialize yet");
 
-        String name = sharedPref.getString("Name",null);
+        String name = sharedPref.getString("Name",null); // TODO : rimpiazzare con stringa di res
         if(name==null)
             throw new StorageException("The name was not found in storage");
 
@@ -89,7 +89,7 @@ class Storage {
             throw new StorageException("The storage hasn't been initialize yet");
 
         SharedPreferences.Editor editor = sharedPref.edit();
-        editor.putString("Name", name);
+        editor.putString("Name", name); // TODO : rimpiazzare con stringa di res
         editor.apply();
 
     }

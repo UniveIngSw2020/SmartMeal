@@ -37,7 +37,7 @@ public final class ManagerStorage extends Storage {
         if(!initialized)
             throw new StorageException("The storage hasn't been initialize yet");
 
-        Set<String> tablesString = sharedPref.getStringSet("Tables",null);
+        Set<String> tablesString = sharedPref.getStringSet("Tables",null); // TODO : rimpiazzare con stringa di res
         if(tablesString==null)
             throw new StorageException("The tables were not found in storage");
 
@@ -55,7 +55,7 @@ public final class ManagerStorage extends Storage {
         if(!initialized)
             throw new StorageException("The storage hasn't been initialize yet");
 
-        int maxNotificationNumber = sharedPref.getInt("MaxNotificationNumber",-1);
+        int maxNotificationNumber = sharedPref.getInt("MaxNotificationNumber",-1); // TODO : rimpiazzare con stringa di res
         if(maxNotificationNumber<0)
             throw new StorageException("The max notification number was not found in storage");
 
