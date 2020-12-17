@@ -1,13 +1,11 @@
 package it.unive.quadcore.smartmeal.storage;
 
-import android.content.Context;
-import android.content.SharedPreferences;
 
 import java.util.Set;
 import java.util.TreeSet;
 
 import it.unive.quadcore.smartmeal.model.ManagerTable;
-import it.unive.quadcore.smartmeal.model.Table;
+
 
 public final class ManagerStorage extends Storage {
 
