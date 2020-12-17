@@ -28,7 +28,7 @@ class Storage {
 
     public static void initializeStorage(Activity activity){ // Alter ego di getInstance
         if(initialized)
-            throw new StorageException("The storage has alredy been initialize");
+            throw new StorageException("The storage has alredy been initialized");
 
         Storage.activity = activity;
 
