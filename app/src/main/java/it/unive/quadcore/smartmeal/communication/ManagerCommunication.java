@@ -192,7 +192,20 @@ public abstract class ManagerCommunication {
         onRequestFreeTableListCallback = supplier;
     }
 
-    public abstract void reportException(Exception exception);
 
+    /**
+     * La callback `onCustomerLeftRoomCallback` verrà chiamata nel caso un cliente
+     * si disconnetta dalla stanza, con parametro l'oggetto della classe Customer
+     * che lo rappresenta.
+     *
+     * @param onCustomerLeftRoomCallback allback che implementa la logica da attuare quando un
+     *                                   cliente si disconnette dalla stanza
+     */
+    public abstract void onCustomerLeftRoom(Consumer<Customer> onCustomerLeftRoomCallback);
+
+
+    /**
+     * Chiude la stanza e disconnette tutti i clienti ad essa collegati.
+     */
     public abstract void closeRoom();
 }

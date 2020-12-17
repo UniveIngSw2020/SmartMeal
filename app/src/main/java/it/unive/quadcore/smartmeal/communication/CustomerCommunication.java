@@ -212,8 +212,26 @@ public abstract class CustomerCommunication {
     }
 
 
-    // TODO onCloseRoom(callback) per gestire evento generato dal closeRoom gestore
+    /**
+     * La callback `onCloseRoomCallback` verrà chiamata nel caso il gestore chiuda la stanza
+     * e il cliente sia ancora connesso ad essa.
+     *
+     * @param onCloseRoomCallback callback che implementa la logica da attuare quando il
+     *                            gestore chiude la stanza
+     */
+    public abstract void onCloseRoom(Runnable onCloseRoomCallback);
 
+
+    /**
+     * Disconnette il cliente dalla stanza del gestore.
+     */
     public abstract void leaveRoom();
+
+
+    /**
+     * Verifica se il cliente è connesso alla stanza del gestore.
+     *
+     * @return true se il cliente è connesso alla stanza del gestore, false altrimenti
+     */
     public abstract boolean isConnected();
 }
