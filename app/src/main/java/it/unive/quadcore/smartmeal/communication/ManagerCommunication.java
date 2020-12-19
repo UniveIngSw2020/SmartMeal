@@ -50,86 +50,27 @@ public abstract class ManagerCommunication extends Communication {
     // TODO
     private ConnectionLifecycleCallback connectionLifecycleCallback() {
 
-        final PayloadCallback payloadCallback = new PayloadCallback() {
-            @Override
-            public void onPayloadReceived(String endpointId, Payload payload) {
-                if (payload.getType() != Payload.Type.BYTES) {
-                    Log.wtf(TAG, "Received a non byte Payload");
-                    return;
-                }
-
-                // This always gets the full data of the payload. Will be null if it's not a BYTES
-                // payload. You can check the payload type with payload.getType().
-                try {
-                    final byte[] receivedBytes = payload.asBytes();
-                    ObjectInputStream objectInputStream = new ObjectInputStream(new ByteArrayInputStream(receivedBytes));
-
-                    Message message = (Message) objectInputStream.readObject();
-                    RequestType requestType = message.getRequestType();
-                    Log.i(TAG, "Message received: " + requestType);
-
-                    // TODO continuare
-                    switch (requestType) {
-                        case FREE_TABLE_LIST:
-                            handleFreeTableListRequest(endpointId);
-                            break;
-                        default:
-                            throw new UnsupportedOperationException("Not implemented yet");
-                    }
-
-                } catch (IOException e) {
-                    Log.wtf(TAG, "Unexpected input IOException: " + e);
-                    throw new AssertionError("Unexpected input IOException");
-                } catch (ClassNotFoundException | ClassCastException e) {
-                    Log.wtf(TAG, "Payload was not a Message: " + e);
-                    throw new AssertionError("Payload was not a Message");
-                }
-            }
+        final PayloadCallback payloadCallback = new MessageListener() {
 
             @Override
-            public void onPayloadTransferUpdate(String endpointId, PayloadTransferUpdate update) {
-                // Bytes payloads are sent as a single chunk, so you'll receive a SUCCESS update immediately
-                // after the call to onPayloadReceived().
+            protected void onMessageReceived(String endpointId, Message message) {
+                // TODO continuare
+                switch (message.getRequestType()) {
+                    case FREE_TABLE_LIST:
+                        handleFreeTableListRequest(endpointId);
+                        break;
+                    default:
+                        throw new UnsupportedOperationException("Not implemented yet");
+                }
             }
         };
 
 
-        return new ConnectionLifecycleCallback() {
-            @Override
-            public void onConnectionInitiated(String endpointId, ConnectionInfo connectionInfo) {
-                Log.d(TAG, "onConnectionInitiated");
-                // Accetta automaticamente la connessione
-                Nearby.getConnectionsClient(activity).acceptConnection(endpointId, payloadCallback);
-            }
+        return new ConnectionListener(activity, payloadCallback) {
 
             @Override
-            public void onConnectionResult(String endpointId, ConnectionResolution result) {
-                // tutti i possibili stati
-                // https://developers.google.com/android/reference/com/google/android/gms/nearby/connection/ConnectionsStatusCodes
-                switch (result.getStatus().getStatusCode()) {
-                    case ConnectionsStatusCodes.STATUS_OK:
-                        // We're connected! Can now start sending and receiving data.
-                        Log.i(TAG, "onConnectionResult: STATUS_OK");
-                        break;
-                    case ConnectionsStatusCodes.STATUS_CONNECTION_REJECTED:
-                        // The connection was rejected by one or both sides.
-                        Log.i(TAG, "onConnectionResult: STATUS_CONNECTION_REJECTED");
-                        break;
-                    case ConnectionsStatusCodes.STATUS_ERROR:
-                        // The connection broke before it was able to be accepted.
-                        Log.e(TAG, "onConnectionResult: STATUS_ERROR");
-                        break;
-                    default:
-                        // Unknown status code
-                        Log.e(TAG, "Unknown status code: " + result.getStatus().getStatusCode());
-                }
-            }
-
-            @Override
-            public void onDisconnected(String endpointId) {
-                // We've been disconnected from this endpoint. No more data can be
-                // sent or received.
-                Log.d(TAG, "onDisconnected");
+            protected void onConnectionSuccess(String endpointId) {
+                // TODO
             }
         };
     }
