@@ -5,6 +5,8 @@ import androidx.annotation.NonNull;
 import java.util.Date;
 import java.util.Objects;
 
+import static it.unive.quadcore.smartmeal.communication.CustomerHandler.Customer;
+
 // Classe che rappresenta le notifiche al cameriere
 public class WaiterNotification implements Comparable<WaiterNotification> {
 
