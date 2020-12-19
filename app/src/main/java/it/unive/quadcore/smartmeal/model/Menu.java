@@ -2,8 +2,10 @@ package it.unive.quadcore.smartmeal.model;
 
 import androidx.annotation.NonNull;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 import java.util.TreeSet;
 
 // Classe che rappresenta Menu'. Nella versione più semplice è un insieme di prodotti. In generale è una mappa tra tipi di prodotto
@@ -16,6 +18,7 @@ public class Menu {
     private Map<FoodCategory,Set<Product>> categoriesProductsMap;
 
     public Menu(Set<Product> products){
+        categoriesProductsMap = new TreeMap<>();
         for(FoodCategory foodCategory : FoodCategory.values()) {
             Set<Product> productsOfThatCategory = new TreeSet<>();
             /*products.forEach(product->{

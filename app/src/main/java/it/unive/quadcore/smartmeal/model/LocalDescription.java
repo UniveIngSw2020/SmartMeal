@@ -10,14 +10,14 @@ public class LocalDescription {
     private final String name;
     private final String presentation ;
     private final Location location;
-    private final Image image;
+    //private final int imageID; // Immagine non dovrebbe servire : dovrebbe essere direttamente mostrata nell'interfaccia grafica tramite xml
     private final Menu menu;
 
-    public LocalDescription(String name,String presentation,Location location,Image image,Menu menu){
+    public LocalDescription(String name,String presentation,Location location/*,int imageID*/,Menu menu){
         this.name = name;
         this.presentation = presentation;
         this.location = location;
-        this.image = image;
+        //this.imageID = imageID;
         this.menu = menu;
     }
     public String getName(){
@@ -29,9 +29,9 @@ public class LocalDescription {
     public Location getLocation(){
         return location;
     }
-    public Image getImage(){
-        return image;
-    }
+   /* public int getImageID(){
+        return imageID;
+    }*/
     public Menu getMenu(){
         return menu;
     }
@@ -43,7 +43,7 @@ public class LocalDescription {
                 "name='" + name + '\'' +
                 ", presentation='" + presentation + '\'' +
                 ", location=" + location +
-                ", image=" + image +
+               // ", image=" + imageID +
                 ", menu=" + menu +
                 '}';
     }

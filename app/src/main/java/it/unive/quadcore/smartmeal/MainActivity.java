@@ -18,6 +18,7 @@ import it.unive.quadcore.smartmeal.model.ManagerTable;
 import it.unive.quadcore.smartmeal.model.Table;
 import it.unive.quadcore.smartmeal.model.WaiterNotification;
 import it.unive.quadcore.smartmeal.storage.ApplicationMode;
+import it.unive.quadcore.smartmeal.storage.CustomerStorage;
 import it.unive.quadcore.smartmeal.storage.ManagerStorage;
 import it.unive.quadcore.smartmeal.storage.StorageException;
 
@@ -126,7 +127,7 @@ public class MainActivity extends AppCompatActivity {
         } */
 
 
-        /* TESTING STORAGE */
+        /* TESTING MANAGER STORAGE */
 
         ManagerStorage.initializeStorage(this);
 
@@ -138,13 +139,35 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        ManagerStorage.setApplicationMode(ApplicationMode.CUSTOMER);
+        //ManagerStorage.setApplicationMode(ApplicationMode.CUSTOMER);
 
         try {
             ApplicationMode applicationMode = ManagerStorage.getApplicationMode();
         }catch(StorageException e){
             e.printStackTrace();
         }
+
+        //ManagerStorage.setTables();
+        Set<ManagerTable> tables = ManagerStorage.getTables();
+
+        //ManagerStorage.setMaxNotificationNumber(5);
+        int MaxNotificationNumber = ManagerStorage.getMaxNotificationNumber();
+
+        try {
+            LocalDescription localDescription = ManagerStorage.getLocalDescription();
+            System.out.println(localDescription);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+
+        /* TESTING CUSTOMER STORAGE*/
+
+        //CustomerStorage.setSensorMode(false);
+        boolean sensorMode = CustomerStorage.getSensorMode();
+
+        //CustomerStorage.setNotificationMode(false);
+        boolean notificationMode = CustomerStorage.getNotificationMode();
 
     }
 }

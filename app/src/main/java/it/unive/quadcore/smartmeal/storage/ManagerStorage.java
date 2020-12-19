@@ -1,6 +1,9 @@
 package it.unive.quadcore.smartmeal.storage;
 
 
+import android.content.SharedPreferences;
+
+import java.util.ArrayList;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -19,6 +22,25 @@ public final class ManagerStorage extends Storage {
 
     // TODO : cambiare
 
+    // Usato per settare la prima volta
+    private static void setTables(){
+        if(!initialized)
+            throw new StorageException("The storage hasn't been initialize yet");
+
+        Set<String> tables = new TreeSet<>();
+        char supp = 'A';
+        while(supp<'Z'+1){
+            for(int i=0;i<=9;i++)
+                tables.add(""+supp+i);
+            supp+=1;
+        }
+
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putStringSet("Tables", tables); // TODO : rimpiazzare con stringa di res
+        editor.apply();
+    }
+
+    // Possibilità di non tenere i tavoli in memoria secondaria ma generarli e basta
     public static Set<ManagerTable> getTables() {
         //throw new UnsupportedOperationException("Not implemented yet");
        /* ManagerTable t1 = new ManagerTable("A1");
@@ -48,7 +70,18 @@ public final class ManagerStorage extends Storage {
         return tables;
     }
 
+    // Usato per settare la prima volta
+    private static void setMaxNotificationNumber(int n){
+        if(!initialized)
+            throw new StorageException("The storage hasn't been initialize yet");
+
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt("MaxNotificationNumber", n); // TODO : rimpiazzare con stringa di res
+        editor.apply();
+    }
+
     // Ritorna il numero massimo di notifiche in coda di uno stesso utente
+    // Possibilità di non teneretale numero in memoria secondaria ma generarlo e basta
     public static int getMaxNotificationNumber(){
         if(!initialized)
             throw new StorageException("The storage hasn't been initialize yet");
