@@ -40,20 +40,15 @@ import it.unive.quadcore.smartmeal.storage.ManagerStorage;
 
 import static it.unive.quadcore.smartmeal.communication.RequestType.FREE_TABLE_LIST;
 
-public abstract class ManagerCommunication {
+public abstract class ManagerCommunication extends Communication {
     private static final String TAG = "ManagerCommunication";
-
-    private static final Strategy STRATEGY = Strategy.P2P_STAR;
-    private static final String SERVICE_ID = "it.unive.quadcore.smartmeal";
-
-    //TODO: create field activity;
 
     @Nullable
     private Supplier<Response<TreeSet<? extends Table>, ? extends TableException>> onRequestFreeTableListCallback;
 
 
     // TODO
-    private ConnectionLifecycleCallback connectionLifecycleCallback(Activity activity) {
+    private ConnectionLifecycleCallback connectionLifecycleCallback() {
 
         final PayloadCallback payloadCallback = new PayloadCallback() {
             @Override
@@ -76,7 +71,7 @@ public abstract class ManagerCommunication {
                     // TODO continuare
                     switch (requestType) {
                         case FREE_TABLE_LIST:
-                            handleFreeTableListRequest(activity, endpointId);
+                            handleFreeTableListRequest(endpointId);
                             break;
                         default:
                             throw new UnsupportedOperationException("Not implemented yet");
@@ -139,23 +134,10 @@ public abstract class ManagerCommunication {
         };
     }
 
-    private void handleFreeTableListRequest(Activity activity, String toEndpointId) {
+    private void handleFreeTableListRequest(String toEndpointId) {
         Objects.requireNonNull(onRequestFreeTableListCallback);
         Message response = new Message(FREE_TABLE_LIST, onRequestFreeTableListCallback.get());
-        sendMessage(activity, toEndpointId, response);
-    }
-
-    private void sendMessage(Activity activity, String toEndpointId, Message response) {
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        try {
-            ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
-            objectOutputStream.writeObject(response);
-            Payload filePayload = Payload.fromBytes(outputStream.toByteArray());
-            Nearby.getConnectionsClient(activity).sendPayload(toEndpointId, filePayload);
-        } catch (IOException e) {
-            Log.wtf(TAG, "Unexpected output IOException: " + e);
-            throw new AssertionError("Unexpected output IOException");
-        }
+        sendMessage(toEndpointId, response);
     }
 
 
@@ -167,8 +149,9 @@ public abstract class ManagerCommunication {
 
     // TODO probabilmente andranno aggiunte callback onSuccess e onFail
     public void startRoom(Activity activity) {
+        this.activity = activity;
 
-        final ConnectionLifecycleCallback connectionLifecycleCallback = connectionLifecycleCallback(activity);
+        final ConnectionLifecycleCallback connectionLifecycleCallback = connectionLifecycleCallback();
 
         AdvertisingOptions advertisingOptions = new AdvertisingOptions.Builder().setStrategy(STRATEGY).build();
         Nearby.getConnectionsClient(activity)

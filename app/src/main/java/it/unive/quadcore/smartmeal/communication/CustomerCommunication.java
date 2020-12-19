@@ -35,16 +35,12 @@ import it.unive.quadcore.smartmeal.local.WaiterNotificationException;
 import it.unive.quadcore.smartmeal.model.Table;
 import it.unive.quadcore.smartmeal.storage.CustomerStorage;
 
-public abstract class CustomerCommunication {
+public abstract class CustomerCommunication extends Communication {
     private static final String TAG = "CustomerCommunication";
-
-    private static final Strategy STRATEGY = Strategy.P2P_STAR;
-    private static final String SERVICE_ID = "it.unive.quadcore.smartmeal";
 
     @Nullable
     private String managerEndpointId;
-    @Nullable
-    private Activity activity;                  // TODO assegnare valore
+
     @Nullable
     private Consumer<Response<TreeSet<Table>, ? extends TableException>> freeTableListCallback;
 
@@ -55,7 +51,8 @@ public abstract class CustomerCommunication {
     // eventualmente prendere callback con costruttore
 
 
-    public void joinRoom() {
+    public void joinRoom(Activity activity) {
+        this.activity = activity;
 
         final EndpointDiscoveryCallback endpointDiscoveryCallback = endpointDiscoveryCallback();
 
@@ -187,19 +184,6 @@ public abstract class CustomerCommunication {
     private void handleFreeTableListResponse(Serializable content) {
         // if (content instanceof SortedSet) TODO pensarci
         freeTableListCallback.accept((Response<TreeSet<Table>, TableException>) content);
-    }
-
-    private void sendMessage(String toEndpointId, Message response) {
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        try {
-            ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
-            objectOutputStream.writeObject(response);
-            Payload filePayload = Payload.fromBytes(outputStream.toByteArray());
-            Nearby.getConnectionsClient(activity).sendPayload(toEndpointId, filePayload);
-        } catch (IOException e) {
-            Log.wtf(TAG, "Unexpected output IOException: " + e);
-            throw new AssertionError("Unexpected output IOException");
-        }
     }
 
 
