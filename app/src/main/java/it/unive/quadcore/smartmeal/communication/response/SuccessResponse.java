@@ -2,10 +2,10 @@ package it.unive.quadcore.smartmeal.communication.response;
 
 import java.io.Serializable;
 
-public class SuccessResponse<T extends Serializable> implements Response<T, Exception> {
+public class SuccessResponse<T extends Serializable, E extends Exception> implements Response<T, E> {
     private final T content;
 
-    private SuccessResponse(T content) {
+    public SuccessResponse(T content) {
         this.content = content;
     }
 
