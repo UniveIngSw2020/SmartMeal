@@ -128,8 +128,8 @@ public abstract class ManagerCommunication extends Communication {
                 });
     }
 
-    public abstract void onNotifyWaiter(Function<WaiterNotification, Response<Serializable, ? extends WaiterNotificationException>> consumer);
-    public abstract void onSelectTable(BiFunction<Customer, Table, Response<Serializable, ? extends TableException>> consumer);
+    public abstract void onNotifyWaiter(Function<WaiterNotification, Confirmation<? extends WaiterNotificationException>> consumer);
+    public abstract void onSelectTable(BiFunction<Customer, Table, Confirmation<? extends TableException>> consumer);
     public void onRequestFreeTableList(Supplier<Response<TreeSet<? extends Table>, ? extends TableException>> supplier) {
         onRequestFreeTableListCallback = supplier;
     }

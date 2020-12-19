@@ -142,8 +142,8 @@ public abstract class CustomerCommunication extends Communication {
     }
 
 
-    public abstract void notifyWaiter(Consumer<Response<Serializable, ? extends WaiterNotificationException>> onResponse);
-    public abstract void selectTable(Table table, Consumer<Response<Serializable, ? extends TableException>> onResponse);
+    public abstract void notifyWaiter(Consumer<Confirmation<? extends WaiterNotificationException>> onResponse);
+    public abstract void selectTable(Table table, Consumer<Confirmation<? extends TableException>> onResponse);
 
     public void requestFreeTableList(Consumer<Response<TreeSet<Table>, ? extends TableException>> consumer){
         freeTableListCallback = consumer;
