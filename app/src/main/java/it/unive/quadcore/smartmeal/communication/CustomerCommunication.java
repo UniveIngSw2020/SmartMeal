@@ -29,6 +29,7 @@ import java.util.Collection;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+import it.unive.quadcore.smartmeal.communication.confirmation.Confirmation;
 import it.unive.quadcore.smartmeal.communication.response.Response;
 import it.unive.quadcore.smartmeal.local.TableException;
 import it.unive.quadcore.smartmeal.local.WaiterNotificationException;
@@ -45,6 +46,7 @@ public abstract class CustomerCommunication extends Communication {
     private Consumer<Response<TreeSet<Table>, ? extends TableException>> freeTableListCallback;
 
     public static CustomerCommunication getInstance() {
+        // TODO
         throw new UnsupportedOperationException("Not implemented yet");
     }
 
@@ -103,6 +105,8 @@ public abstract class CustomerCommunication extends Communication {
             protected void onMessageReceived(String endpointId, Message message) {
                 // TODO continuare
                 switch (message.getRequestType()) {
+                    case CUSTOMER_NAME:
+                        handleCustomerNameConfirmation(message.getContent());
                     case FREE_TABLE_LIST:
                         handleFreeTableListResponse(message.getContent());
                     default:
@@ -115,8 +119,21 @@ public abstract class CustomerCommunication extends Communication {
             @Override
             protected void onConnectionSuccess(String endpointId) {
                 managerEndpointId = endpointId;
+
+                // TODO mandare messaggio con nome
             }
         };
+    }
+
+    protected void handleCustomerNameConfirmation(Serializable content) {
+        Confirmation<CustomerNotRecognizedException> confirmation = (Confirmation<CustomerNotRecognizedException>) content;
+        try {
+            confirmation.obtain();
+
+            // TODO la connesione è andata a buon fine
+        } catch (CustomerNotRecognizedException e) {
+            // TODO inivare nuovamente nome
+        }
     }
 
     private void handleFreeTableListResponse(Serializable content) {

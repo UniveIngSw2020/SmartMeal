@@ -11,7 +11,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 
-public abstract class Communication {
+abstract class Communication {
     private static final String TAG = "Communication";
 
     protected static final Strategy STRATEGY = Strategy.P2P_STAR;

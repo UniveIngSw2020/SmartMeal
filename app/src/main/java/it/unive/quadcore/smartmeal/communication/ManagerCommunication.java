@@ -8,43 +8,40 @@ import androidx.arch.core.util.Function;
 import androidx.core.util.Consumer;
 import androidx.core.util.Supplier;
 
-import com.google.android.gms.common.util.BiConsumer;
 import com.google.android.gms.nearby.Nearby;
 import com.google.android.gms.nearby.connection.AdvertisingOptions;
-import com.google.android.gms.nearby.connection.ConnectionInfo;
 import com.google.android.gms.nearby.connection.ConnectionLifecycleCallback;
-import com.google.android.gms.nearby.connection.ConnectionResolution;
-import com.google.android.gms.nearby.connection.ConnectionsStatusCodes;
-import com.google.android.gms.nearby.connection.Payload;
 import com.google.android.gms.nearby.connection.PayloadCallback;
-import com.google.android.gms.nearby.connection.PayloadTransferUpdate;
-import com.google.android.gms.nearby.connection.Strategy;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.TreeSet;
 import java.util.Objects;
 import java.util.function.BiFunction;
 
+import it.unive.quadcore.smartmeal.communication.confirmation.Confirmation;
 import it.unive.quadcore.smartmeal.communication.response.Response;
 import it.unive.quadcore.smartmeal.local.TableException;
 import it.unive.quadcore.smartmeal.local.WaiterNotificationException;
-import it.unive.quadcore.smartmeal.model.Customer;
 import it.unive.quadcore.smartmeal.model.Table;
 import it.unive.quadcore.smartmeal.model.WaiterNotification;
 import it.unive.quadcore.smartmeal.storage.ManagerStorage;
 
+import static it.unive.quadcore.smartmeal.communication.CustomerHandler.Customer;
+import static it.unive.quadcore.smartmeal.communication.RequestType.CUSTOMER_NAME;
 import static it.unive.quadcore.smartmeal.communication.RequestType.FREE_TABLE_LIST;
+
 
 public abstract class ManagerCommunication extends Communication {
     private static final String TAG = "ManagerCommunication";
 
+    private final CustomerHandler customerHandler;
+
     @Nullable
     private Supplier<Response<TreeSet<? extends Table>, ? extends TableException>> onRequestFreeTableListCallback;
+
+    private ManagerCommunication() {
+        customerHandler = CustomerHandler.getInstance();
+    }
 
 
     // TODO
@@ -54,6 +51,18 @@ public abstract class ManagerCommunication extends Communication {
 
             @Override
             protected void onMessageReceived(String endpointId, Message message) {
+                RequestType requestType = message.getRequestType();
+
+
+                if (requestType == RequestType.CUSTOMER_NAME) {
+                    handleCustomerNameMessage(message);
+                    return;
+                }
+
+                if (!customerHandler.containsCustomer(endpointId)) {
+                    new Message(CUSTOMER_NAME, false);
+                }
+
                 // TODO continuare
                 switch (message.getRequestType()) {
                     case FREE_TABLE_LIST:
@@ -62,6 +71,8 @@ public abstract class ManagerCommunication extends Communication {
                     default:
                         throw new UnsupportedOperationException("Not implemented yet");
                 }
+
+
             }
         };
 
@@ -73,6 +84,13 @@ public abstract class ManagerCommunication extends Communication {
                 // TODO
             }
         };
+    }
+
+    private void handleCustomerNameMessage(Message message) {
+        // TODO
+        //customerHandler.addCustomer(endpointId, name);
+        // TODO avvisare del buon esito
+
     }
 
     private void handleFreeTableListRequest(String toEndpointId) {
