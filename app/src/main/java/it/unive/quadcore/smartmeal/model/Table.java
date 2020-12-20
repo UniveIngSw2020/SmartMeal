@@ -2,9 +2,10 @@ package it.unive.quadcore.smartmeal.model;
 
 import androidx.annotation.NonNull;
 
+import java.io.Serializable;
 import java.util.Objects;
 
-public abstract class Table implements Comparable<Table>{ // TODO : Togliere l'abstract ?
+public abstract class Table implements Comparable<Table>, Serializable { // TODO : Togliere l'abstract ?
     // possibile costruttore package-private chiamato da un'altra classe
 
     // eventuale array esterno di tavoli (classe che si occupa di istanziare i tavoli
