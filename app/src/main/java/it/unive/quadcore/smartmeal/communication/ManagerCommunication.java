@@ -34,7 +34,7 @@ import static it.unive.quadcore.smartmeal.communication.RequestType.FREE_TABLE_L
 import static it.unive.quadcore.smartmeal.communication.RequestType.NOTIFY_WAITER;
 
 
-public abstract class ManagerCommunication extends Communication {
+public class ManagerCommunication extends Communication {
     @NonNull
     private static final String TAG = "ManagerCommunication";
 
@@ -50,6 +50,17 @@ public abstract class ManagerCommunication extends Communication {
     @Nullable
     private Consumer<Customer> onCustomerLeftRoomCallback;
     private boolean roomStarted;
+
+    @Nullable
+    private static ManagerCommunication instance;
+
+    public synchronized static ManagerCommunication getInstance() {
+        if (instance == null) {
+            instance = new ManagerCommunication();
+        }
+
+        return instance;
+    }
 
     private ManagerCommunication() {
         roomStarted = false;
@@ -89,6 +100,7 @@ public abstract class ManagerCommunication extends Communication {
                         break;
                     case NOTIFY_WAITER:
                         handleNotifyWaiterRequest(endpointId);
+                        break;
                     default:
                         throw new UnsupportedOperationException("Not implemented yet");
                 }
@@ -132,7 +144,7 @@ public abstract class ManagerCommunication extends Communication {
     private void handleCustomerNotRecognized(@NonNull String endpointId) {
         Message confirmationMessage = new Message(CUSTOMER_NAME, new ConfirmationDenied<>(new CustomerNotRecognizedException()));
         sendMessage(endpointId, confirmationMessage);
-    };
+    }
 
     private void handleCustomerNameMessage(@NonNull String endpointId, @NonNull Serializable content) {
         // TODO check exception instead of if & else
@@ -156,16 +168,14 @@ public abstract class ManagerCommunication extends Communication {
     }
 
 
-    public static ManagerCommunication getInstance() {
-        throw new UnsupportedOperationException("Not implemented yet");
-    }
+
 
     // eventualmente prendere callback con costruttore
 
     // TODO probabilmente andranno aggiunte callback onSuccess e onFail
-    public void startRoom(Activity activity) {
-        if(roomStarted){
-            throw new IllegalStateException("Room had already started");
+    public void startRoom(@NonNull Activity activity) {
+        if(isRoomStarted()) {
+            throw new IllegalStateException("Room has been already started");
         }
 
         Objects.requireNonNull(onCustomerLeftRoomCallback);
@@ -186,23 +196,25 @@ public abstract class ManagerCommunication extends Communication {
                         connectionLifecycleCallback,
                         advertisingOptions
                 )
-                .addOnSuccessListener((Void unused) -> {
-                    Log.i(TAG, "Successfully started advertising");
-                })
-                .addOnFailureListener((Exception e) -> {
-                    Log.e(TAG, "Advertising failed");
-                });
+                .addOnSuccessListener((Void unused) -> Log.i(TAG, "Successfully started advertising"))
+                .addOnFailureListener((Exception e) -> Log.e(TAG, "Advertising failed"));
     }
 
-    public void onNotifyWaiter(Function<WaiterNotification, Confirmation<? extends WaiterNotificationException>> onNotifyWaiterCallback) {
+    public void onNotifyWaiter(@NonNull Function<WaiterNotification, Confirmation<? extends WaiterNotificationException>> onNotifyWaiterCallback) {
+        Objects.requireNonNull(onNotifyWaiterCallback);
+
         this.onNotifyWaiterCallback = onNotifyWaiterCallback;
     }
 
-    public void onSelectTable(BiFunction<Customer, Table, Confirmation<? extends TableException>> onSelectTableCallback) {
+    public void onSelectTable(@NonNull BiFunction<Customer, Table, Confirmation<? extends TableException>> onSelectTableCallback) {
+        Objects.requireNonNull(onSelectTableCallback);
+
         this.onSelectTableCallback = onSelectTableCallback;
     }
 
-    public void onRequestFreeTableList(Supplier<Response<TreeSet<? extends Table>, ? extends TableException>> onRequestFreeTableListCallback) {
+    public void onRequestFreeTableList(@NonNull Supplier<Response<TreeSet<? extends Table>, ? extends TableException>> onRequestFreeTableListCallback) {
+        Objects.requireNonNull(onRequestFreeTableListCallback);
+
         this.onRequestFreeTableListCallback = onRequestFreeTableListCallback;
     }
 
@@ -215,7 +227,9 @@ public abstract class ManagerCommunication extends Communication {
      * @param onCustomerLeftRoomCallback callback che implementa la logica da attuare quando un
      *                                   cliente si disconnette dalla stanza
      */
-    public void onCustomerLeftRoom(Consumer<Customer> onCustomerLeftRoomCallback) {
+    public void onCustomerLeftRoom(@NonNull Consumer<Customer> onCustomerLeftRoomCallback) {
+        Objects.requireNonNull(onCustomerLeftRoomCallback);
+
         this.onCustomerLeftRoomCallback = onCustomerLeftRoomCallback;
     }
 
@@ -224,9 +238,17 @@ public abstract class ManagerCommunication extends Communication {
      * Chiude la stanza e disconnette tutti i clienti ad essa collegati.
      */
     public void closeRoom() {
+        if (!isRoomStarted()) {
+            throw new IllegalStateException("The room has not been started");
+        }
+
         Nearby.getConnectionsClient(activity).stopAllEndpoints();
         Nearby.getConnectionsClient(activity).stopAdvertising();
         roomStarted = false;
         activity = null;
+    }
+
+    public boolean isRoomStarted() {
+        return roomStarted;
     }
 }
