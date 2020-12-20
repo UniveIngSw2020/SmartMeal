@@ -12,26 +12,30 @@ import com.google.android.gms.nearby.connection.ConnectionResolution;
 import com.google.android.gms.nearby.connection.ConnectionsStatusCodes;
 import com.google.android.gms.nearby.connection.PayloadCallback;
 
+import java.util.Objects;
+
 public abstract class ConnectionListener extends ConnectionLifecycleCallback {
     private static final String TAG = "ConnectionListener";
 
-    private Activity activity;
-    private PayloadCallback payloadCallback;
+    @NonNull
+    private final Activity activity;
+    @NonNull
+    private final PayloadCallback payloadCallback;
 
-    public ConnectionListener(Activity activity, PayloadCallback payloadCallback) {
+    public ConnectionListener(@NonNull Activity activity, @NonNull PayloadCallback payloadCallback) {
         this.activity = activity;
         this.payloadCallback = payloadCallback;
     }
 
     @Override
-    public void onConnectionInitiated(String endpointId, ConnectionInfo connectionInfo) {
+    public void onConnectionInitiated(@NonNull String endpointId, @NonNull ConnectionInfo connectionInfo) {
         Log.d(TAG, "onConnectionInitiated");
         // Accetta automaticamente la connessione
         Nearby.getConnectionsClient(activity).acceptConnection(endpointId, payloadCallback);
     }
 
     @Override
-    public void onConnectionResult(String endpointId, ConnectionResolution result) {
+    public void onConnectionResult(@NonNull String endpointId, ConnectionResolution result) {
         // tutti i possibili stati
         // https://developers.google.com/android/reference/com/google/android/gms/nearby/connection/ConnectionsStatusCodes
         switch (result.getStatus().getStatusCode()) {
@@ -56,11 +60,12 @@ public abstract class ConnectionListener extends ConnectionLifecycleCallback {
     }
 
     @Override
-    public void onDisconnected(String endpointId) {
+    public void onDisconnected(@NonNull String endpointId) {
+        Objects.requireNonNull(endpointId);
         // We've been disconnected from this endpoint. No more data can be
         // sent or received.
         Log.d(TAG, "onDisconnected");
     }
 
-    protected abstract void onConnectionSuccess(String endpointId);
+    protected abstract void onConnectionSuccess(@NonNull String endpointId);
 }

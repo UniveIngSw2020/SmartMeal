@@ -1,6 +1,8 @@
 package it.unive.quadcore.smartmeal.communication.confirmation;
 
-public class Confirmation<E extends Exception> {
+import java.io.Serializable;
+
+public class Confirmation<E extends Exception> implements Serializable {
     public Confirmation() {}
 
     public void obtain() throws E {}

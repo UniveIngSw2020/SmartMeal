@@ -3,6 +3,7 @@ package it.unive.quadcore.smartmeal.communication;
 import android.app.Activity;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.arch.core.util.Function;
 import androidx.core.util.Consumer;
@@ -16,30 +17,42 @@ import com.google.android.gms.nearby.connection.PayloadCallback;
 import java.io.Serializable;
 import java.util.TreeSet;
 import java.util.Objects;
-import java.util.function.BiFunction;
 
 import it.unive.quadcore.smartmeal.communication.confirmation.Confirmation;
+import it.unive.quadcore.smartmeal.communication.confirmation.ConfirmationDenied;
 import it.unive.quadcore.smartmeal.communication.response.Response;
 import it.unive.quadcore.smartmeal.local.TableException;
 import it.unive.quadcore.smartmeal.local.WaiterNotificationException;
 import it.unive.quadcore.smartmeal.model.Table;
 import it.unive.quadcore.smartmeal.model.WaiterNotification;
 import it.unive.quadcore.smartmeal.storage.ManagerStorage;
+import it.unive.quadcore.smartmeal.util.BiFunction;
 
 import static it.unive.quadcore.smartmeal.communication.CustomerHandler.Customer;
 import static it.unive.quadcore.smartmeal.communication.RequestType.CUSTOMER_NAME;
 import static it.unive.quadcore.smartmeal.communication.RequestType.FREE_TABLE_LIST;
+import static it.unive.quadcore.smartmeal.communication.RequestType.NOTIFY_WAITER;
 
 
 public abstract class ManagerCommunication extends Communication {
+    @NonNull
     private static final String TAG = "ManagerCommunication";
 
+    @NonNull
     private final CustomerHandler customerHandler;
 
     @Nullable
     private Supplier<Response<TreeSet<? extends Table>, ? extends TableException>> onRequestFreeTableListCallback;
+    @Nullable
+    private Function<WaiterNotification, Confirmation<? extends WaiterNotificationException>> onNotifyWaiterCallback;
+    @Nullable
+    private BiFunction<Customer, Table, Confirmation<? extends TableException>> onSelectTableCallback;
+    @Nullable
+    private Consumer<Customer> onCustomerLeftRoomCallback;
+    private boolean roomStarted;
 
     private ManagerCommunication() {
+        roomStarted = false;
         customerHandler = CustomerHandler.getInstance();
     }
 
@@ -50,17 +63,20 @@ public abstract class ManagerCommunication extends Communication {
         final PayloadCallback payloadCallback = new MessageListener() {
 
             @Override
-            protected void onMessageReceived(String endpointId, Message message) {
+            protected void onMessageReceived(@NonNull String endpointId, @NonNull Message message) {
+                Objects.requireNonNull(endpointId);
+                Objects.requireNonNull(message);
+
                 RequestType requestType = message.getRequestType();
 
-
                 if (requestType == RequestType.CUSTOMER_NAME) {
-                    handleCustomerNameMessage(message);
+                    handleCustomerNameMessage(endpointId, message.getContent());
                     return;
                 }
 
-                if (!customerHandler.containsCustomer(endpointId)) {
-                    new Message(CUSTOMER_NAME, false);
+                else if (!customerHandler.containsCustomer(endpointId)) {
+                    handleCustomerNotRecognized(endpointId);
+                    return;
                 }
 
                 // TODO continuare
@@ -68,6 +84,11 @@ public abstract class ManagerCommunication extends Communication {
                     case FREE_TABLE_LIST:
                         handleFreeTableListRequest(endpointId);
                         break;
+                    case SELECT_TABLE:
+                        handleSelectTableRequest(endpointId, message.getContent());
+                        break;
+                    case NOTIFY_WAITER:
+                        handleNotifyWaiterRequest(endpointId);
                     default:
                         throw new UnsupportedOperationException("Not implemented yet");
                 }
@@ -80,20 +101,55 @@ public abstract class ManagerCommunication extends Communication {
         return new ConnectionListener(activity, payloadCallback) {
 
             @Override
-            protected void onConnectionSuccess(String endpointId) {
+            protected void onConnectionSuccess(@NonNull String endpointId) {
                 // TODO
+            }
+
+            @Override
+            public void onDisconnected(@NonNull String endpointId) {
+                super.onDisconnected(endpointId);
+                Objects.requireNonNull(onCustomerLeftRoomCallback);
+
+                onCustomerLeftRoomCallback.accept(customerHandler.getCustomer(endpointId));
             }
         };
     }
 
-    private void handleCustomerNameMessage(Message message) {
-        // TODO
-        //customerHandler.addCustomer(endpointId, name);
-        // TODO avvisare del buon esito
+    private void handleNotifyWaiterRequest(@NonNull String endpointId) {
+        Objects.requireNonNull(onNotifyWaiterCallback);
+        WaiterNotification waiterNotification = new WaiterNotification(customerHandler.getCustomer(endpointId));
+        Confirmation<? extends WaiterNotificationException> confirmation = onNotifyWaiterCallback.apply(waiterNotification);
+        sendMessage(endpointId, new Message(NOTIFY_WAITER, confirmation));
+    }
+
+    private void handleSelectTableRequest(@NonNull String endpointId, @NonNull Serializable content) {
+        Objects.requireNonNull(onSelectTableCallback);
+        Table selectedTable = (Table) content;
+        Confirmation<? extends TableException> confirmation = onSelectTableCallback.apply(customerHandler.getCustomer(endpointId), selectedTable);
+        sendMessage(endpointId, new Message(NOTIFY_WAITER, confirmation));
+    }
+
+    private void handleCustomerNotRecognized(@NonNull String endpointId) {
+        Message confirmationMessage = new Message(CUSTOMER_NAME, new ConfirmationDenied<>(new CustomerNotRecognizedException()));
+        sendMessage(endpointId, confirmationMessage);
+    };
+
+    private void handleCustomerNameMessage(@NonNull String endpointId, @NonNull Serializable content) {
+        // TODO check exception instead of if & else
+        Objects.requireNonNull(content);
+        String name = (String) content;
+        if(customerHandler.containsCustomer(endpointId)){
+            Log.i(TAG, "Customer " + endpointId + " was already recognized in Local");
+        }
+        else {
+            customerHandler.addCustomer(endpointId, name);
+            Message confirmationMessage = new Message(CUSTOMER_NAME, new Confirmation<CustomerNotRecognizedException>());
+            sendMessage(endpointId, confirmationMessage);
+        }
 
     }
 
-    private void handleFreeTableListRequest(String toEndpointId) {
+    private void handleFreeTableListRequest(@NonNull String toEndpointId) {
         Objects.requireNonNull(onRequestFreeTableListCallback);
         Message response = new Message(FREE_TABLE_LIST, onRequestFreeTableListCallback.get());
         sendMessage(toEndpointId, response);
@@ -108,6 +164,16 @@ public abstract class ManagerCommunication extends Communication {
 
     // TODO probabilmente andranno aggiunte callback onSuccess e onFail
     public void startRoom(Activity activity) {
+        if(roomStarted){
+            throw new IllegalStateException("Room had already started");
+        }
+
+        Objects.requireNonNull(onCustomerLeftRoomCallback);
+
+        Objects.requireNonNull(onSelectTableCallback);
+        Objects.requireNonNull(onNotifyWaiterCallback);
+        Objects.requireNonNull(onRequestFreeTableListCallback);
+
         this.activity = activity;
 
         final ConnectionLifecycleCallback connectionLifecycleCallback = connectionLifecycleCallback();
@@ -128,10 +194,16 @@ public abstract class ManagerCommunication extends Communication {
                 });
     }
 
-    public abstract void onNotifyWaiter(Function<WaiterNotification, Confirmation<? extends WaiterNotificationException>> consumer);
-    public abstract void onSelectTable(BiFunction<Customer, Table, Confirmation<? extends TableException>> consumer);
-    public void onRequestFreeTableList(Supplier<Response<TreeSet<? extends Table>, ? extends TableException>> supplier) {
-        onRequestFreeTableListCallback = supplier;
+    public void onNotifyWaiter(Function<WaiterNotification, Confirmation<? extends WaiterNotificationException>> onNotifyWaiterCallback) {
+        this.onNotifyWaiterCallback = onNotifyWaiterCallback;
+    }
+
+    public void onSelectTable(BiFunction<Customer, Table, Confirmation<? extends TableException>> onSelectTableCallback) {
+        this.onSelectTableCallback = onSelectTableCallback;
+    }
+
+    public void onRequestFreeTableList(Supplier<Response<TreeSet<? extends Table>, ? extends TableException>> onRequestFreeTableListCallback) {
+        this.onRequestFreeTableListCallback = onRequestFreeTableListCallback;
     }
 
 
@@ -140,14 +212,21 @@ public abstract class ManagerCommunication extends Communication {
      * si disconnetta dalla stanza, con parametro l'oggetto della classe Customer
      * che lo rappresenta.
      *
-     * @param onCustomerLeftRoomCallback allback che implementa la logica da attuare quando un
+     * @param onCustomerLeftRoomCallback callback che implementa la logica da attuare quando un
      *                                   cliente si disconnette dalla stanza
      */
-    public abstract void onCustomerLeftRoom(Consumer<Customer> onCustomerLeftRoomCallback);
+    public void onCustomerLeftRoom(Consumer<Customer> onCustomerLeftRoomCallback) {
+        this.onCustomerLeftRoomCallback = onCustomerLeftRoomCallback;
+    }
 
 
     /**
      * Chiude la stanza e disconnette tutti i clienti ad essa collegati.
      */
-    public abstract void closeRoom();
+    public void closeRoom() {
+        Nearby.getConnectionsClient(activity).stopAllEndpoints();
+        Nearby.getConnectionsClient(activity).stopAdvertising();
+        roomStarted = false;
+        activity = null;
+    }
 }

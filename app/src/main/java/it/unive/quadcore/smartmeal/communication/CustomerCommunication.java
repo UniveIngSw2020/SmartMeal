@@ -3,6 +3,7 @@ package it.unive.quadcore.smartmeal.communication;
 import android.app.Activity;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.util.Consumer;
 
@@ -26,6 +27,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.Objects;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
@@ -44,6 +46,7 @@ public abstract class CustomerCommunication extends Communication {
 
     @Nullable
     private Consumer<Response<TreeSet<Table>, ? extends TableException>> freeTableListCallback;
+    private boolean connected;
 
     public static CustomerCommunication getInstance() {
         // TODO
@@ -102,7 +105,10 @@ public abstract class CustomerCommunication extends Communication {
 
         final PayloadCallback payloadCallback = new MessageListener() {
             @Override
-            protected void onMessageReceived(String endpointId, Message message) {
+            protected void onMessageReceived(@NonNull String endpointId, @NonNull Message message) {
+                Objects.requireNonNull(endpointId);
+                Objects.requireNonNull(message);
+
                 // TODO continuare
                 switch (message.getRequestType()) {
                     case CUSTOMER_NAME:
@@ -117,22 +123,29 @@ public abstract class CustomerCommunication extends Communication {
 
         return new ConnectionListener(activity, payloadCallback) {
             @Override
-            protected void onConnectionSuccess(String endpointId) {
+            protected void onConnectionSuccess(@NonNull String endpointId) {
                 managerEndpointId = endpointId;
-
-                // TODO mandare messaggio con nome
+                sendName();
             }
         };
     }
 
-    protected void handleCustomerNameConfirmation(Serializable content) {
+    private void sendName() {
+        sendMessage(managerEndpointId, new Message(RequestType.CUSTOMER_NAME, CustomerStorage.getName()));
+    }
+
+    protected void handleCustomerNameConfirmation(@NonNull Serializable content) {
+        Objects.requireNonNull(content);
         Confirmation<CustomerNotRecognizedException> confirmation = (Confirmation<CustomerNotRecognizedException>) content;
         try {
             confirmation.obtain();
-
-            // TODO la connesione è andata a buon fine
+            connected = true;
+            Log.i(TAG, "Connection confirmed");
         } catch (CustomerNotRecognizedException e) {
-            // TODO inivare nuovamente nome
+            Log.e(TAG, "Connection not confirmed");
+            sendName();
+
+            // TODO eventualmente limitare i tentativi di connessione
         }
     }
 
