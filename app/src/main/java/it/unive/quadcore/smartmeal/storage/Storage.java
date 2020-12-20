@@ -36,6 +36,8 @@ class Storage {
      */
     Storage() {}
 
+    // Metodo da applicare all'inizio dell'esecuzione dell'applicazione, dalla MainActivity. Dopo avere invocato tale metodo si possono
+    // chiamare tutti gli altri.
     // Si passa l'Activity per le shared preferences. Un'alternativa a ciò è passare l'Activity ad ogni metodo come input.
     // Si usa l'activity per creare le shared preferences.
     public static void initializeStorage(Activity activity){ // Alter ego di getInstance
@@ -91,7 +93,7 @@ class Storage {
         if(!initialized)
             throw new StorageException("The storage hasn't been initialize yet");
 
-        // Preference non esistente : lancio eccezione
+        // Preference non esistente : lancio eccezione. Alternativa è settare valore di default (nome "Username")
         if(!sharedPreferences.contains("Name")) { // TODO : rimpiazzare con stringa di res
             /*SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.putString("Name","Username");
