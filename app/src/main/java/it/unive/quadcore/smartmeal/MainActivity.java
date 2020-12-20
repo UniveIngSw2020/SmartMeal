@@ -135,6 +135,7 @@ public class MainActivity extends AppCompatActivity {
 
         try {
             String name = ManagerStorage.getName();
+            System.out.println(name);
         }catch(StorageException e){
             e.printStackTrace();
         }
@@ -147,12 +148,6 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        //ManagerStorage.setTables();
-        Set<ManagerTable> tables = ManagerStorage.getTables();
-
-        //ManagerStorage.setMaxNotificationNumber(5);
-        int MaxNotificationNumber = ManagerStorage.getMaxNotificationNumber();
-
         try {
             LocalDescription localDescription = ManagerStorage.getLocalDescription();
             System.out.println(localDescription);
@@ -161,12 +156,18 @@ public class MainActivity extends AppCompatActivity {
         }
 
 
+        Set<ManagerTable> tables = ManagerStorage.getTables();
+
+        int MaxNotificationNumber = ManagerStorage.getMaxNotificationNumber();
+
+
+
         /* TESTING CUSTOMER STORAGE*/
 
         //CustomerStorage.setSensorMode(false);
         boolean sensorMode = CustomerStorage.getSensorMode();
 
-        //CustomerStorage.setNotificationMode(false);
+        CustomerStorage.setNotificationMode(false);
         boolean notificationMode = CustomerStorage.getNotificationMode();
 
     }
