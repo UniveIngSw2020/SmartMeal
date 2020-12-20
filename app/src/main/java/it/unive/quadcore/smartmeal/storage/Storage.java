@@ -11,6 +11,7 @@ import android.preference.PreferenceManager;
 import java.util.Set;
 import java.util.TreeSet;
 
+import it.unive.quadcore.smartmeal.MainActivity;
 import it.unive.quadcore.smartmeal.R;
 import it.unive.quadcore.smartmeal.model.FoodCategory;
 import it.unive.quadcore.smartmeal.model.LocalDescription;
@@ -25,21 +26,21 @@ class Storage {
 
     protected static boolean initialized = false;
 
-    protected static Activity activity ; //
-
     // Shared Preferences. La prima di deafult, ovvero si mettono i settings dell'applicazione. La seconda di uso generico.
     protected static SharedPreferences defaultSharedPreferences;
     protected static SharedPreferences sharedPreferences;
+
+    private static LocalDescription localDescription = null;
     /**
      * Rende non instanziabile questa classe.
      */
     Storage() {}
 
+    // Si passa l'Activity per le shared preferences. Un'alternativa a ciò è passare l'Activity ad ogni metodo come input.
+    // Si usa l'activity per creare le shared preferences.
     public static void initializeStorage(Activity activity){ // Alter ego di getInstance
         if(initialized)
             throw new StorageException("The storage has alredy been initialized");
-
-        Storage.activity = activity;
 
         // Shared Preference di deafult. Usata per i settings dell'applicazione.
         defaultSharedPreferences = PreferenceManager.getDefaultSharedPreferences(activity);
@@ -54,15 +55,20 @@ class Storage {
         if(!initialized)
             throw new StorageException("The storage hasn't been initialize yet");
 
-        String applicationModeString = defaultSharedPreferences.getString("ApplicationMode",null); // TODO : rimpiazzare con stringa di res
-        if(applicationModeString==null)
-            throw new StorageException("The application mode was not found in storage");
+        // Preference non esistente (primo uso della preference). Metto valore di default
+        if(!defaultSharedPreferences.contains("ApplicationMode")) { // TODO : rimpiazzare con stringa di res
+            SharedPreferences.Editor editor = defaultSharedPreferences.edit();
+            editor.putString("ApplicationMode",ApplicationMode.UNDEFINED.name());
+            editor.apply();
+        }
+        // Prende l'ApplicationMode dallo storage : è codificato come stringa
+        String applicationModeString = defaultSharedPreferences.getString("ApplicationMode",ApplicationMode.UNDEFINED.name());
 
         ApplicationMode applicationMode ;
         try{
-            applicationMode = ApplicationMode.valueOf(applicationModeString);
+            applicationMode = ApplicationMode.valueOf(applicationModeString); // Da stringa a Enum
             return applicationMode;
-        }catch(IllegalArgumentException e) {
+        }catch(IllegalArgumentException e) { // La stringa non codifica un ApplicationMode
             throw new StorageException("The storage contains an invalid application mode");
         }
     }
@@ -73,6 +79,7 @@ class Storage {
 
         SharedPreferences.Editor editor = defaultSharedPreferences.edit();
 
+        // Scrivo l'ApplicationMode nello storage. Se non esiste tale preference viene creata.
         String applicationModeString = applicationMode.name(); // toString in alternativa
         editor.putString("ApplicationMode",applicationModeString); // TODO : rimpiazzare con stringa di res
         editor.apply();
@@ -84,27 +91,38 @@ class Storage {
         if(!initialized)
             throw new StorageException("The storage hasn't been initialize yet");
 
-        String name = sharedPreferences.getString("Name",null); // TODO : rimpiazzare con stringa di res
-        if(name==null)
-            throw new StorageException("The name was not found in storage");
+        // Preference non esistente : lancio eccezione
+        if(!sharedPreferences.contains("Name")) { // TODO : rimpiazzare con stringa di res
+            /*SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putString("Name","Username");
+            editor.apply();*/
+            throw new StorageException("The name was not found in storage"); // Eccezione o valore di default?
+        }
 
-        return name;
+        // Prendo il nome dallo storage
+        return sharedPreferences.getString("Name","Username");
     }
 
     public static void setName(String name) {
         if(!initialized)
             throw new StorageException("The storage hasn't been initialize yet");
 
+        // Scrivo il nome nello storage. Se non esiste tale preference viene creata.
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString("Name", name); // TODO : rimpiazzare con stringa di res
         editor.apply();
     }
 
 
-
+    // La descrizione del locale non è memorizzata in modo permanente, ma è semplicemente generata in memoria primaria.
     public static LocalDescription getLocalDescription() {
         if(!initialized)
             throw new StorageException("The storage hasn't been initialize yet");
+
+        // Istanza già creata
+        if(localDescription!=null)
+            return localDescription;
+
 
         // Creiamo i prodotti
         Set<Product> products = generateProducts();
@@ -113,16 +131,19 @@ class Storage {
         Menu menu = new Menu(products);
 
         //Creiamo Local Description
-        String presentation = "A delicious and friendly pub in a boat-like location";
+        String presentation = "A delicious and friendly pub in a boat-like location"; // TODO :rimpiazzare con valori di res
         Location location = new Location("");
         location.setLatitude(45.56121046165753d);
         location.setLongitude(12.237328642473326);
         //int imageID = R.drawable.localpicture;
 
-        return new LocalDescription("The boat restourant",presentation, location/*, imageID*/ ,menu);
+        localDescription = new LocalDescription("The boat restourant",presentation, location/*, imageID*/ ,menu);
+
+        return localDescription;
 
     }
 
+    // Generazione dei prodotti
     private static Set<Product> generateProducts(){
         Set<Product> products = new TreeSet<>();
 

@@ -22,10 +22,8 @@ public final class ManagerStorage extends Storage {
 
     // TODO : cambiare
 
-    // Usato per settare la prima volta
-    private static void setTables(){
-        if(!initialized)
-            throw new StorageException("The storage hasn't been initialize yet");
+    // Genera i tavoli di default
+    private static Set<String> generateTablesStrings(){
 
         Set<String> tables = new TreeSet<>();
         char supp = 'A';
@@ -35,9 +33,7 @@ public final class ManagerStorage extends Storage {
             supp+=1;
         }
 
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putStringSet("Tables", tables); // TODO : rimpiazzare con stringa di res
-        editor.apply();
+        return tables;
     }
 
     // Possibilità di non tenere i tavoli in memoria secondaria ma generarli e basta
@@ -57,9 +53,13 @@ public final class ManagerStorage extends Storage {
         if(!initialized)
             throw new StorageException("The storage hasn't been initialize yet");
 
-        Set<String> tablesString = sharedPreferences.getStringSet("Tables",null); // TODO : rimpiazzare con stringa di res
-        if(tablesString==null)
-            throw new StorageException("The tables were not found in storage");
+        // Preference non esistente. Primo accesso a tale preference. Scrivo valore di deafult
+        if(!sharedPreferences.contains("Tables")){ // TODO : rimpiazzare con stringa di res
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putStringSet("Tables",generateTablesStrings());
+            editor.apply();
+        }
+        Set<String> tablesString = sharedPreferences.getStringSet("Tables",new TreeSet<>());
 
         Set<ManagerTable> tables = new TreeSet<>();
         for(String tableId : tablesString){
@@ -70,26 +70,24 @@ public final class ManagerStorage extends Storage {
         return tables;
     }
 
-    // Usato per settare la prima volta
-    private static void setMaxNotificationNumber(int n){
-        if(!initialized)
-            throw new StorageException("The storage hasn't been initialize yet");
-
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putInt("MaxNotificationNumber", n); // TODO : rimpiazzare con stringa di res
-        editor.apply();
+    // Genera il numero di default
+    private static int generateMaxNotificationNumber(){
+        return 5;
     }
 
     // Ritorna il numero massimo di notifiche in coda di uno stesso utente
-    // Possibilità di non teneretale numero in memoria secondaria ma generarlo e basta
+    // Possibilità di non tenere tale numero in memoria secondaria ma generarlo e basta
     public static int getMaxNotificationNumber(){
         if(!initialized)
             throw new StorageException("The storage hasn't been initialize yet");
 
-        int maxNotificationNumber = sharedPreferences.getInt("MaxNotificationNumber",-1); // TODO : rimpiazzare con stringa di res
-        if(maxNotificationNumber<0)
-            throw new StorageException("The max notification number was not found in storage");
+        // Preference non esistente. Primo accesso a tale preference. Scrivo valore di deafult
+        if(!sharedPreferences.contains("MaxNotificationNumber")){ // TODO : rimpiazzare con stringa di res
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putInt("MaxNotificationNumber",generateMaxNotificationNumber());
+            editor.apply();
+        }
 
-        return maxNotificationNumber;
+        return sharedPreferences.getInt("MaxNotificationNumber",generateMaxNotificationNumber());
     }
 }
