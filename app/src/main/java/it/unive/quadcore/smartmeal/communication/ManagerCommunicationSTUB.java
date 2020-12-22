@@ -9,10 +9,11 @@ import com.google.android.gms.common.util.BiConsumer;
 
 import java.util.TreeSet;
 
-import it.unive.quadcore.smartmeal.model.Customer;
 import it.unive.quadcore.smartmeal.model.ManagerTable;
 import it.unive.quadcore.smartmeal.model.Table;
 import it.unive.quadcore.smartmeal.model.WaiterNotification;
+
+import static it.unive.quadcore.smartmeal.communication.CustomerHandler.Customer;
 
 public class ManagerCommunicationSTUB extends ManagerCommunication{
     private static ManagerCommunicationSTUB instance = null;

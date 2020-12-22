@@ -1,12 +1,18 @@
 package it.unive.quadcore.smartmeal.local;
 
 import android.app.Activity;
+import android.util.Log;
 
 import java.util.Set;
 import java.util.SortedSet;
+import java.util.TreeSet;
 
 import it.unive.quadcore.smartmeal.communication.ManagerCommunication;
 import it.unive.quadcore.smartmeal.communication.ManagerCommunicationSTUB;
+import it.unive.quadcore.smartmeal.communication.confirmation.Confirmation;
+import it.unive.quadcore.smartmeal.communication.confirmation.ConfirmationDenied;
+import it.unive.quadcore.smartmeal.communication.response.ErrorResponse;
+import it.unive.quadcore.smartmeal.communication.response.SuccessResponse;
 import it.unive.quadcore.smartmeal.model.ManagerTable;
 import it.unive.quadcore.smartmeal.model.Table;
 import it.unive.quadcore.smartmeal.model.WaiterNotification;
@@ -19,6 +25,8 @@ import static it.unive.quadcore.smartmeal.communication.CustomerHandler.Customer
 
 // CLasse locale (usata dal codice di gestione dell'interfaccia grafica)
 public class Local {
+    private static final String TAG = "Local";
+
     // Singletone
     private static Local instance = null;
 
@@ -62,26 +70,28 @@ public class Local {
                 waiterNotification -> {
                     try {
                         waiterNotificationHandler.addNotification(waiterNotification);
+                        return new Confirmation<>();
                     } catch (WaiterNotificationException e) { // Eccezione : non si può aggiungere tale notifica cameriere
-                        managerCommunication.reportException(e); // Forwardo l'eccezione al customer
+                        return new ConfirmationDenied<>(e); // Forwardo l'eccezione al customer
                     }
                 });
         managerCommunication.onRequestFreeTableList( () -> { // Callback da eseguire quando arriva richiesta lista tavoli liberi
             try {
-                return tableHandler.getFreeTableList();
+                return new SuccessResponse<>(tableHandler.getFreeTableList());
             } catch (TableException e) { // Eccezione : la lista di tavoli liberi è vuota
                 // TODO : forwardare l'eccezione? in alternativa tale eccezione nel metodo getFreeTableList si potrebbe proprio
                 // non mettere
-                managerCommunication.reportException(e); // Forwardo l'eccezione al customer
-                return null; // Oppure new TreeSet<>();
+                // Forwardo l'eccezione al customer
+                return new ErrorResponse<>(e); // Oppure new TreeSet<>();
             }
         });
         managerCommunication.onSelectTable( (customer,table) -> { // Callback da eseguire quando arriva selezione di un tavolo
             try{
                 tableHandler.assignTable(customer,table);
+                return new Confirmation<>();
             }
             catch( TableException e){ // Eccezione : tale cliente non può prendere tale tavolo
-                managerCommunication.reportException(e); // Forwardo l'eccezione al customer
+                return new ConfirmationDenied<>(e); // Forwardo l'eccezione al customer
             }
         });
 
@@ -89,7 +99,7 @@ public class Local {
             try{
                 tableHandler.freeTable(tableHandler.getTable(customer));
             }catch( TableException e){
-                managerCommunication.reportException(e);
+                Log.e(TAG,"Customer that left the room didn't have a table");
             }
         });
 

@@ -23,6 +23,7 @@ import it.unive.quadcore.smartmeal.communication.confirmation.ConfirmationDenied
 import it.unive.quadcore.smartmeal.communication.response.Response;
 import it.unive.quadcore.smartmeal.local.TableException;
 import it.unive.quadcore.smartmeal.local.WaiterNotificationException;
+import it.unive.quadcore.smartmeal.model.ManagerTable;
 import it.unive.quadcore.smartmeal.model.Table;
 import it.unive.quadcore.smartmeal.model.WaiterNotification;
 import it.unive.quadcore.smartmeal.storage.ManagerStorage;

@@ -12,7 +12,6 @@ import it.unive.quadcore.smartmeal.local.Local;
 import it.unive.quadcore.smartmeal.local.RoomStateException;
 import it.unive.quadcore.smartmeal.local.TableException;
 import it.unive.quadcore.smartmeal.local.WaiterNotificationException;
-import it.unive.quadcore.smartmeal.model.Customer;
 import it.unive.quadcore.smartmeal.model.LocalDescription;
 import it.unive.quadcore.smartmeal.model.ManagerTable;
 import it.unive.quadcore.smartmeal.model.Table;
@@ -21,6 +20,8 @@ import it.unive.quadcore.smartmeal.storage.ApplicationMode;
 import it.unive.quadcore.smartmeal.storage.CustomerStorage;
 import it.unive.quadcore.smartmeal.storage.ManagerStorage;
 import it.unive.quadcore.smartmeal.storage.StorageException;
+
+import static it.unive.quadcore.smartmeal.communication.CustomerHandler.Customer;
 
 public class MainActivity extends AppCompatActivity {
 

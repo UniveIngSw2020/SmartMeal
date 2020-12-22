@@ -2,7 +2,7 @@ package it.unive.quadcore.smartmeal.communication.response;
 
 import java.io.Serializable;
 
-public class ErrorResponse<T extends Serializable, E extends Exception> implements Response<Serializable, E> {
+public class ErrorResponse<T extends Serializable, E extends Exception> implements Response<T, E> {
     private final E exception;
 
     public ErrorResponse(E exception) {
@@ -10,7 +10,7 @@ public class ErrorResponse<T extends Serializable, E extends Exception> implemen
     }
 
     @Override
-    public Serializable getContent() throws E {
+    public T getContent() throws E {
         throw exception;
     }
 }
