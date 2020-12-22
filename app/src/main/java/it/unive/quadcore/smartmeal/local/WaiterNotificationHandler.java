@@ -47,7 +47,7 @@ class WaiterNotificationHandler {
     synchronized void addNotification(WaiterNotification waiterNotification) throws WaiterNotificationException {
 
         // Controllo che il numero di notification in coda fatte da quel customer non sia superiore al limite massimo
-        if(countCustomerWaiterNotification(waiterNotification.getCustomer())>MAX_NOTIFICATION_NUMBER)
+        if(countCustomerWaiterNotification(waiterNotification.getCustomer())>=MAX_NOTIFICATION_NUMBER)
             throw new WaiterNotificationException("Max notifications number exceeded");
 
         if(!notificationList.add(waiterNotification))
@@ -58,7 +58,7 @@ class WaiterNotificationHandler {
     // E' un metodo visibile solo a Local.
     synchronized void removeNotification(WaiterNotification waiterNotification) throws WaiterNotificationException {
         if(!notificationList.remove(waiterNotification))
-            throw new WaiterNotificationException("The selected notification does not exists");
+            throw new WaiterNotificationException("The selected notification does not exist");
     }
 
     // Ritorna la lista di notifiche. Se tale lista è vuota, ritorna un'eccezione.

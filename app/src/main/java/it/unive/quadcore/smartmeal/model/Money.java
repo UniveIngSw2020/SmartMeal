@@ -9,6 +9,10 @@ public class Money {
         this.value = value;
     }
 
+    public int getValue(){
+        return value;
+    }
+
     @NonNull
     @Override
     public String toString() {
