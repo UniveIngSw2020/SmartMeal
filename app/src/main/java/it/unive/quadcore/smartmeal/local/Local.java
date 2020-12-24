@@ -8,7 +8,7 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 
 import it.unive.quadcore.smartmeal.communication.ManagerCommunication;
-import it.unive.quadcore.smartmeal.communication.ManagerCommunicationSTUB;
+//import it.unive.quadcore.smartmeal.communication.ManagerCommunicationSTUB;
 import it.unive.quadcore.smartmeal.communication.confirmation.Confirmation;
 import it.unive.quadcore.smartmeal.communication.confirmation.ConfirmationDenied;
 import it.unive.quadcore.smartmeal.communication.response.ErrorResponse;
@@ -63,7 +63,8 @@ public class Local {
         waiterNotificationHandler = new WaiterNotificationHandler();
 
         // Creazione oggetto comunicazione
-        managerCommunication = ManagerCommunicationSTUB.getInstance(); // TODO : ricambiare a MAnagerCOmmunication
+//        managerCommunication = ManagerCommunicationSTUB.getInstance(); // TODO : ricambiare a MAnagerCOmmunication
+        managerCommunication = ManagerCommunication.getInstance(); // TODO : ricambiare a MAnagerCOmmunication
 
         // Passo le varie callback all gestore della comunicazione
         managerCommunication.onNotifyWaiter( // Callback da eseguire quando arriva notifica cameriere
@@ -199,7 +200,7 @@ public class Local {
 
         roomState = false;
     }
-
+/*
     // TODO : rimuovere ciò. Solo per testing
     public void testingTableHandler(){
         ((ManagerCommunicationSTUB)managerCommunication).beginTableHandler();
@@ -208,4 +209,6 @@ public class Local {
     public void testingWaiterNotificationHandler(){
         ((ManagerCommunicationSTUB)managerCommunication).beginWaiterNotificationHandler();
     }
+
+ */
 }

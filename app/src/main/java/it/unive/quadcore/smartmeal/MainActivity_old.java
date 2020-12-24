@@ -23,7 +23,7 @@ import it.unive.quadcore.smartmeal.storage.StorageException;
 
 import static it.unive.quadcore.smartmeal.communication.CustomerHandler.Customer;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity_old extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -15,6 +15,7 @@ import it.unive.quadcore.smartmeal.model.WaiterNotification;
 
 import static it.unive.quadcore.smartmeal.communication.CustomerHandler.Customer;
 
+/*
 public class ManagerCommunicationSTUB extends ManagerCommunication{
     private static ManagerCommunicationSTUB instance = null;
 
@@ -91,9 +92,9 @@ public class ManagerCommunicationSTUB extends ManagerCommunication{
         consumerCustomerLeft.accept(client2);
         freeTables = supplierFreeTables.get();
 
-        /*Customer client4 = new Customer(112,"Andrea");
-        Table table4 = freeTables.first();
-        consumerSelectTable.accept(client4,table4);*/
+//        Customer client4 = new Customer(112,"Andrea");
+//        Table table4 = freeTables.first();
+//        consumerSelectTable.accept(client4,table4);
     }
 
     public void beginWaiterNotificationHandler(){
@@ -110,7 +111,8 @@ public class ManagerCommunicationSTUB extends ManagerCommunication{
 
         consumerNotifyWaiter.accept(notification1); // Eccezione : notifica che esiste già
 
-       /* for(int i=0;i<5;i++) // Eccezione : superato numeo massimo notitifiche
-            consumerNotifyWaiter.accept(new WaiterNotification(client)); */
+//        for(int i=0;i<5;i++) // Eccezione : superato numeo massimo notitifiche
+//            consumerNotifyWaiter.accept(new WaiterNotification(client));
     }
 }
+*/
