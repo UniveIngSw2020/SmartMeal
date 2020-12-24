@@ -39,7 +39,7 @@ public class WaiterNotification implements Comparable<WaiterNotification> {
             // Comparare i nomi dei clienti non è ottimale perchè se no compareTo non sarebbe più consistente rispetto a equals
             // Non sarebbe più vero che equals dà true se e solo se compareTo dà 0
             //return customer.getName().compareTo(o.getCustomer().getName());
-            return customer.getId()-o.getCustomer().getId(); // Comparo gli id dei clienti
+            return customer.getId().compareTo(o.getCustomer().getId()); // Comparo gli id dei clienti
     }
 
     // Uguaglianza rispetto alla data e al customer.
