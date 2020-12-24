@@ -5,21 +5,18 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import android.location.Location;
-import android.media.Image;
 import android.preference.PreferenceManager;
 
 import java.util.Set;
 import java.util.TreeSet;
 
-import it.unive.quadcore.smartmeal.MainActivity;
-import it.unive.quadcore.smartmeal.R;
 import it.unive.quadcore.smartmeal.model.FoodCategory;
 import it.unive.quadcore.smartmeal.model.LocalDescription;
 import it.unive.quadcore.smartmeal.model.Menu;
 import it.unive.quadcore.smartmeal.model.Money;
 import it.unive.quadcore.smartmeal.model.Product;
 
-class Storage {
+public class Storage {
 
     // TODO : possibilità di fare Storage oggetto singletone
 
