@@ -1,3 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Smart Meal</string>
+
+    <string name="select_app_mode_hint">Select mode</string>
+    <string name="client">Client</string>
+    <string name="manager">Manager</string>
+    <string name="insert_personal_data_hint">Insert name</string>
+    <string name="name_edit_text_hint">Name</string>
+    <string name="confirm_button_text">Confirm</string>
 </resources>
