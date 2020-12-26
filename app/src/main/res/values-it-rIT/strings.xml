@@ -8,4 +8,10 @@
     <string name="insert_personal_data_hint">Inserisci nome</string>
     <string name="name_edit_text_hint">Nome</string>
     <string name="confirm_button_text">Conferma</string>
+
+    <string name="field_required_snackbar">Campo obbligatorio</string>
+
+    <string name="title_customer_home_fragment">Home</string>
+    <string name="title_customer_menu_fragment">Menù</string>
+    <string name="title_customer_maps_fragment">Mappa</string>
 </resources>
