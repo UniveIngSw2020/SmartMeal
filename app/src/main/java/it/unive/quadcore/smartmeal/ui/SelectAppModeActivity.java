@@ -9,7 +9,7 @@ import android.widget.Button;
 import it.unive.quadcore.smartmeal.R;
 import it.unive.quadcore.smartmeal.storage.ApplicationMode;
 import it.unive.quadcore.smartmeal.storage.Storage;
-import it.unive.quadcore.smartmeal.ui.customer.CustomerHomeActivity;
+import it.unive.quadcore.smartmeal.ui.customer.CustomerBottomNavigationActivity;
 import it.unive.quadcore.smartmeal.ui.customer.InsertPersonalDataActivity;
 
 public class SelectAppModeActivity extends AppCompatActivity {
@@ -21,7 +21,14 @@ public class SelectAppModeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Storage.initializeStorage(this);
+        // TODO attenzione fa crashre l'app al secondo avvio!
+        // TODO probabilmente aggiungere metodo isInitialized() in Storage
+        // TODO oppure chiedere un'activity ogni volta che si usa un metodo di Storage
+        try {
+            Storage.initializeStorage(this);
+        } catch (RuntimeException e) {
+
+        }
 
         // TODO attenzione rimuovere per versione finale
         // commentare / decommentare per poter cambiare modalità app
@@ -32,7 +39,7 @@ public class SelectAppModeActivity extends AppCompatActivity {
                 setContentView(R.layout.activity_select_app_mode);
                 break;
             case CUSTOMER:
-                startActivity(new Intent(this, CustomerHomeActivity.class));
+                startActivity(new Intent(this, CustomerBottomNavigationActivity.class));
                 finish();
                 return;
             case MANAGER:
