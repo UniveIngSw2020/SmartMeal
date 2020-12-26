@@ -9,6 +9,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.google.android.material.snackbar.BaseTransientBottomBar;
+import com.google.android.material.snackbar.Snackbar;
+
 import it.unive.quadcore.smartmeal.R;
 import it.unive.quadcore.smartmeal.storage.ApplicationMode;
 import it.unive.quadcore.smartmeal.storage.CustomerStorage;
@@ -28,9 +31,18 @@ public class InsertPersonalDataActivity extends AppCompatActivity {
         confirmationButton = findViewById(R.id.confirmation_button);
 
         confirmationButton.setOnClickListener(v -> {
-            String customerName = nameEditText.getText().toString();
+            // TODO eventaulmente aggiungere controlli validità nome
 
-            // TODO verificare che customerName non sia vuoto. (possibilmente disabilitare Button)
+            String customerName = nameEditText.getText().toString().trim();
+
+            if (customerName.isEmpty()) {
+                Snackbar.make(
+                        findViewById(android.R.id.content),
+                        R.string.field_required_snackbar,
+                        BaseTransientBottomBar.LENGTH_LONG
+                ).show();
+                return;
+            }
 
             CustomerStorage.setName(customerName);
             CustomerStorage.setApplicationMode(ApplicationMode.CUSTOMER);
@@ -38,8 +50,15 @@ public class InsertPersonalDataActivity extends AppCompatActivity {
             Log.i(TAG, "Customer name stored: " + customerName);
 
             // avvia l'activity principale del Cliente
-            startActivity(new Intent(InsertPersonalDataActivity.this, CustomerHomeActivity.class));
-            // TODO Gestire tasto indietro (deve far uscire dall'app)
+            Intent intent = new Intent(InsertPersonalDataActivity.this, CustomerBottomNavigationActivity.class);
+            // svuota il backstack
+            intent.addFlags(
+                    Intent.FLAG_ACTIVITY_CLEAR_TOP
+                    | Intent.FLAG_ACTIVITY_CLEAR_TASK
+                    | Intent.FLAG_ACTIVITY_NEW_TASK
+            );
+            startActivity(intent);
+            finish();
         });
     }
 }
