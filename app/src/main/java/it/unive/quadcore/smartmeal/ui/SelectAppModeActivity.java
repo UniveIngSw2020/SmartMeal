@@ -12,6 +12,7 @@ import it.unive.quadcore.smartmeal.storage.Storage;
 import it.unive.quadcore.smartmeal.ui.customer.CustomerBottomNavigationActivity;
 import it.unive.quadcore.smartmeal.ui.customer.InsertPersonalDataActivity;
 import it.unive.quadcore.smartmeal.ui.manager.InsertPasswordActivity;
+import it.unive.quadcore.smartmeal.ui.manager.ManagerHomeActivity;
 
 public class SelectAppModeActivity extends AppCompatActivity {
 
@@ -33,7 +34,7 @@ public class SelectAppModeActivity extends AppCompatActivity {
 
         // TODO attenzione rimuovere per versione finale
         // commentare / decommentare per poter cambiare modalità app
-        Storage.setApplicationMode(ApplicationMode.UNDEFINED);
+        //Storage.setApplicationMode(ApplicationMode.UNDEFINED);
 
         switch (Storage.getApplicationMode()) {
             case UNDEFINED:
@@ -44,10 +45,8 @@ public class SelectAppModeActivity extends AppCompatActivity {
                 finish();
                 return;
             case MANAGER:
-                // TODO rimpiazzare ManagerHomeActivity con il nome dell'Activity del Manager
-                // e decommentare
-//                startActivity(new Intent(this, ManagerHomeActivity.class));
-//                finish();
+                  startActivity(new Intent(this, ManagerHomeActivity.class));
+                  finish();
                 return;
             default:
                 throw new IllegalStateException("Unexpected: Storage.getApplicationMode() returned null");
