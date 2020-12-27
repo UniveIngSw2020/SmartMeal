@@ -105,79 +105,44 @@ public final class ManagerStorage extends Storage {
 
     private static String getEncryptedPassword(){
         // TODO : sostituire con solo password cifrata
-        String password = "PasswordSmartMeal";
-        byte[] plaintext = password.getBytes();
-
-        KeyGenerator keygen = null;
-        try {
-            keygen = KeyGenerator.getInstance("AES");
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        }
-        keygen.init(256);
-        SecretKey key = keygen.generateKey();
-        Cipher cipher = null;
-        try {
-            cipher = Cipher.getInstance("AES/CBC/PKCS5PADDING");
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        } catch (NoSuchPaddingException e) {
-            e.printStackTrace();
-        }
-        try {
-            cipher.init(Cipher.ENCRYPT_MODE, key);
-        } catch (InvalidKeyException e) {
-            e.printStackTrace();
-        }
-        try {
-            byte[] ciphertext = cipher.doFinal(plaintext);
-        } catch (BadPaddingException e) {
-            e.printStackTrace();
-        } catch (IllegalBlockSizeException e) {
-            e.printStackTrace();
-        }
-        byte[] iv = cipher.getIV();
-
-        return new String(iv, StandardCharsets.UTF_8);
-    }
-
-    private static String encryptPassword(String password){
-
-        byte[] plaintext = password.getBytes();
-
-        KeyGenerator keygen = null;
-        try {
-            keygen = KeyGenerator.getInstance("AES");
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        }
-        keygen.init(256);
-        SecretKey key = keygen.generateKey();
-        Cipher cipher = null;
-        try {
-            cipher = Cipher.getInstance("AES/CBC/PKCS5PADDING");
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        } catch (NoSuchPaddingException e) {
-            e.printStackTrace();
-        }
-        try {
-            cipher.init(Cipher.ENCRYPT_MODE, key);
-        } catch (InvalidKeyException e) {
-            e.printStackTrace();
-        }
-        try {
-            byte[] ciphertext = cipher.doFinal(plaintext);
-        } catch (BadPaddingException e) {
-            e.printStackTrace();
-        } catch (IllegalBlockSizeException e) {
-            e.printStackTrace();
-        }
-        byte[] iv = cipher.getIV();
-
-        return new String(iv, StandardCharsets.UTF_8);
+        String password = "Password";
 
         /*
+        byte[] plaintext = password.getBytes();
+
+        KeyGenerator keygen = null;
+        try {
+            keygen = KeyGenerator.getInstance("AES");
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+        keygen.init(256);
+        SecretKey key = keygen.generateKey();
+        Cipher cipher = null;
+        try {
+            cipher = Cipher.getInstance("AES/CBC/PKCS5PADDING");
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        } catch (NoSuchPaddingException e) {
+            e.printStackTrace();
+        }
+        try {
+            cipher.init(Cipher.ENCRYPT_MODE, key);
+        } catch (InvalidKeyException e) {
+            e.printStackTrace();
+        }
+        try {
+            byte[] ciphertext = cipher.doFinal(plaintext);
+        } catch (BadPaddingException e) {
+            e.printStackTrace();
+        } catch (IllegalBlockSizeException e) {
+            e.printStackTrace();
+        }
+        byte[] iv = cipher.getIV();
+
+        return new String(iv, StandardCharsets.UTF_8);
+        */
+
         MessageDigest md = null;
         try {
             md = MessageDigest.getInstance("SHA-256");
@@ -186,15 +151,63 @@ public final class ManagerStorage extends Storage {
         }
         md.update(password.getBytes());
         byte[] digest = md.digest();
-        return new String(digest, StandardCharsets.UTF_8); */
+        return new String(digest, StandardCharsets.UTF_8);
+    }
+
+    private static String encryptPassword(String password){
+
+        /*byte[] plaintext = password.getBytes();
+
+        KeyGenerator keygen = null;
+        try {
+            keygen = KeyGenerator.getInstance("AES");
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+        keygen.init(256);
+        SecretKey key = keygen.generateKey();
+        Cipher cipher = null;
+        try {
+            cipher = Cipher.getInstance("AES/CBC/PKCS5PADDING");
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        } catch (NoSuchPaddingException e) {
+            e.printStackTrace();
+        }
+        try {
+            cipher.init(Cipher.ENCRYPT_MODE, key);
+        } catch (InvalidKeyException e) {
+            e.printStackTrace();
+        }
+        try {
+            byte[] ciphertext = cipher.doFinal(plaintext);
+        } catch (BadPaddingException e) {
+            e.printStackTrace();
+        } catch (IllegalBlockSizeException e) {
+            e.printStackTrace();
+        }
+        byte[] iv = cipher.getIV();
+
+        return new String(iv, StandardCharsets.UTF_8);
+        */
+
+        MessageDigest md = null;
+        try {
+            md = MessageDigest.getInstance("SHA-256");
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+        md.update(password.getBytes());
+        byte[] digest = md.digest();
+        return new String(digest, StandardCharsets.UTF_8);
     }
 
     public static boolean checkPassword(String password){
 
-        String realDecryptedPassword = getEncryptedPassword();
+        String realEncryptedPassword = getEncryptedPassword();
 
-        String decryptedPassword = encryptPassword(password);
+        String encryptedPassword = encryptPassword(password);
 
-        return realDecryptedPassword.equals(decryptedPassword);
+        return encryptedPassword.equals(realEncryptedPassword);
     }
 }

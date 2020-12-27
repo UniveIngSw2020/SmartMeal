@@ -37,7 +37,7 @@ public class InsertPasswordActivity extends AppCompatActivity {
 
             String password = passwordEditText.getText().toString().trim();
 
-            if (password.isEmpty() || !ManagerStorage.checkPassword(password)) {
+            if (password.isEmpty() || (!ManagerStorage.checkPassword(password))) {
                 Snackbar.make(
                         findViewById(android.R.id.content),
                         R.string.incorrect_password_snackbar,
