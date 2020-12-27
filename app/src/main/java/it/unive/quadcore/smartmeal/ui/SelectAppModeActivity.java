@@ -11,6 +11,7 @@ import it.unive.quadcore.smartmeal.storage.ApplicationMode;
 import it.unive.quadcore.smartmeal.storage.Storage;
 import it.unive.quadcore.smartmeal.ui.customer.CustomerBottomNavigationActivity;
 import it.unive.quadcore.smartmeal.ui.customer.InsertPersonalDataActivity;
+import it.unive.quadcore.smartmeal.ui.manager.InsertPasswordActivity;
 
 public class SelectAppModeActivity extends AppCompatActivity {
 
@@ -62,9 +63,8 @@ public class SelectAppModeActivity extends AppCompatActivity {
 
         managerButton.setOnClickListener(v -> {
             // avvia l'activity che richiede la password per accedere alla modalità MANAGER
-            // TODO rimpiazzare InsertPasswordActivity con il nome dell'Activity corretto
 
-//            startActivity(new Intent(SelectAppModeActivity.this, InsertPasswordActivity.class));
+            startActivity(new Intent(SelectAppModeActivity.this, InsertPasswordActivity.class));
         });
 
     }

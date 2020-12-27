@@ -14,4 +14,11 @@
     <string name="title_customer_home_fragment">Home</string>
     <string name="title_customer_menu_fragment">Menu</string>
     <string name="title_customer_maps_fragment">Maps</string>
+
+    <string name="insert_password_hint">Insert password</string>
+    <string name="incorrect_password_snackbar">Incorrect password</string>
+
+    <string name="button_manager_home_room_text">Create room</string>
+    <string name="button_manager_home_menu_text">Show menu</string>
+    <string name="button_manager_home_description_text">Show description</string>
 </resources>

@@ -3,9 +3,21 @@ package it.unive.quadcore.smartmeal.storage;
 
 import android.content.SharedPreferences;
 
-import java.util.ArrayList;
+
+import java.nio.charset.StandardCharsets;
+import java.security.InvalidKeyException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Set;
 import java.util.TreeSet;
+
+
+import javax.crypto.BadPaddingException;
+import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.KeyGenerator;
+import javax.crypto.NoSuchPaddingException;
+import javax.crypto.SecretKey;
 
 import it.unive.quadcore.smartmeal.model.ManagerTable;
 
@@ -89,5 +101,66 @@ public final class ManagerStorage extends Storage {
         }
 
         return sharedPreferences.getInt("MaxNotificationNumber",generateMaxNotificationNumber());
+    }
+
+    private static String getEncryptedPassword(){
+        return "PaSssWord!9";
+    }
+
+    private static String encryptPassword(String password){
+
+        byte[] plaintext = password.getBytes();
+
+        KeyGenerator keygen = null;
+        try {
+            keygen = KeyGenerator.getInstance("AES");
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+        keygen.init(256);
+        SecretKey key = keygen.generateKey();
+        Cipher cipher = null;
+        try {
+            cipher = Cipher.getInstance("AES/CBC/PKCS5PADDING");
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        } catch (NoSuchPaddingException e) {
+            e.printStackTrace();
+        }
+        try {
+            cipher.init(Cipher.ENCRYPT_MODE, key);
+        } catch (InvalidKeyException e) {
+            e.printStackTrace();
+        }
+        try {
+            byte[] ciphertext = cipher.doFinal(plaintext);
+        } catch (BadPaddingException e) {
+            e.printStackTrace();
+        } catch (IllegalBlockSizeException e) {
+            e.printStackTrace();
+        }
+        byte[] iv = cipher.getIV();
+
+        return new String(iv, StandardCharsets.UTF_8);
+
+        /*
+        MessageDigest md = null;
+        try {
+            md = MessageDigest.getInstance("SHA-256");
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+        md.update(password.getBytes());
+        byte[] digest = md.digest();
+        return new String(digest, StandardCharsets.UTF_8); */
+    }
+
+    public static boolean checkPassword(String password){
+
+        String realDecryptedPassword = getEncryptedPassword();
+
+        String decryptedPassword = encryptPassword(password);
+
+        return realDecryptedPassword.equals(decryptedPassword);
     }
 }

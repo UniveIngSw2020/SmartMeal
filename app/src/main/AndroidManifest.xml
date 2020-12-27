@@ -16,6 +16,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.SmartMeal">
+        <activity android:name=".ui.manager.ManagerHomeActivity"></activity>
+        <activity android:name=".ui.manager.InsertPasswordActivity" />
         <activity android:name=".MainActivity_old" />
         <activity android:name=".ui.SelectAppModeActivity">
             <intent-filter>
@@ -24,12 +26,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".ui.customer.InsertPersonalDataActivity"
             android:windowSoftInputMode="adjustResize" />
         <activity android:name=".ui.customer.CustomerBottomNavigationActivity" />
-
     </application>
 
 </manifest>
