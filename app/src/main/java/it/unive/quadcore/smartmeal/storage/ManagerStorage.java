@@ -104,7 +104,41 @@ public final class ManagerStorage extends Storage {
     }
 
     private static String getEncryptedPassword(){
-        return "PaSssWord!9";
+        // TODO : sostituire con solo password cifrata
+        String password = "PasswordSmartMeal";
+        byte[] plaintext = password.getBytes();
+
+        KeyGenerator keygen = null;
+        try {
+            keygen = KeyGenerator.getInstance("AES");
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+        keygen.init(256);
+        SecretKey key = keygen.generateKey();
+        Cipher cipher = null;
+        try {
+            cipher = Cipher.getInstance("AES/CBC/PKCS5PADDING");
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        } catch (NoSuchPaddingException e) {
+            e.printStackTrace();
+        }
+        try {
+            cipher.init(Cipher.ENCRYPT_MODE, key);
+        } catch (InvalidKeyException e) {
+            e.printStackTrace();
+        }
+        try {
+            byte[] ciphertext = cipher.doFinal(plaintext);
+        } catch (BadPaddingException e) {
+            e.printStackTrace();
+        } catch (IllegalBlockSizeException e) {
+            e.printStackTrace();
+        }
+        byte[] iv = cipher.getIV();
+
+        return new String(iv, StandardCharsets.UTF_8);
     }
 
     private static String encryptPassword(String password){
