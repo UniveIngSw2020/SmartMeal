@@ -6,6 +6,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 
+import java.util.Objects;
+
 import it.unive.quadcore.smartmeal.R;
 import it.unive.quadcore.smartmeal.storage.CustomerStorage;
 import it.unive.quadcore.smartmeal.storage.ManagerStorage;
@@ -20,7 +22,10 @@ public class MenuManagerActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_menu_manager);
+
+        Objects.requireNonNull(getSupportActionBar()).setTitle(R.string.title_manager_menu);
 
         menuRecyclerView = findViewById(R.id.menu_recycler_view_manager);
         RecyclerView.LayoutManager recyclerViewLayoutManager = new LinearLayoutManager(

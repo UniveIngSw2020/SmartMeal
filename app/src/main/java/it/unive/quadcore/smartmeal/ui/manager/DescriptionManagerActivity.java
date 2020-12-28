@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.Objects;
+
 import it.unive.quadcore.smartmeal.R;
 import it.unive.quadcore.smartmeal.model.LocalDescription;
 import it.unive.quadcore.smartmeal.storage.CustomerStorage;
@@ -20,7 +22,10 @@ public class DescriptionManagerActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_description_manager);
+
+        Objects.requireNonNull(getSupportActionBar()).setTitle(R.string.title_manager_description);
 
         localNameTextView = findViewById(R.id.local_name_text_view_manager);
         descriptionTextView = findViewById(R.id.description_text_view_manager);

@@ -8,8 +8,8 @@
 
     <Button
         android:id="@+id/button_home_manager_room"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="175dp"
+        android:layout_height="62dp"
         android:layout_marginTop="140dp"
         android:text="@string/button_manager_home_room_text"
         app:layout_constraintEnd_toEndOf="parent"
