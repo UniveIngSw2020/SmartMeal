@@ -12,9 +12,16 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
+
 import it.unive.quadcore.smartmeal.R;
 
-public class MapsFragment extends Fragment {
+public class MapsFragment extends Fragment implements OnMapReadyCallback {
     // TODO autogenerato
 
     private MapsViewModel notificationsViewModel;
@@ -24,13 +31,24 @@ public class MapsFragment extends Fragment {
         notificationsViewModel =
                 new ViewModelProvider(this).get(MapsViewModel.class);
         View root = inflater.inflate(R.layout.fragment_maps, container, false);
-        final TextView textView = root.findViewById(R.id.text_notifications);
-        notificationsViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable String s) {
-                textView.setText(s);
-            }
-        });
+
+        SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager()
+                .findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
+
         return root;
+    }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        // TODO cambiare posizione e descrizione marker
+        final float DEFAULT_MAP_ZOOM_LEVEL = 15;
+        LatLng sydney = new LatLng(-33.852, 151.211);
+        googleMap.addMarker(new MarkerOptions()
+                .position(sydney)
+                .title("Marker in Sydney"));
+
+        googleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+        googleMap.moveCamera(CameraUpdateFactory.zoomTo(DEFAULT_MAP_ZOOM_LEVEL));
     }
 }
