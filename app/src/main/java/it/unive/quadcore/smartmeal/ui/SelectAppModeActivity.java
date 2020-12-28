@@ -34,7 +34,7 @@ public class SelectAppModeActivity extends AppCompatActivity {
 
         // TODO attenzione rimuovere per versione finale
         // commentare / decommentare per poter cambiare modalità app
-        //Storage.setApplicationMode(ApplicationMode.UNDEFINED);
+        Storage.setApplicationMode(ApplicationMode.UNDEFINED);
 
         switch (Storage.getApplicationMode()) {
             case UNDEFINED:

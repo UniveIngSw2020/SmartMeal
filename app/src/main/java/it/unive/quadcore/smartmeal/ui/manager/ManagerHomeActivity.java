@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 
+import java.util.Objects;
+
 import it.unive.quadcore.smartmeal.R;
 import it.unive.quadcore.smartmeal.storage.ApplicationMode;
 import it.unive.quadcore.smartmeal.storage.Storage;
@@ -24,6 +26,8 @@ public class ManagerHomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_manager_home);
+
+        Objects.requireNonNull(getSupportActionBar()).setTitle(R.string.title_manager_home);
 
         roomButton = findViewById(R.id.button_home_manager_room);
         menuButton = findViewById(R.id.button_home_manager_menu);
@@ -45,6 +49,8 @@ public class ManagerHomeActivity extends AppCompatActivity {
 
             startActivity(new Intent(ManagerHomeActivity.this, InsertPasswordActivity.class));
         });
+
+        // TODO : impostazioni
 
     }
 }

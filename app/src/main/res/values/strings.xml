@@ -21,4 +21,6 @@
     <string name="button_manager_home_room_text">Create room</string>
     <string name="button_manager_home_menu_text">Show menu</string>
     <string name="button_manager_home_description_text">Show description</string>
+
+    <string name="title_manager_home">Home</string>
 </resources>
