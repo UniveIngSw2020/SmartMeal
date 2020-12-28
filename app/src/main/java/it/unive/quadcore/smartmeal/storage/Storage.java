@@ -132,7 +132,7 @@ public class Storage {
         //Creiamo Local Description
         String presentation = "A delicious and friendly pub in a boat-like location"; // TODO :rimpiazzare con valori di res
         Location location = new Location("");
-        location.setLatitude(45.56121046165753d);
+        location.setLatitude(45.56121046165753);
         location.setLongitude(12.237328642473326);
         //int imageID = R.drawable.localpicture;
 

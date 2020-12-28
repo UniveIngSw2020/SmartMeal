@@ -1,5 +1,6 @@
 package it.unive.quadcore.smartmeal.ui.customer.bottomnavigation.maps;
 
+import android.location.Location;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,6 +21,8 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import it.unive.quadcore.smartmeal.R;
+import it.unive.quadcore.smartmeal.model.LocalDescription;
+import it.unive.quadcore.smartmeal.storage.CustomerStorage;
 
 public class MapsFragment extends Fragment implements OnMapReadyCallback {
     // TODO autogenerato
@@ -43,12 +46,16 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
     public void onMapReady(GoogleMap googleMap) {
         // TODO cambiare posizione e descrizione marker
         final float DEFAULT_MAP_ZOOM_LEVEL = 15;
-        LatLng sydney = new LatLng(-33.852, 151.211);
-        googleMap.addMarker(new MarkerOptions()
-                .position(sydney)
-                .title("Marker in Sydney"));
 
-        googleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+        LocalDescription localDescription = CustomerStorage.getLocalDescription();
+        Location location = localDescription.getLocation();
+
+        LatLng localLatLng = new LatLng(location.getLatitude(), location.getLongitude());
+        googleMap.addMarker(new MarkerOptions()
+                .position(localLatLng)
+                .title(localDescription.getName()));
+
         googleMap.moveCamera(CameraUpdateFactory.zoomTo(DEFAULT_MAP_ZOOM_LEVEL));
+        googleMap.moveCamera(CameraUpdateFactory.newLatLng(localLatLng));
     }
 }
