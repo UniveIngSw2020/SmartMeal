@@ -35,19 +35,19 @@ public class ManagerHomeActivity extends AppCompatActivity {
 
         roomButton.setOnClickListener(v -> {
             // avvia l'activity che richiede i dati dell'utente
-            startActivity(new Intent(ManagerHomeActivity.this, InsertPersonalDataActivity.class));
+            startActivity(new Intent(ManagerHomeActivity.this, ManagerHomeActivity.class));
         });
 
         menuButton.setOnClickListener(v -> {
             // avvia l'activity che richiede la password per accedere alla modalità MANAGER
 
-            startActivity(new Intent(ManagerHomeActivity.this, InsertPasswordActivity.class));
+            startActivity(new Intent(ManagerHomeActivity.this, MenuManagerActivity.class));
         });
 
         descriptionButton.setOnClickListener(v -> {
             // avvia l'activity che richiede la password per accedere alla modalità MANAGER
 
-            startActivity(new Intent(ManagerHomeActivity.this, InsertPasswordActivity.class));
+            startActivity(new Intent(ManagerHomeActivity.this, DescriptionManagerActivity.class));
         });
 
         // TODO : impostazioni

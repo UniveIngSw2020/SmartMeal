@@ -16,7 +16,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.SmartMeal">
-        <activity android:name=".ui.manager.DesriptionManagerActivity"></activity>
+        <activity android:name=".ui.manager.DescriptionManagerActivity"></activity>
         <activity android:name=".ui.manager.MenuManagerActivity" />
         <activity android:name=".ui.manager.ManagerHomeActivity" />
         <activity
