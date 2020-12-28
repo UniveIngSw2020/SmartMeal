@@ -68,7 +68,7 @@ public class CustomerHandler {
         this.customerMap = new HashMap<>();
     }
 
-    void addCustomer(String customerId, String customerName) {
+    synchronized void addCustomer(String customerId, String customerName) {
         if (containsCustomer(customerId)) {
             throw new IllegalStateException("A customer with the given id already exists");
         }
@@ -76,25 +76,25 @@ public class CustomerHandler {
         customerMap.put(customer.getId(), customer);
     }
 
-    void removeCustomer(Customer customer) {
+    synchronized void removeCustomer(Customer customer) {
         removeCustomer(customer.getId());
     }
 
-    void removeCustomer(String customerId) {
+    synchronized void removeCustomer(String customerId) {
         if (!containsCustomer(customerId)) {
             throw new IllegalStateException("A customer with the given id doesn't exist");
         }
         customerMap.remove(customerId);
     }
 
-    Customer getCustomer(String customerId) {
+    synchronized Customer getCustomer(String customerId) {
         if (!containsCustomer(customerId)) {
             throw new IllegalStateException("A customer with the given id doesn't exist");
         }
         return customerMap.get(customerId);
     }
 
-    boolean containsCustomer(String customerId) {
+    synchronized boolean containsCustomer(String customerId) {
         return customerMap.containsKey(customerId);
     }
 }

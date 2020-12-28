@@ -18,13 +18,13 @@ public class Product implements Comparable<Product>{
         this.description = description;
     }
 
-    public String getName(){
+    public String getName() {
         return name;
     }
-    public Money getPrice(){
+    public Money getPrice() {
         return price;
     }
-    public String getDescription(){
+    public String getDescription() {
         return description;
     }
     public FoodCategory getCategory() {

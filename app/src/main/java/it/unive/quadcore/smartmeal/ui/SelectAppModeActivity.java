@@ -23,13 +23,9 @@ public class SelectAppModeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // TODO attenzione fa crashre l'app al secondo avvio!
-        // TODO probabilmente aggiungere metodo isInitialized() in Storage
-        // TODO oppure chiedere un'activity ogni volta che si usa un metodo di Storage
-        try {
+        // inizializza Storage se non lo è già
+        if (!Storage.isInitialized()) {
             Storage.initializeStorage(this);
-        } catch (RuntimeException e) {
-
         }
 
         // TODO attenzione rimuovere per versione finale
