@@ -7,7 +7,9 @@
     <string name="manager">Gestore</string>
     <string name="insert_personal_data_hint">Inserisci nome</string>
     <string name="name_edit_text_hint">Nome</string>
-    <string name="confirm_button_text">Conferma</string>
+
+    <string name="confirmation_button_text">Conferma</string>
+    <string name="cancellation_button_text">Annulla</string>
 
     <string name="field_required_snackbar">Campo obbligatorio</string>
 
@@ -16,4 +18,12 @@
     <string name="title_customer_maps_fragment">Mappa</string>
 
     <string name="decimal_separator">,</string>
+
+    <string name="leave_room">Esci</string>
+    <string name="call_waiter">Chiama cameriere</string>
+    <string name="menu">Menù</string>
+    <string name="connected_message">Sei connesso</string>
+    <string name="selected_table_message">Sei seduto al tavolo</string>
+
+    <string name="table">Tavolo</string>
 </resources>

@@ -52,7 +52,7 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.ProductViewHol
 
     @Override
     public void onBindViewHolder(@NonNull ProductViewHolder holder, int position) {
-        Product product =  productList.get(position);
+        Product product = productList.get(position);
 
         holder.productNameTextView.setText(product.getName());
         holder.ingredientsTextView.setText(product.getDescription());

@@ -7,7 +7,9 @@
     <string name="manager">Manager</string>
     <string name="insert_personal_data_hint">Insert name</string>
     <string name="name_edit_text_hint">Name</string>
-    <string name="confirm_button_text">Confirm</string>
+
+    <string name="confirmation_button_text">Confirm</string>
+    <string name="cancellation_button_text">Cancel</string>
 
     <string name="field_required_snackbar">Field required</string>
 
@@ -16,4 +18,12 @@
     <string name="title_customer_maps_fragment">Maps</string>
 
     <string name="decimal_separator">.</string>
+
+    <string name="leave_room">Leave</string>
+    <string name="call_waiter">Call Waiter</string>
+    <string name="menu">Menu</string>
+    <string name="connected_message">You\'re connected</string>
+    <string name="selected_table_message">You\'re seating at table</string>
+
+    <string name="table">Table</string>
 </resources>
