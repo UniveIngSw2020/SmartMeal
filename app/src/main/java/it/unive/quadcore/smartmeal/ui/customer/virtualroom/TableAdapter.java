@@ -1,6 +1,7 @@
 package it.unive.quadcore.smartmeal.ui.customer.virtualroom;
 
 import android.app.Activity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +18,8 @@ import it.unive.quadcore.smartmeal.R;
 import it.unive.quadcore.smartmeal.model.Table;
 
 public class TableAdapter extends RecyclerView.Adapter<TableAdapter.TableViewHolder> {
+    private static final String TAG = "TableAdapter";
+
     public static final class TableViewHolder extends RecyclerView.ViewHolder {
         private TextView tableTextView;
 

@@ -1,6 +1,7 @@
 package it.unive.quadcore.smartmeal.ui.customer.bottomnavigation.home;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,8 @@ import it.unive.quadcore.smartmeal.model.LocalDescription;
 import it.unive.quadcore.smartmeal.storage.CustomerStorage;
 
 public class HomeFragment extends Fragment {
+    private static final String TAG = "HomeFragment";
+
     private HomeViewModel homeViewModel;
 
     private TextView localNameTextView;
@@ -30,7 +33,6 @@ public class HomeFragment extends Fragment {
         descriptionTextView = root.findViewById(R.id.description_text_view);
         localImageView = root.findViewById(R.id.local_image_view);
 
-        // mostra la descrizione del locale a schermo
         LocalDescription localDescription = CustomerStorage.getLocalDescription();
         localNameTextView.setText(localDescription.getName());
         descriptionTextView.setText(localDescription.getPresentation());

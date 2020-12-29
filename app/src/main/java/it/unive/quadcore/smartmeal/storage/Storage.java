@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 
 import android.location.Location;
 import android.preference.PreferenceManager;
+import android.util.Log;
 
 import java.util.Set;
 import java.util.TreeSet;
@@ -17,6 +18,7 @@ import it.unive.quadcore.smartmeal.model.Money;
 import it.unive.quadcore.smartmeal.model.Product;
 
 public class Storage {
+    private static final String TAG = "Storage";
 
     // TODO : possibilità di fare Storage oggetto singletone
 

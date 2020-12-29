@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 
 import it.unive.quadcore.smartmeal.R;
@@ -14,6 +15,7 @@ import it.unive.quadcore.smartmeal.ui.customer.InsertPersonalDataActivity;
 
 public class SelectAppModeActivity extends AppCompatActivity {
 
+    private static final String TAG = "SelectAppModeActivity";
     private Button customerButton;
     private Button managerButton;
 
@@ -23,6 +25,7 @@ public class SelectAppModeActivity extends AppCompatActivity {
 
         // inizializza Storage se non lo è già
         if (!Storage.isInitialized()) {
+            Log.i(TAG, "Storage initialized");
             Storage.initializeStorage(this);
         }
 
