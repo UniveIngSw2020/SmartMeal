@@ -45,6 +45,9 @@ public class CustomerCommunication extends Communication {
     private Consumer<Confirmation<? extends TableException>> onSelectTableConfirmationCallback;
 
     @Nullable
+    private Runnable onConnectionSuccessCallback;
+
+    @Nullable
     private Runnable onCloseRoomCallback;
 
     @Nullable
@@ -66,10 +69,12 @@ public class CustomerCommunication extends Communication {
     // eventualmente prendere callback con costruttore
 
 
-    public void joinRoom(@NonNull Activity activity) {
+    public void joinRoom(@NonNull Activity activity, @NonNull Runnable onConnectionSuccessCallback) {
+        Objects.requireNonNull(onConnectionSuccessCallback);
         Objects.requireNonNull(onCloseRoomCallback);
 
         this.activity = activity;
+        this.onConnectionSuccessCallback = onConnectionSuccessCallback;
 
         final EndpointDiscoveryCallback endpointDiscoveryCallback = endpointDiscoveryCallback();
 
@@ -155,6 +160,7 @@ public class CustomerCommunication extends Communication {
                 super.onDisconnected(endpointId);
                 Objects.requireNonNull(onCloseRoomCallback);
 
+                leaveRoom();
                 connected = false;
                 onCloseRoomCallback.run();
             }
@@ -190,6 +196,8 @@ public class CustomerCommunication extends Communication {
         try {
             confirmation.obtain();
             connected = true;
+            onConnectionSuccessCallback.run();
+
             Log.i(TAG, "Connection confirmed");
         } catch (CustomerNotRecognizedException e) {
             Log.e(TAG, "Connection not confirmed");
