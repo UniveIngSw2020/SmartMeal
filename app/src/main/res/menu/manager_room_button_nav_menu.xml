@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/manager_room_navigation_waiterNotifications"
+        android:title="@string/title_manager_room_waiterNotifications_fragment" />
+    <item
+        android:id="@+id/manager_room_navigation_tableList"
+        android:title="@string/title_manager_room_tableList_fragment" />
+</menu>

@@ -27,4 +27,11 @@
     <string name="title_manager_home">Home</string>
     <string name="title_manager_description">Description</string>
     <string name="title_manager_menu">Menu</string>
+
+    <string name="title_activity_manager_room_bottom_navigation">MainActivity</string>
+
+    <string name="title_manager_room_waiterNotifications_fragment">Waiter notifications</string>
+    <string name="title_manager_room_tableList_fragment">Table list</string>
+
+
 </resources>

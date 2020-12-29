@@ -35,7 +35,7 @@ public class ManagerHomeActivity extends AppCompatActivity {
 
         roomButton.setOnClickListener(v -> {
             // avvia l'activity che richiede i dati dell'utente
-            startActivity(new Intent(ManagerHomeActivity.this, ManagerHomeActivity.class));
+            startActivity(new Intent(ManagerHomeActivity.this, ManagerRoomBottomNavigationActivity.class));
         });
 
         menuButton.setOnClickListener(v -> {
