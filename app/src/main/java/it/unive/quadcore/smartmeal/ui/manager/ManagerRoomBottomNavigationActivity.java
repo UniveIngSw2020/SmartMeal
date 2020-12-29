@@ -23,12 +23,11 @@ public class ManagerRoomBottomNavigationActivity extends AppCompatActivity {
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.manager_room_navigation_waiterNotifications, R.id.manager_room_navigation_tableList, R.id.navigation_notifications)
+                R.id.manager_room_navigation_waiterNotifications, R.id.manager_room_navigation_tableList, R.id.manager_room_navigation_DUMMY)
                 .build();
         //val navHostFragment =
         //        supportFragmentManager.findFragmentById(R.id.navigation_host) as NavHostFragment
         //val navController: NavController = navHostFragment.navController
-        supportFragmentManager.findFragmentById(R.id.navigation_host)
         NavController navController = Navigation.findNavController(this, R.id.nav_host_manager_room_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navView, navController);

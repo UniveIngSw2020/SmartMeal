@@ -23,13 +23,13 @@ public class waiterNotificationsFragment extends Fragment {
         waiterNotificationsViewModel =
                 new ViewModelProvider(this).get(waiterNotificationsViewModel.class);
         View root = inflater.inflate(R.layout.fragment_waiter_notifications, container, false);
-        final TextView textView = root.findViewById(R.id.text_home);
+        /*final TextView textView = root.findViewById(R.id.text_home);
         waiterNotificationsViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {
                 textView.setText(s);
             }
-        });
+        });*/
         return root;
     }
 }
