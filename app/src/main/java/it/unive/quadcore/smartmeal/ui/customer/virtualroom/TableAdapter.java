@@ -8,6 +8,10 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.util.Consumer;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
@@ -15,6 +19,9 @@ import java.util.List;
 import java.util.SortedSet;
 
 import it.unive.quadcore.smartmeal.R;
+import it.unive.quadcore.smartmeal.communication.CustomerCommunication;
+import it.unive.quadcore.smartmeal.communication.confirmation.Confirmation;
+import it.unive.quadcore.smartmeal.local.TableException;
 import it.unive.quadcore.smartmeal.model.Table;
 
 public class TableAdapter extends RecyclerView.Adapter<TableAdapter.TableViewHolder> {
@@ -51,6 +58,53 @@ public class TableAdapter extends RecyclerView.Adapter<TableAdapter.TableViewHol
 
         String tableString = activity.getString(R.string.table);
         holder.tableTextView.setText(String.format("%s %s", tableString, table.getId()));
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.i(TAG, "Table item clicked: " + table.getId());
+
+                CustomerCommunication customerCommunication = CustomerCommunication.getInstance();
+
+                // TODO pensare alla cosa migliore da fare
+                if (!customerCommunication.isConnected()) {
+                    return;
+                }
+
+                customerCommunication.selectTable(table, new Consumer<Confirmation<? extends TableException>>() {
+                    @Override
+                    public void accept(Confirmation<? extends TableException> confirmation) {
+                        try {
+                            confirmation.obtain();
+
+                            // TODO probabilmente si può fare meglio
+                            CustomerVirtualRoomFragment customerVirtualRoomFragment = new CustomerVirtualRoomFragment();
+
+                            FragmentManager fragmentManager = ((AppCompatActivity) activity).getSupportFragmentManager();
+                            fragmentManager
+                                    .beginTransaction()
+                                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                                    .replace(R.id.customer_room_fragment_container, customerVirtualRoomFragment)
+                                    .commit();
+
+                        } catch (TableException e) {
+                            Log.i(TAG, "Table exception happened: " + e.getMessage());
+
+                            // 1. Tavolo già occupato
+                            // avvisare cliente, aggiornare lista tavoli e far scegliere un altro tavolo
+
+                            // 2. Tavolo non esiste
+                            // avvisare il cliente con un errore generico e farlo ritentare
+
+                            // 3. Il cliente ha già il tavolo che ha richiesto
+
+                            // 4. Il cliente ha già un tavolo (diverso da quello richiesto)
+
+                        }
+                    }
+                });
+            }
+        });
     }
 
     @Override
