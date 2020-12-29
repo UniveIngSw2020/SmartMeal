@@ -5,12 +5,15 @@ import android.os.Bundle;
 
 import androidx.core.util.Consumer;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
@@ -73,6 +76,22 @@ public class ChooseTableFragment extends Fragment {
         fakeTableSortedSet.add(new ManagerTable("b"));
         fakeTableSortedSet.add(new ManagerTable("c"));
         setupTableRecyclerView(root, fakeTableSortedSet);
+
+        // TODO da rimuovere (solo per testing)
+        Button confirmButton = root.findViewById(R.id.table_confirmation_button);
+        confirmButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CustomerVirtualRoomFragment fragment = new CustomerVirtualRoomFragment();
+
+                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                fragmentManager
+                        .beginTransaction()
+                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                        .replace(R.id.customer_room_fragment_container, fragment)
+                        .commit();
+            }
+        });
 
         return root;
     }

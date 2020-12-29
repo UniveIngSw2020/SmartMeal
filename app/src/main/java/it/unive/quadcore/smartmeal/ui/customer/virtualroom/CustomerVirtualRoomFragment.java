@@ -2,20 +2,27 @@ package it.unive.quadcore.smartmeal.ui.customer.virtualroom;
 
 import android.os.Bundle;
 
+import androidx.core.util.Consumer;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.TextView;
+
+import com.google.android.material.snackbar.BaseTransientBottomBar;
+import com.google.android.material.snackbar.Snackbar;
 
 import it.unive.quadcore.smartmeal.R;
+import it.unive.quadcore.smartmeal.communication.CustomerCommunication;
+import it.unive.quadcore.smartmeal.communication.confirmation.Confirmation;
+import it.unive.quadcore.smartmeal.local.WaiterNotificationException;
+import it.unive.quadcore.smartmeal.ui.customer.bottomnavigation.menu.MenuFragment;
 
-// TODO autogenerato
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link CustomerVirtualRoomFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class CustomerVirtualRoomFragment extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
@@ -28,6 +35,13 @@ public class CustomerVirtualRoomFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+
+    private TextView tableNumberTextView;
+    private Button menuButton;
+    private Button callButton;
+    private Button exitButton;
+
 
     public CustomerVirtualRoomFragment() {
         // Required empty public constructor
@@ -61,9 +75,79 @@ public class CustomerVirtualRoomFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_customer_virtual_room, container, false);
+        View root = inflater.inflate(R.layout.fragment_customer_virtual_room, container, false);
+
+        tableNumberTextView = root.findViewById(R.id.table_number_text_view);
+        menuButton = root.findViewById(R.id.menu_button);
+        callButton = root.findViewById(R.id.call_button);
+        exitButton = root.findViewById(R.id.exit_customer_room_button);
+
+
+        // TODO rimpiazzare con il vero numero di tavolo
+        String tableId = "21";
+
+        tableNumberTextView.setText(tableId);
+        menuButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // TODO probabilmente si può fare meglio
+                MenuFragment menuFragment = new MenuFragment();
+
+                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                fragmentManager
+                        .beginTransaction()
+                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                        .replace(R.id.customer_room_fragment_container, menuFragment)
+                        .addToBackStack(null)
+                        .commit();
+            }
+        });
+
+        callButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CustomerCommunication customerCommunication = CustomerCommunication.getInstance();
+
+
+                // TODO eventualmente se dopo tot secondi non è arrivata la conferma, inviare nuovamente
+//                Thread thread;
+                customerCommunication.notifyWaiter(new Consumer<Confirmation<? extends WaiterNotificationException>>() {
+                    @Override
+                    public void accept(Confirmation<? extends WaiterNotificationException> confirmation) {
+//                        thread.interrupt();
+                        int snackbarMessageId;
+
+                        try {
+                            confirmation.obtain();
+                            snackbarMessageId = R.string.waiter_notification_confirmed;
+                        } catch (WaiterNotificationException e) {
+                            Log.i(TAG, "Waiter notification rejected: " + e.getMessage());
+                            snackbarMessageId = R.string.waiter_notification_rejected;
+                        }
+
+                        final int snackbarMessageIdFinal = snackbarMessageId;
+                        getActivity().runOnUiThread(() -> {
+                            Snackbar.make(
+                                    v.findViewById(android.R.id.content),
+                                    snackbarMessageIdFinal,
+                                    BaseTransientBottomBar.LENGTH_LONG
+                            ).show();
+                        });
+                    }
+                });
+            }
+        });
+
+        exitButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CustomerCommunication customerCommunication = CustomerCommunication.getInstance();
+                customerCommunication.leaveRoom();
+            }
+        });
+
+        return root;
     }
 }

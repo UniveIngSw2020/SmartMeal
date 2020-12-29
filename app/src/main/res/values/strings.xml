@@ -26,4 +26,7 @@
     <string name="selected_table_message">You\'re seating at table</string>
 
     <string name="table">Table</string>
+
+    <string name="waiter_notification_confirmed">Call to waiter successfully sent</string>
+    <string name="waiter_notification_rejected">Too many calls to waiter</string>
 </resources>
