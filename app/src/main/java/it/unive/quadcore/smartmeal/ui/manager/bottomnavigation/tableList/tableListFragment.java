@@ -22,13 +22,13 @@ public class tableListFragment extends Fragment {
         tableListViewModel =
                 new ViewModelProvider(this).get(tableListViewModel.class);
         View root = inflater.inflate(R.layout.fragment_table_list, container, false);
-        final TextView textView = root.findViewById(R.id.text_dashboard);
+       /* final TextView textView = root.findViewById(R.id.text_dashboard);
         tableListViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {
                 textView.setText(s);
             }
-        });
+        });*/
         return root;
     }
 }
