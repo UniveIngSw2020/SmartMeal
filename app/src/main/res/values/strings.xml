@@ -46,4 +46,7 @@
     <string name="attachment_summary_on">Automatically download attachments for incoming emails
     </string>
     <string name="attachment_summary_off">Only download attachments when manually requested</string>
+
+    <string name="already_occupied_table_snackbar">Selected table is already occupied</string>
+    <string name="unexpected_table_error_snackbar">Unexpected table selection error</string>
 </resources>

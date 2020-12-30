@@ -14,6 +14,9 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.snackbar.BaseTransientBottomBar;
+import com.google.android.material.snackbar.Snackbar;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.SortedSet;
@@ -21,6 +24,9 @@ import java.util.SortedSet;
 import it.unive.quadcore.smartmeal.R;
 import it.unive.quadcore.smartmeal.communication.CustomerCommunication;
 import it.unive.quadcore.smartmeal.communication.confirmation.Confirmation;
+import it.unive.quadcore.smartmeal.local.AlreadyAssignedTableException;
+import it.unive.quadcore.smartmeal.local.AlreadyOccupiedTableException;
+import it.unive.quadcore.smartmeal.local.NoSuchTableException;
 import it.unive.quadcore.smartmeal.local.TableException;
 import it.unive.quadcore.smartmeal.model.Table;
 
@@ -87,8 +93,29 @@ public class TableAdapter extends RecyclerView.Adapter<TableAdapter.TableViewHol
                                     .replace(R.id.customer_room_fragment_container, customerVirtualRoomFragment)
                                     .commit();
 
+                        } catch(AlreadyOccupiedTableException e) {
+                            Log.i(TAG, "AlreadyOccupiedTableException happened: " + e.getMessage());
+                            Snackbar.make(
+                                    v.findViewById(android.R.id.content),
+                                    R.string.already_occupied_table_snackbar,
+                                    BaseTransientBottomBar.LENGTH_LONG
+                            ).show();
+                        } catch(NoSuchTableException e) {
+                            Log.i(TAG, "NoSuchTableException happened: " + e.getMessage());
+                            Snackbar.make(
+                                    v.findViewById(android.R.id.content),
+                                    R.string.unexpected_table_error_snackbar,
+                                    BaseTransientBottomBar.LENGTH_LONG
+                            ).show();
+                        } catch(AlreadyAssignedTableException e) { //TODO: needs to have priority in Local over AlreadyOccupiedException
+                            Log.i(TAG, "AlreadyAssignedTableException happened: " + e.getMessage());
                         } catch (TableException e) {
-                            Log.i(TAG, "Table exception happened: " + e.getMessage());
+                            Log.i(TAG, "TableException happened: " + e.getMessage());
+                            Snackbar.make(
+                                    v.findViewById(android.R.id.content),
+                                    R.string.unexpected_table_error_snackbar,
+                                    BaseTransientBottomBar.LENGTH_LONG
+                            ).show();
 
                             // 1. Tavolo già occupato
                             // avvisare cliente, aggiornare lista tavoli e far scegliere un altro tavolo

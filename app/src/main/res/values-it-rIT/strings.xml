@@ -31,4 +31,7 @@
     <string name="waiter_notification_rejected">Troppe chiamate al cameriere</string>
 
     <string name="settings">Impostazioni</string>
+
+    <string name="already_occupied_table_snackbar">Il tavolo selezionato è già occupato</string>
+    <string name="unexpected_table_error_snackbar">Errore imprevisto nella selezione del tavolo</string>
 </resources>
