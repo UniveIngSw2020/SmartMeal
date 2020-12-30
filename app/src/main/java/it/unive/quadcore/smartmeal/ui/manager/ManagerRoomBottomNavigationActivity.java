@@ -25,9 +25,6 @@ public class ManagerRoomBottomNavigationActivity extends AppCompatActivity {
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.manager_room_navigation_waiterNotifications, R.id.manager_room_navigation_tableList, R.id.manager_room_navigation_DUMMY)
                 .build();
-        //val navHostFragment =
-        //        supportFragmentManager.findFragmentById(R.id.navigation_host) as NavHostFragment
-        //val navController: NavController = navHostFragment.navController
         NavController navController = Navigation.findNavController(this, R.id.nav_host_manager_room_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navView, navController);
