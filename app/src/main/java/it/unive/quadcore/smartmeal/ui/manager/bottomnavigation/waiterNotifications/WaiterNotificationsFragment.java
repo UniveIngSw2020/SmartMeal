@@ -11,6 +11,8 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.TreeSet;
+
 import it.unive.quadcore.smartmeal.R;
 import it.unive.quadcore.smartmeal.local.Local;
 import it.unive.quadcore.smartmeal.local.RoomStateException;
@@ -50,7 +52,10 @@ public class WaiterNotificationsFragment extends Fragment {
         } catch (RoomStateException e) {
             e.printStackTrace();
         } catch (WaiterNotificationException e) {
-            e.printStackTrace();
+           /* waiterNotificationAdapter = new WaiterNotificationAdapter(getActivity(),new TreeSet<>());
+            waiterNotificationRecyclerView.setAdapter(waiterNotificationAdapter);*/
+            new NoNotificationsDialogFragment().show(getFragmentManager(), "noNotifications"); // TODO : deprecato
         }
     }
+
 }

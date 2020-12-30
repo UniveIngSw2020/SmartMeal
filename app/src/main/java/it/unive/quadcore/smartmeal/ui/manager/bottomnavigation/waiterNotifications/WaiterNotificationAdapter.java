@@ -13,6 +13,9 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.snackbar.BaseTransientBottomBar;
+import com.google.android.material.snackbar.Snackbar;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.SortedSet;
@@ -67,8 +70,9 @@ public class WaiterNotificationAdapter extends RecyclerView.Adapter<WaiterNotifi
         WaiterNotification notification =  waiterNotifications.get(position);
 
         try {
-            holder.tableTextView.setText(Local.getInstance().getTable(notification.getCustomer()).getId());
-        } catch (RoomStateException e) {
+            String prefix = activity.getString(R.string.table_prefix_waiter_notification);
+            holder.tableTextView.setText(String.format("%s %s", prefix, Local.getInstance().getTable(notification.getCustomer()).getId()));
+        } catch (RoomStateException e) { // TODO :gestire eccezioni
             e.printStackTrace();
         } catch (TableException e) {
             e.printStackTrace();
@@ -78,14 +82,11 @@ public class WaiterNotificationAdapter extends RecyclerView.Adapter<WaiterNotifi
         holder.deleteButton.setOnClickListener(view->{
             try {
                 Local.getInstance().removeWaiterNotification(notification);
-            } catch (RoomStateException e) {
-                e.printStackTrace();
-            } catch (WaiterNotificationException e) {
+                Context context = view.getContext();
+                context.startActivity(new Intent(context, ManagerRoomBottomNavigationActivity.class));
+            } catch (RoomStateException | WaiterNotificationException e) {
                 e.printStackTrace();
             }
-
-            Context context = view.getContext();
-            context.startActivity(new Intent(context, ManagerRoomBottomNavigationActivity.class));
         });
     }
 

@@ -33,5 +33,10 @@
     <string name="title_manager_room_waiterNotifications_fragment">Waiter notifications</string>
     <string name="title_manager_room_tableList_fragment">Table list</string>
 
+    <string name="table_prefix_waiter_notification">Table:</string>
+
+    <string name="empty_waiter_notification_list_alert">No current notifications</string>
+    <string name="close_label_alert">Close</string>
+
 
 </resources>
