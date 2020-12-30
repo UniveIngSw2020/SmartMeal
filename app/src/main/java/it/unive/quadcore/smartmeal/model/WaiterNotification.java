@@ -1,5 +1,7 @@
 package it.unive.quadcore.smartmeal.model;
 
+import android.text.format.DateFormat;
+
 import androidx.annotation.NonNull;
 
 import java.util.Date;
@@ -25,8 +27,13 @@ public class WaiterNotification implements Comparable<WaiterNotification> {
     }
 
     // Data e orario
+    // TODO : può essere tolto
     public Date getTime(){
         return new Date(dateTime.getTime());
+    }
+
+    public String getPrettyTime(){
+        return DateFormat.format("kk:mm", dateTime).toString();
     }
 
     // Comparabile rispetto alla data. Ordinamento naturale.

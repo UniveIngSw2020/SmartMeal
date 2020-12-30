@@ -1,6 +1,7 @@
 package it.unive.quadcore.smartmeal.ui.manager.bottomnavigation.waiterNotifications;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,6 +28,7 @@ import it.unive.quadcore.smartmeal.model.Product;
 import it.unive.quadcore.smartmeal.model.WaiterNotification;
 import it.unive.quadcore.smartmeal.ui.customer.bottomnavigation.menu.MenuAdapter;
 import it.unive.quadcore.smartmeal.ui.manager.ManagerHomeActivity;
+import it.unive.quadcore.smartmeal.ui.manager.ManagerRoomBottomNavigationActivity;
 import it.unive.quadcore.smartmeal.ui.manager.MenuManagerActivity;
 
 public class WaiterNotificationAdapter extends RecyclerView.Adapter<WaiterNotificationAdapter.NotificationViewHolder>{
@@ -41,6 +43,7 @@ public class WaiterNotificationAdapter extends RecyclerView.Adapter<WaiterNotifi
             this.tableTextView = itemView.findViewById(R.id.table_text_view);
             this.dateHourTextView = itemView.findViewById(R.id.date_hour_text_view);
             this.deleteButton = itemView.findViewById(R.id.waiter_notification_delete_button);
+
         }
     }
 
@@ -55,7 +58,7 @@ public class WaiterNotificationAdapter extends RecyclerView.Adapter<WaiterNotifi
     @NonNull
     @Override
     public WaiterNotificationAdapter.NotificationViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(activity).inflate(R.layout.product_row_item, parent, false);
+        View view = LayoutInflater.from(activity).inflate(R.layout.waiter_notification_row, parent, false);
         return new WaiterNotificationAdapter.NotificationViewHolder(view);
     }
 
@@ -70,7 +73,7 @@ public class WaiterNotificationAdapter extends RecyclerView.Adapter<WaiterNotifi
         } catch (TableException e) {
             e.printStackTrace();
         }
-        holder.dateHourTextView.setText(notification.getTime().toString());
+        holder.dateHourTextView.setText(notification.getPrettyTime());
 
         holder.deleteButton.setOnClickListener(view->{
             try {
@@ -80,6 +83,9 @@ public class WaiterNotificationAdapter extends RecyclerView.Adapter<WaiterNotifi
             } catch (WaiterNotificationException e) {
                 e.printStackTrace();
             }
+
+            Context context = view.getContext();
+            context.startActivity(new Intent(context, ManagerRoomBottomNavigationActivity.class));
         });
     }
 

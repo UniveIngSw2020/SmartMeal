@@ -8,6 +8,7 @@ import android.widget.Button;
 
 import it.unive.quadcore.smartmeal.R;
 import it.unive.quadcore.smartmeal.local.Local;
+import it.unive.quadcore.smartmeal.local.RoomStateException;
 import it.unive.quadcore.smartmeal.storage.ApplicationMode;
 import it.unive.quadcore.smartmeal.storage.Storage;
 import it.unive.quadcore.smartmeal.ui.customer.CustomerBottomNavigationActivity;
@@ -30,6 +31,11 @@ public class SelectAppModeActivity extends AppCompatActivity {
         }
 
         // TODO : togliere. SOlo per testing
+        try {
+            Local.getInstance().createRoom(this);
+        } catch (RoomStateException e) {
+            e.printStackTrace();
+        }
         Local.getInstance().testingUI();
 
         // TODO attenzione rimuovere per versione finale

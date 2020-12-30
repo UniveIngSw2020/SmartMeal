@@ -216,6 +216,12 @@ public class Local {
     public void testingUI() { // TODO : rimettere costruttore Customer a private
         Customer customer = new Customer("12334","Enrico");
         try {
+            Table table = tableHandler.getFreeTableList().first();
+            tableHandler.assignTable(customer,table);
+        } catch (TableException e) {
+            e.printStackTrace();
+        }
+        try {
             waiterNotificationHandler.addNotification(new WaiterNotification(customer));
             System.out.println(waiterNotificationHandler);
         } catch (WaiterNotificationException e) {
