@@ -2,11 +2,15 @@ package it.unive.quadcore.smartmeal.ui.customer;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -14,6 +18,7 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import it.unive.quadcore.smartmeal.R;
+import it.unive.quadcore.smartmeal.ui.SettingsActivity;
 import it.unive.quadcore.smartmeal.ui.customer.virtualroom.CustomerVirtualRoomActivity;
 
 public class CustomerBottomNavigationActivity extends AppCompatActivity {
@@ -46,4 +51,24 @@ public class CustomerBottomNavigationActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.menu_settings) {
+            startActivity(new Intent(
+                    CustomerBottomNavigationActivity.this,
+                    SettingsActivity.class
+            ));
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
 }

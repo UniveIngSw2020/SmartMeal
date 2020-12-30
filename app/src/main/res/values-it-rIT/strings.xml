@@ -29,4 +29,6 @@
 
     <string name="waiter_notification_confirmed">Chiamata al cameriere inviata correttamente</string>
     <string name="waiter_notification_rejected">Troppe chiamate al cameriere</string>
+
+    <string name="settings">Impostazioni</string>
 </resources>
