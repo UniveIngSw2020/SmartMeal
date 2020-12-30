@@ -180,7 +180,7 @@ public class CustomerCommunication extends Communication {
         Objects.requireNonNull(content);
 
         @SuppressWarnings("unchecked")
-        Confirmation<TableException> confirmation = (Confirmation<TableException>) content;
+        Confirmation<? extends TableException> confirmation = (Confirmation<? extends TableException>) content;
         onSelectTableConfirmationCallback.accept(confirmation);
     }
 
