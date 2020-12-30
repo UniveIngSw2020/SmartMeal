@@ -14,7 +14,7 @@ public class CustomerHandler {
         // nome
         private final String name;
 
-        private Customer(String id, String name) {
+        public Customer(String id, String name) {
             this.id = id;
             this.name = name;
         }

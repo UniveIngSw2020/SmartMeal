@@ -210,5 +210,17 @@ public class Local {
         ((ManagerCommunicationSTUB)managerCommunication).beginWaiterNotificationHandler();
     }
 
+
  */
+
+    public void testingUI() { // TODO : rimettere costruttore Customer a private
+        Customer customer = new Customer("12334","Enrico");
+        try {
+            waiterNotificationHandler.addNotification(new WaiterNotification(customer));
+            System.out.println(waiterNotificationHandler);
+        } catch (WaiterNotificationException e) {
+            e.printStackTrace();
+        }
+        System.out.println(waiterNotificationHandler);
+    }
 }

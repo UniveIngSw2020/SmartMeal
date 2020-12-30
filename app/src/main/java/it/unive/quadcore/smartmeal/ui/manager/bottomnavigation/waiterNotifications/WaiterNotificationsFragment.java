@@ -15,9 +15,6 @@ import it.unive.quadcore.smartmeal.R;
 import it.unive.quadcore.smartmeal.local.Local;
 import it.unive.quadcore.smartmeal.local.RoomStateException;
 import it.unive.quadcore.smartmeal.local.WaiterNotificationException;
-import it.unive.quadcore.smartmeal.storage.CustomerStorage;
-import it.unive.quadcore.smartmeal.ui.customer.bottomnavigation.menu.MenuAdapter;
-import it.unive.quadcore.smartmeal.ui.customer.bottomnavigation.menu.MenuViewModel;
 
 
 public class WaiterNotificationsFragment extends Fragment {
@@ -31,7 +28,7 @@ public class WaiterNotificationsFragment extends Fragment {
 
         waiterNotificationsViewModel =
                 new ViewModelProvider(this).get(WaiterNotificationsViewModel.class);
-        View root = inflater.inflate(R.layout.fragment_menu, container, false);
+        View root = inflater.inflate(R.layout.fragment_waiter_notifications, container, false);
 
         setupWaiterNotificationRecyclerView(root);
         return root;

@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.widget.Button;
 
 import it.unive.quadcore.smartmeal.R;
+import it.unive.quadcore.smartmeal.local.Local;
 import it.unive.quadcore.smartmeal.storage.ApplicationMode;
 import it.unive.quadcore.smartmeal.storage.Storage;
 import it.unive.quadcore.smartmeal.ui.customer.CustomerBottomNavigationActivity;
@@ -27,6 +28,9 @@ public class SelectAppModeActivity extends AppCompatActivity {
         if (!Storage.isInitialized()) {
             Storage.initializeStorage(this);
         }
+
+        // TODO : togliere. SOlo per testing
+        Local.getInstance().testingUI();
 
         // TODO attenzione rimuovere per versione finale
         // commentare / decommentare per poter cambiare modalità app
