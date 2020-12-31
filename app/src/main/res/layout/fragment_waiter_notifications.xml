@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.manager.bottomnavigation.tableList.TableListFragment" >
+    tools:context=".ui.manager.bottomnavigation.waiterNotifications.WaiterNotificationsFragment" >
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/waiter_notification_recycler_view"
