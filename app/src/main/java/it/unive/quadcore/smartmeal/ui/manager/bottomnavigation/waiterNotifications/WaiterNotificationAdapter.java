@@ -72,8 +72,10 @@ public class WaiterNotificationAdapter extends RecyclerView.Adapter<WaiterNotifi
         holder.deleteButton.setOnClickListener(view->{
             try {
                 Local.getInstance().removeWaiterNotification(notification);
-                Context context = view.getContext();
-                context.startActivity(new Intent(context, ManagerRoomBottomNavigationActivity.class));
+
+                int notificationToRemoveIndex = waiterNotifications.indexOf(notification);
+                waiterNotifications.remove(notificationToRemoveIndex);
+                notifyItemRemoved(notificationToRemoveIndex);
             } catch (RoomStateException | WaiterNotificationException e) {
                 e.printStackTrace();
             }

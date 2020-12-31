@@ -83,13 +83,10 @@ public class TableListAdapter extends RecyclerView.Adapter<TableListAdapter.Tabl
         holder.deleteButton.setOnClickListener(view->{
             try {
                 Local.getInstance().freeTable(table);
-                Context context = view.getContext();
-                //context.startActivity(new Intent(context, TableListFragment.class));
 
-                FragmentManager fragmentManager = ((FragmentActivity)context).getSupportFragmentManager();
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.replace(R.id.nav_host_manager_room_fragment, new TableListFragment());
-                fragmentTransaction.commit();
+                int tableToRemoveIndex = tableList.indexOf(table);
+                tableList.remove(tableToRemoveIndex);
+                notifyItemRemoved(tableToRemoveIndex);
             } catch (RoomStateException | TableException e) {
                 e.printStackTrace();
             }
