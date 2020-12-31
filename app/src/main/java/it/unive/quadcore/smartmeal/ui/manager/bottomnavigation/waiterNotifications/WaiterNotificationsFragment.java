@@ -11,12 +11,11 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.TreeSet;
-
 import it.unive.quadcore.smartmeal.R;
 import it.unive.quadcore.smartmeal.local.Local;
 import it.unive.quadcore.smartmeal.local.RoomStateException;
 import it.unive.quadcore.smartmeal.local.WaiterNotificationException;
+import it.unive.quadcore.smartmeal.ui.manager.bottomnavigation.EmptyListDialogFragment;
 
 
 public class WaiterNotificationsFragment extends Fragment {
@@ -52,9 +51,9 @@ public class WaiterNotificationsFragment extends Fragment {
         } catch (RoomStateException e) {
             e.printStackTrace();
         } catch (WaiterNotificationException e) {
-           /* waiterNotificationAdapter = new WaiterNotificationAdapter(getActivity(),new TreeSet<>());
-            waiterNotificationRecyclerView.setAdapter(waiterNotificationAdapter);*/
-            new NoNotificationsDialogFragment().show(getFragmentManager(), "noNotifications"); // TODO : deprecato
+            // Non ci sono notifiche : mostro un dialog
+            new EmptyListDialogFragment(getString(R.string.empty_waiter_notification_list_alert))
+                        .show(requireFragmentManager(), "noNotifications"); // TODO : deprecato
         }
     }
 

@@ -10,11 +10,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
-
-import com.google.android.material.snackbar.BaseTransientBottomBar;
-import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,14 +21,8 @@ import it.unive.quadcore.smartmeal.local.Local;
 import it.unive.quadcore.smartmeal.local.RoomStateException;
 import it.unive.quadcore.smartmeal.local.TableException;
 import it.unive.quadcore.smartmeal.local.WaiterNotificationException;
-import it.unive.quadcore.smartmeal.model.Menu;
-import it.unive.quadcore.smartmeal.model.Money;
-import it.unive.quadcore.smartmeal.model.Product;
 import it.unive.quadcore.smartmeal.model.WaiterNotification;
-import it.unive.quadcore.smartmeal.ui.customer.bottomnavigation.menu.MenuAdapter;
-import it.unive.quadcore.smartmeal.ui.manager.ManagerHomeActivity;
 import it.unive.quadcore.smartmeal.ui.manager.ManagerRoomBottomNavigationActivity;
-import it.unive.quadcore.smartmeal.ui.manager.MenuManagerActivity;
 
 public class WaiterNotificationAdapter extends RecyclerView.Adapter<WaiterNotificationAdapter.NotificationViewHolder>{
     public static final class NotificationViewHolder extends RecyclerView.ViewHolder {
@@ -43,7 +33,7 @@ public class WaiterNotificationAdapter extends RecyclerView.Adapter<WaiterNotifi
         public NotificationViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            this.tableTextView = itemView.findViewById(R.id.table_text_view);
+            this.tableTextView = itemView.findViewById(R.id.table_notification_text_view);
             this.dateHourTextView = itemView.findViewById(R.id.date_hour_text_view);
             this.deleteButton = itemView.findViewById(R.id.waiter_notification_delete_button);
 
@@ -70,7 +60,7 @@ public class WaiterNotificationAdapter extends RecyclerView.Adapter<WaiterNotifi
         WaiterNotification notification =  waiterNotifications.get(position);
 
         try {
-            String prefix = activity.getString(R.string.table_prefix_waiter_notification);
+            String prefix = activity.getString(R.string.table_prefix);
             holder.tableTextView.setText(String.format("%s %s", prefix, Local.getInstance().getTable(notification.getCustomer()).getId()));
         } catch (RoomStateException e) { // TODO :gestire eccezioni
             e.printStackTrace();

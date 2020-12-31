@@ -1,4 +1,4 @@
-package it.unive.quadcore.smartmeal.ui.manager.bottomnavigation.waiterNotifications;
+package it.unive.quadcore.smartmeal.ui.manager.bottomnavigation;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -9,14 +9,22 @@ import androidx.fragment.app.DialogFragment;
 
 import it.unive.quadcore.smartmeal.R;
 
-public class NoNotificationsDialogFragment extends DialogFragment {
+public class EmptyListDialogFragment extends DialogFragment {
+
+    String label ;
+
+    public EmptyListDialogFragment(String label){
+        super();
+        this.label=label;
+    }
+
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
         String closeLabel = getActivity().getString(R.string.close_label_alert);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setMessage(R.string.empty_waiter_notification_list_alert)
+        builder.setMessage(label)
                 /*.setPositiveButton("", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         //

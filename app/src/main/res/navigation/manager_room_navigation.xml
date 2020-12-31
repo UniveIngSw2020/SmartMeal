@@ -3,23 +3,18 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/navigation_home">
+    app:startDestination="@+id/manager_room_navigation_waiterNotifications">
 
     <fragment
-        android:id="@+id/navigation_home"
+        android:id="@+id/manager_room_navigation_waiterNotifications"
         android:name="it.unive.quadcore.smartmeal.ui.manager.bottomnavigation.waiterNotifications.WaiterNotificationsFragment"
         android:label="@string/title_manager_room_waiterNotifications_fragment"
         tools:layout="@layout/fragment_waiter_notifications" />
 
     <fragment
-        android:id="@+id/navigation_dashboard"
-        android:name="it.unive.quadcore.smartmeal.ui.manager.bottomnavigation.tableList.tableListFragment"
+        android:id="@+id/manager_room_navigation_tableList"
+        android:name="it.unive.quadcore.smartmeal.ui.manager.bottomnavigation.tableList.TableListFragment"
         android:label="@string/title_manager_room_tableList_fragment"
         tools:layout="@layout/fragment_table_list" />
 
-    <fragment
-        android:id="@+id/navigation_notifications"
-        android:name="it.unive.quadcore.smartmeal.ui.manager.bottomnavigation.notifications.NotificationsFragment"
-        android:label="Navigation"
-        tools:layout="@layout/fragment_notifications" />
 </navigation>

@@ -33,10 +33,14 @@
     <string name="title_manager_room_waiterNotifications_fragment">Waiter notifications</string>
     <string name="title_manager_room_tableList_fragment">Table list</string>
 
-    <string name="table_prefix_waiter_notification">Table:</string>
+    <string name="table_prefix">Table:</string>
 
     <string name="empty_waiter_notification_list_alert">No current notifications</string>
     <string name="close_label_alert">Close</string>
+    <string name="empty_table_list_alert">No tables assigned yet</string>
 
+    <string name="error_manager_room_snackbar">It is impossible to create a room right now</string>
 
+    <string name="modify_table_button_label">Modify</string>
+    <string name="delete_table_button_label">Delete</string>
 </resources>

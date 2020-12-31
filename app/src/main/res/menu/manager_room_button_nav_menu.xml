@@ -7,7 +7,4 @@
     <item
         android:id="@+id/manager_room_navigation_tableList"
         android:title="@string/title_manager_room_tableList_fragment" />
-    <item
-        android:id="@+id/manager_room_navigation_DUMMY"
-        android:title="Item" />
 </menu>

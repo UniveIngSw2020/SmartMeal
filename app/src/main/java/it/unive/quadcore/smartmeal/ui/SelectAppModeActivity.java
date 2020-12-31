@@ -30,14 +30,6 @@ public class SelectAppModeActivity extends AppCompatActivity {
             Storage.initializeStorage(this);
         }
 
-        // TODO : togliere. SOlo per testing
-        try {
-            Local.getInstance().createRoom(this);
-        } catch (RoomStateException e) {
-            e.printStackTrace();
-        }
-        Local.getInstance().testingUI();
-
         // TODO attenzione rimuovere per versione finale
         // commentare / decommentare per poter cambiare modalità app
         Storage.setApplicationMode(ApplicationMode.UNDEFINED);

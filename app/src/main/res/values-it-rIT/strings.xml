@@ -33,8 +33,14 @@
     <string name="title_manager_room_waiterNotifications_fragment">Waiter notifications</string>
     <string name="title_manager_room_tableList_fragment">Tables</string>
 
-    <string name="table_prefix_waiter_notification">Tavolo:</string>
+    <string name="table_prefix">Tavolo:</string>
 
     <string name="empty_waiter_notification_list_alert">Attualmente non ci sono notifiche</string>
     <string name="close_label_alert">Chiudi</string>
+    <string name="empty_table_list_alert">Attualmente non ci sono tavoli occupati</string>
+
+    <string name="error_manager_room_snackbar">Impossibile creare una stanza virtuale ora</string>
+
+    <string name="modify_table_button_label">Modifica</string>
+    <string name="delete_table_button_label">Elimina</string>
 </resources>

@@ -54,7 +54,6 @@ public class Local {
 
     // Creazione stanza virtuale
     public void createRoom(Activity activity) throws RoomStateException {
-
         if(roomState) // Stanza virtuale già aperta
             throw new RoomStateException(true);
 
@@ -223,10 +222,25 @@ public class Local {
         }
         try {
             waiterNotificationHandler.addNotification(new WaiterNotification(customer));
-            System.out.println(waiterNotificationHandler);
         } catch (WaiterNotificationException e) {
             e.printStackTrace();
         }
-        System.out.println(waiterNotificationHandler);
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        Customer customer1 = new Customer("1","Matteo");
+        try {
+            Table table = tableHandler.getFreeTableList().first();
+            tableHandler.assignTable(customer1,table);
+        } catch (TableException e) {
+            e.printStackTrace();
+        }
+        try {
+            waiterNotificationHandler.addNotification(new WaiterNotification(customer1));
+        } catch (WaiterNotificationException e) {
+            e.printStackTrace();
+        }
     }
 }
