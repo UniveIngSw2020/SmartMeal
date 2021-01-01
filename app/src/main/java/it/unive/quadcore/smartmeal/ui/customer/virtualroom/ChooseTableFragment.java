@@ -34,6 +34,8 @@ public class ChooseTableFragment extends Fragment {
     private RecyclerView tableRecyclerView;
     private TableAdapter tableAdapter;
 
+    private Button cancelButton;
+
     // TODO remove
     private SortedSet<Table> fakeTableSortedSet;
 
@@ -70,29 +72,20 @@ public class ChooseTableFragment extends Fragment {
 
         joinRoom(root);
 
-        // TODO remove
+        // TODO remove (solo per testing)
         fakeTableSortedSet = new TreeSet<>();
         fakeTableSortedSet.add(new ManagerTable("a"));
         fakeTableSortedSet.add(new ManagerTable("b"));
         fakeTableSortedSet.add(new ManagerTable("c"));
         setupTableRecyclerView(root, fakeTableSortedSet);
 
-        // TODO da rimuovere (solo per testing)
-        Button confirmButton = root.findViewById(R.id.table_confirmation_button);
-        confirmButton.setOnClickListener(new View.OnClickListener() {
+        cancelButton = root.findViewById(R.id.cancellation_button);
+        cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                CustomerVirtualRoomFragment fragment = new CustomerVirtualRoomFragment();
-
-                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                fragmentManager
-                        .beginTransaction()
-                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-                        .replace(R.id.customer_room_fragment_container, fragment)
-                        .commit();
+                getActivity().finish();
             }
         });
-
         return root;
     }
 

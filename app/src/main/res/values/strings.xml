@@ -40,4 +40,7 @@
     <string name="change_name_settings">Change name</string>
     <string name="logout_settings">Logout</string>
     <string name="about_settings">About</string>
+
+    <string name="table_confirmation_text">You have chosen the table</string>
+    <string name="select_table">Select table</string>
 </resources>

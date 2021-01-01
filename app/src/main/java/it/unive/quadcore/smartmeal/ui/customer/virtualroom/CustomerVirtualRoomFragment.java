@@ -25,16 +25,13 @@ import it.unive.quadcore.smartmeal.ui.customer.bottomnavigation.menu.MenuFragmen
 
 public class CustomerVirtualRoomFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
     private static final String TAG = "CustomerVirtualRoomFrag";
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+    private static final String TABLE_ID_PARAM = "tableId";
+
+
+    private String tableId;
 
 
     private TextView tableNumberTextView;
@@ -45,22 +42,22 @@ public class CustomerVirtualRoomFragment extends Fragment {
 
     public CustomerVirtualRoomFragment() {
         // Required empty public constructor
+
+        this.tableId = "";
     }
 
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
+     * @param tableId Parameter 1.
      * @return A new instance of fragment CustomerVirtualRoomFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static CustomerVirtualRoomFragment newInstance(String param1, String param2) {
+    public static CustomerVirtualRoomFragment newInstance(String tableId) {
         CustomerVirtualRoomFragment fragment = new CustomerVirtualRoomFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+        args.putString(TABLE_ID_PARAM, tableId);
         fragment.setArguments(args);
         return fragment;
     }
@@ -69,8 +66,7 @@ public class CustomerVirtualRoomFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            tableId = getArguments().getString(TABLE_ID_PARAM);
         }
     }
 
@@ -84,9 +80,6 @@ public class CustomerVirtualRoomFragment extends Fragment {
         callButton = root.findViewById(R.id.call_button);
         exitButton = root.findViewById(R.id.exit_customer_room_button);
 
-
-        // TODO rimpiazzare con il vero numero di tavolo
-        String tableId = "21";
 
         tableNumberTextView.setText(tableId);
         menuButton.setOnClickListener(new View.OnClickListener() {
