@@ -164,6 +164,8 @@ public class Local {
         if(!roomState) // La stanza non è aperta
             throw new RoomStateException(false);
 
+        waiterNotificationHandler.removeCustomerNotifications(getCustomerByTable(table));
+
         tableHandler.freeTable(table);
     }
 
@@ -239,6 +241,36 @@ public class Local {
         }
         try {
             waiterNotificationHandler.addNotification(new WaiterNotification(customer1));
+        } catch (WaiterNotificationException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void testingUI_1() {
+        Customer customer = new Customer("111111","Giacomo");
+        try {
+            Table table = tableHandler.getFreeTableList().last();
+            tableHandler.assignTable(customer,table);
+        } catch (TableException e) {
+            e.printStackTrace();
+        }
+        try {
+            waiterNotificationHandler.addNotification(new WaiterNotification(customer));
+        } catch (WaiterNotificationException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void testingUI_2() {
+        Customer customer = new Customer("12345555555","Davide");
+        try {
+            Table table = tableHandler.getFreeTableList().last();
+            tableHandler.assignTable(customer,table);
+        } catch (TableException e) {
+            e.printStackTrace();
+        }
+        try {
+            waiterNotificationHandler.addNotification(new WaiterNotification(customer));
         } catch (WaiterNotificationException e) {
             e.printStackTrace();
         }

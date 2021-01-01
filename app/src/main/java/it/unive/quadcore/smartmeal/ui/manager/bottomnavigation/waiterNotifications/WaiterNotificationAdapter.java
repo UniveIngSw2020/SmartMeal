@@ -23,6 +23,7 @@ import it.unive.quadcore.smartmeal.local.TableException;
 import it.unive.quadcore.smartmeal.local.WaiterNotificationException;
 import it.unive.quadcore.smartmeal.model.WaiterNotification;
 import it.unive.quadcore.smartmeal.ui.manager.ManagerRoomBottomNavigationActivity;
+import it.unive.quadcore.smartmeal.ui.manager.bottomnavigation.EmptyListDialogFragment;
 
 public class WaiterNotificationAdapter extends RecyclerView.Adapter<WaiterNotificationAdapter.NotificationViewHolder>{
     public static final class NotificationViewHolder extends RecyclerView.ViewHolder {
@@ -62,9 +63,7 @@ public class WaiterNotificationAdapter extends RecyclerView.Adapter<WaiterNotifi
         try {
             String prefix = activity.getString(R.string.table_prefix);
             holder.tableTextView.setText(String.format("%s %s", prefix, Local.getInstance().getTable(notification.getCustomer()).getId()));
-        } catch (RoomStateException e) { // TODO :gestire eccezioni
-            e.printStackTrace();
-        } catch (TableException e) {
+        } catch (RoomStateException | TableException e) { // TODO :gestire eccezioni
             e.printStackTrace();
         }
         holder.dateHourTextView.setText(notification.getPrettyTime());
@@ -76,6 +75,7 @@ public class WaiterNotificationAdapter extends RecyclerView.Adapter<WaiterNotifi
                 int notificationToRemoveIndex = waiterNotifications.indexOf(notification);
                 waiterNotifications.remove(notificationToRemoveIndex);
                 notifyItemRemoved(notificationToRemoveIndex);
+
             } catch (RoomStateException | WaiterNotificationException e) {
                 e.printStackTrace();
             }

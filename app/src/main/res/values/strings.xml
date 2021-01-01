@@ -43,4 +43,14 @@
 
     <string name="modify_table_button_label">Modify</string>
     <string name="delete_table_button_label">Delete</string>
+
+    <string name="reload_button_label">Reload</string>
+
+    <string name="insert_new_customer_hint">Insert customer name</string>
+    <string name="select_table_hint">Select a table</string>
+
+    <string name="no_new_customer_name_snackbar">You have to specify the customer name</string>
+
+    <string name="added_table_alert">Table added correctly!</string>
+
 </resources>

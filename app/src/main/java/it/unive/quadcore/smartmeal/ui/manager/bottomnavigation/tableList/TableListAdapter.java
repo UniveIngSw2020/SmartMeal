@@ -90,6 +90,7 @@ public class TableListAdapter extends RecyclerView.Adapter<TableListAdapter.Tabl
             } catch (RoomStateException | TableException e) {
                 e.printStackTrace();
             }
+
         });
     }
 

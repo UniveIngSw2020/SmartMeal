@@ -30,8 +30,8 @@
 
     <string name="title_activity_manager_room_bottom_navigation">MainActivity</string>
 
-    <string name="title_manager_room_waiterNotifications_fragment">Waiter notifications</string>
-    <string name="title_manager_room_tableList_fragment">Tables</string>
+    <string name="title_manager_room_waiterNotifications_fragment">Notifiche cameriere</string>
+    <string name="title_manager_room_tableList_fragment">Gestione tavoli</string>
 
     <string name="table_prefix">Tavolo:</string>
 
@@ -43,4 +43,15 @@
 
     <string name="modify_table_button_label">Modifica</string>
     <string name="delete_table_button_label">Elimina</string>
+
+    <string name="reload_button_label">Aggiorna</string>
+
+    <string name="insert_new_customer_hint">Inserisci il nome cliente</string>
+    <string name="select_table_hint">Seleziona un tavolo</string>
+
+    <string name="no_new_customer_name_snackbar">Devi specificare il nome del cliente</string>
+
+    <string name="added_table_alert">Tavolo aggiunto correttamente!</string>
+
+
 </resources>

@@ -1,5 +1,6 @@
 package it.unive.quadcore.smartmeal.local;
 
+import java.util.Iterator;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
@@ -67,5 +68,15 @@ class WaiterNotificationHandler {
         if(notificationList==null || notificationList.isEmpty()) // Controllo a null non servirebbe
             throw new WaiterNotificationException("The notification list is empty");
         return new TreeSet<>(notificationList); // Ritorno una copia
+    }
+
+    // Rimuove tutte le notifiche effettuate da un client
+    synchronized void removeCustomerNotifications(Customer customer) {
+        Iterator<WaiterNotification> it = notificationList.iterator();
+        while(it.hasNext()){
+            WaiterNotification notification = it.next();
+            if(notification.getCustomer().equals(customer))
+                it.remove();
+        }
     }
 }

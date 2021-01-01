@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -24,6 +25,8 @@ public class WaiterNotificationsFragment extends Fragment {
 
     private WaiterNotificationsViewModel waiterNotificationsViewModel;
 
+    private Button reloadButton;
+
     public View onCreateView(@NonNull LayoutInflater inflater,
             ViewGroup container, Bundle savedInstanceState) {
 
@@ -32,6 +35,15 @@ public class WaiterNotificationsFragment extends Fragment {
         View root = inflater.inflate(R.layout.fragment_waiter_notifications, container, false);
 
         setupWaiterNotificationRecyclerView(root);
+
+        reloadButton = root.findViewById(R.id.reload_button_waiter_notifications);
+        reloadButton.setOnClickListener(v -> {
+            Local.getInstance().testingUI_1(); // TODO : togliere, solo per testing
+
+            setupWaiterNotificationRecyclerView(root);
+            //waiterNotificationAdapter.notify;
+        });
+
         return root;
     }
 
@@ -50,7 +62,7 @@ public class WaiterNotificationsFragment extends Fragment {
             waiterNotificationRecyclerView.setAdapter(waiterNotificationAdapter);
         } catch (RoomStateException e) {
             e.printStackTrace();
-        } catch (WaiterNotificationException e) {
+        } catch (WaiterNotificationException e) { // TODO : tenere ?
             // Non ci sono notifiche : mostro un dialog
             new EmptyListDialogFragment(getString(R.string.empty_waiter_notification_list_alert))
                         .show(requireFragmentManager(), "noNotifications"); // TODO : deprecato

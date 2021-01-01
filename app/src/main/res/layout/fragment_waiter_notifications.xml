@@ -13,6 +13,18 @@
         android:layout_height="match_parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/reload_button_waiter_notifications"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/reload_button_label"
+        app:layout_constraintBottom_toBottomOf="@+id/waiter_notification_recycler_view"
+        app:layout_constraintEnd_toEndOf="@+id/waiter_notification_recycler_view"
+        app:layout_constraintStart_toStartOf="@+id/waiter_notification_recycler_view"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.901" />
 </androidx.constraintlayout.widget.ConstraintLayout>
