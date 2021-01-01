@@ -123,7 +123,14 @@ public class ManagerCommunication extends Communication {
                 super.onDisconnected(endpointId);
                 Objects.requireNonNull(onCustomerLeftRoomCallback);
 
-                onCustomerLeftRoomCallback.accept(customerHandler.getCustomer(endpointId));
+                if (customerHandler.containsCustomer(endpointId)) {
+                    Customer customer = customerHandler.getCustomer(endpointId);
+                    Log.i(TAG, "Customer disconnected: " + customer);
+                    onCustomerLeftRoomCallback.accept(customer);
+                    customerHandler.removeCustomer(endpointId);
+                } else {
+                    Log.i(TAG, "Unrecognized customer tried to disconnect");
+                }
             }
         };
     }
@@ -245,6 +252,9 @@ public class ManagerCommunication extends Communication {
 
         Nearby.getConnectionsClient(activity).stopAllEndpoints();
         Nearby.getConnectionsClient(activity).stopAdvertising();
+
+        customerHandler.removeAllCustomers();
+
         roomStarted = false;
         activity = null;
     }

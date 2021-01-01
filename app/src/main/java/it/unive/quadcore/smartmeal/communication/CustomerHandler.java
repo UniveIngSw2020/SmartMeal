@@ -97,4 +97,8 @@ public class CustomerHandler {
     synchronized boolean containsCustomer(String customerId) {
         return customerMap.containsKey(customerId);
     }
+
+    synchronized void removeAllCustomers() {
+        // TODO rimuovere tutti i customer
+    }
 }
