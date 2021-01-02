@@ -22,11 +22,13 @@ import java.util.List;
 import java.util.Set;
 
 import it.unive.quadcore.smartmeal.R;
+import it.unive.quadcore.smartmeal.communication.CustomerHandler;
 import it.unive.quadcore.smartmeal.local.Local;
 import it.unive.quadcore.smartmeal.local.RoomStateException;
 import it.unive.quadcore.smartmeal.local.TableException;
 import it.unive.quadcore.smartmeal.model.ManagerTable;
 import it.unive.quadcore.smartmeal.ui.manager.ManagerRoomBottomNavigationActivity;
+import it.unive.quadcore.smartmeal.ui.manager.addTable.AddedTableDialogFragment;
 
 public class TableListAdapter extends RecyclerView.Adapter<TableListAdapter.TableViewHolder>{
     public static final class TableViewHolder extends RecyclerView.ViewHolder {
@@ -69,16 +71,23 @@ public class TableListAdapter extends RecyclerView.Adapter<TableListAdapter.Tabl
         holder.tableTextView.setText(String.format("%s %s", prefix, table.getId()));
 
         try {
-            holder.customerTextView.setText(Local.getInstance().getCustomerByTable(table).getName());
+            CustomerHandler.Customer customer = Local.getInstance().getCustomerByTable(table);
+            holder.customerTextView.setText(customer.getName());
+
+            holder.modifyButton.setOnClickListener(view->{
+                try {
+                    new ModifyTableDialogFragment(customer,Local.getInstance().getFreeTableList(), this)
+                            .show(((FragmentActivity)view.getContext()).getSupportFragmentManager(),"modifyTable");
+                } catch (RoomStateException e) {  // TODO : ECCEZIONI
+                    e.printStackTrace();
+                } catch (TableException e) {
+                    e.printStackTrace();
+                }
+            });
         } catch (RoomStateException | TableException e) { // TODO : gestire eccezioni
             e.printStackTrace();
         }
 
-        // TODO : realizzare callback
-
-        holder.modifyButton.setOnClickListener(view->{
-
-        });
 
         holder.deleteButton.setOnClickListener(view->{
             try {
@@ -97,5 +106,28 @@ public class TableListAdapter extends RecyclerView.Adapter<TableListAdapter.Tabl
     @Override
     public int getItemCount() {
         return tableList.size();
+    }
+
+
+    public void changeTable(ManagerTable oldTable, ManagerTable newTable){
+        tableList.remove(oldTable);
+
+        tableList.add(newTable);
+
+        notifyDataSetChanged();
+    }
+
+    public void reload(){
+        try {
+            tableList.clear();
+            tableList.addAll(Local.getInstance().getAssignedTableList());
+            notifyDataSetChanged();
+        } catch (RoomStateException e) {
+            e.printStackTrace();
+        } catch (TableException e) {
+            e.printStackTrace();
+        }
+
+
     }
 }

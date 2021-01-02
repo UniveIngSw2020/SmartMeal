@@ -88,7 +88,7 @@ public class AddTableAdapter extends RecyclerView.Adapter<AddTableAdapter.TableV
                 e.printStackTrace();
             }
 
-            new AddedTableDialogFragment(activity).show(((FragmentActivity)view.getContext()).getSupportFragmentManager(),"addedTable"); // TODO : deprecato
+            new AddedTableDialogFragment().show(((FragmentActivity)view.getContext()).getSupportFragmentManager(),"addedTable");
         });
     }
 

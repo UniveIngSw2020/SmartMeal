@@ -1,9 +1,8 @@
-package it.unive.quadcore.smartmeal.ui.manager.addTable;
+package it.unive.quadcore.smartmeal.ui.manager;
 
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.FragmentManager;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,17 +10,24 @@ import android.os.Bundle;
 import androidx.fragment.app.DialogFragment;
 
 import it.unive.quadcore.smartmeal.R;
+import it.unive.quadcore.smartmeal.ui.manager.addTable.AddTableActivity;
 
-public class AddedTableDialogFragment extends DialogFragment {
+public class ErrorDialogFragment extends DialogFragment {
 
+    private final String message;
+
+    public ErrorDialogFragment(String message){
+        super();
+
+        this.message=message;
+    }
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
-        Activity activity = getActivity();
-        String closeLabel = activity.getString(R.string.close_label_alert);
+        String closeLabel = getActivity().getString(R.string.close_label_alert);
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-        builder.setMessage(R.string.added_table_alert)
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setMessage(message)
                 /*.setPositiveButton("", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         //
@@ -29,9 +35,7 @@ public class AddedTableDialogFragment extends DialogFragment {
                 })*/
                 .setNegativeButton(closeLabel, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        Intent intent = new Intent(activity, AddTableActivity.class);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        activity.startActivity(intent);
+
                     }
                 });
 

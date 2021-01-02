@@ -45,8 +45,8 @@ public class TableListFragment extends Fragment {
         reloadButton.setOnClickListener(v -> {
             Local.getInstance().testingUI_2(); // TODO : togliere, solo per testing
 
-            setupTableListRecyclerView(root);
-            //waiterNotificationAdapter.notify;
+            //setupTableListRecyclerView(root);
+            tableListAdapter.reload();
         });
 
         floatingButton = root.findViewById(R.id.floating_button_add_table);

@@ -86,4 +86,16 @@ public class WaiterNotificationAdapter extends RecyclerView.Adapter<WaiterNotifi
     public int getItemCount() {
         return waiterNotifications.size();
     }
+
+    public void reload() {
+        try {
+            waiterNotifications.clear();
+            waiterNotifications.addAll(Local.getInstance().getWaiterNotificationList());
+            notifyDataSetChanged();
+        } catch (RoomStateException e) {
+            e.printStackTrace();
+        } catch (WaiterNotificationException e) {
+            e.printStackTrace();
+        }
+    }
 }

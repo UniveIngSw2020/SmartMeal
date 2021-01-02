@@ -179,6 +179,8 @@ public class ManagerCommunication extends Communication {
             throw new IllegalStateException("Room has been already started");
         }
 
+        roomStarted = true;
+
         Objects.requireNonNull(onCustomerLeftRoomCallback);
 
         Objects.requireNonNull(onSelectTableCallback);
@@ -199,6 +201,8 @@ public class ManagerCommunication extends Communication {
                 )
                 .addOnSuccessListener((Void unused) -> Log.i(TAG, "Successfully started advertising"))
                 .addOnFailureListener((Exception e) -> Log.e(TAG, "Advertising failed"));
+
+
     }
 
     public void onNotifyWaiter(@NonNull Function<WaiterNotification, Confirmation<? extends WaiterNotificationException>> onNotifyWaiterCallback) {

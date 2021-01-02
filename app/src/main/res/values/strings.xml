@@ -53,4 +53,10 @@
 
     <string name="added_table_alert">Table added correctly!</string>
 
+    <string name="modify_table_alert">Select the new table for the customer</string>
+    <string name="confirm_label_alert">Confirm</string>
+    <string name="modify_table_error_alert">Error : the table has not changed</string>
+
+    <string name="confirm_text_alert">You really want to close the room?</string>
+
 </resources>

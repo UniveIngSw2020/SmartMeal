@@ -53,5 +53,12 @@
 
     <string name="added_table_alert">Tavolo aggiunto correttamente!</string>
 
+    <string name="modify_table_alert">Seleziona il nuovo tavolo per il cliente</string>
+    <string name="confirm_label_alert">Conferma</string>
+
+    <string name="modify_table_error_alert">Errore : il tavolo non è stato cambiato</string>
+
+    <string name="confirm_text_alert">Sei sicuro di voler chiudere la stanza?</string>
+
 
 </resources>

@@ -40,8 +40,8 @@ public class WaiterNotificationsFragment extends Fragment {
         reloadButton.setOnClickListener(v -> {
             Local.getInstance().testingUI_1(); // TODO : togliere, solo per testing
 
-            setupWaiterNotificationRecyclerView(root);
-            //waiterNotificationAdapter.notify;
+            //setupWaiterNotificationRecyclerView(root);
+            waiterNotificationAdapter.reload();
         });
 
         return root;
