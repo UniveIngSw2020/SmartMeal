@@ -9,6 +9,8 @@ import android.view.View;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.BaseTransientBottomBar;
+import com.google.android.material.snackbar.Snackbar;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -18,6 +20,7 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import it.unive.quadcore.smartmeal.R;
+import it.unive.quadcore.smartmeal.ui.SelectAppModeActivity;
 import it.unive.quadcore.smartmeal.ui.SettingsActivity;
 import it.unive.quadcore.smartmeal.ui.customer.virtualroom.CustomerVirtualRoomActivity;
 
@@ -43,6 +46,16 @@ public class CustomerBottomNavigationActivity extends AppCompatActivity {
         startCustomerVirtualRoomFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // TODO probabilmente ha senso creare una classe apposita per controllo permessi
+                if (!SelectAppModeActivity.hasNearbyPermissions(CustomerBottomNavigationActivity.this)) {
+                    Snackbar.make(
+                            findViewById(android.R.id.content),
+                            R.string.field_required_snackbar, // TODO cambiare stringa
+                            BaseTransientBottomBar.LENGTH_LONG
+                    ).show();
+                    return;
+                }
+
                 startActivity(new Intent(
                         CustomerBottomNavigationActivity.this,
                         CustomerVirtualRoomActivity.class

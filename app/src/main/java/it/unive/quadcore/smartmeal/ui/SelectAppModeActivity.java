@@ -1,5 +1,6 @@
 package it.unive.quadcore.smartmeal.ui;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
@@ -12,8 +13,12 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 import it.unive.quadcore.smartmeal.R;
 import it.unive.quadcore.smartmeal.storage.ApplicationMode;
+import it.unive.quadcore.smartmeal.storage.CustomerStorage;
 import it.unive.quadcore.smartmeal.storage.Storage;
 import it.unive.quadcore.smartmeal.ui.customer.CustomerBottomNavigationActivity;
 import it.unive.quadcore.smartmeal.ui.customer.InsertPersonalDataActivity;
@@ -22,14 +27,44 @@ public class SelectAppModeActivity extends AppCompatActivity {
 
     private static final String TAG = "SelectAppModeActivity";
 
-    private static final String[] REQUIRED_PERMISSIONS = new String[] {
-            Manifest.permission.BLUETOOTH,
-            Manifest.permission.BLUETOOTH_ADMIN,
-            Manifest.permission.ACCESS_WIFI_STATE,
-            Manifest.permission.CHANGE_WIFI_STATE,
-            Manifest.permission.ACCESS_COARSE_LOCATION,
-            Manifest.permission.ACCESS_FINE_LOCATION
-    };
+    private static String[] getNearbyRequiredPermissions() {
+        return new String[] {
+                Manifest.permission.BLUETOOTH,
+                Manifest.permission.BLUETOOTH_ADMIN,
+                Manifest.permission.ACCESS_WIFI_STATE,
+                Manifest.permission.CHANGE_WIFI_STATE,
+                Manifest.permission.ACCESS_COARSE_LOCATION,
+                Manifest.permission.ACCESS_FINE_LOCATION
+        };
+    }
+
+    private static String[] getNotificationsRequiredPermissions() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            return new String[] {
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.ACCESS_BACKGROUND_LOCATION
+            };
+        } else {
+            return new String[] {
+                    Manifest.permission.ACCESS_FINE_LOCATION
+            };
+        }
+    }
+
+    private static String[] getSensorsRequiredPermissions() {
+        return new String[] {
+            // TODO capire che permessi servono
+        };
+    }
+
+    private static String[] getAllRequiredPermissions() {
+        ArrayList<String> requiredPermissions = new ArrayList<>();
+        requiredPermissions.addAll(Arrays.asList(getNearbyRequiredPermissions()));
+        requiredPermissions.addAll(Arrays.asList(getNotificationsRequiredPermissions()));
+        requiredPermissions.addAll(Arrays.asList(getSensorsRequiredPermissions()));
+
+        return requiredPermissions.toArray(new String[0]);
+    }
 
     private static final int REQUEST_CODE_REQUIRED_PERMISSIONS = 1;
 
@@ -82,7 +117,6 @@ public class SelectAppModeActivity extends AppCompatActivity {
 
 //            startActivity(new Intent(SelectAppModeActivity.this, InsertPasswordActivity.class));
         });
-
     }
 
     @Override
@@ -91,33 +125,64 @@ public class SelectAppModeActivity extends AppCompatActivity {
 
         // TODO testare, in teoria le altre versioni hanno permessi in automatico
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (!hasPermission(this, REQUIRED_PERMISSIONS)) {
-                requestPermissions(REQUIRED_PERMISSIONS, REQUEST_CODE_REQUIRED_PERMISSIONS);
+            String[] requiredPermissions = getAllRequiredPermissions();
+            if (!hasPermission(this, requiredPermissions)) {
+                requestPermissions(requiredPermissions, REQUEST_CODE_REQUIRED_PERMISSIONS);
             }
         }
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
-// TODO la tengo in caso serva in futuro
+        if (requestCode != REQUEST_CODE_REQUIRED_PERMISSIONS) {
+            return;
+        }
 
-//    @Override
-//    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-//        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-//
-//        if (requestCode != REQUEST_CODE_REQUIRED_PERMISSIONS) {
-//            return;
+//        for (int i = 0; i < permissions.length; i++) {
+//            if (permissions[i] = P)
 //        }
+//
 //
 //        for (int grantResult : grantResults) {
+//            if
+//
+//
 //            if (grantResult == PackageManager.PERMISSION_DENIED) {
-//                Snackbar.make(
-//                        findViewById(android.R.id.content),
-//                        "Required",
-//                        BaseTransientBottomBar.LENGTH_LONG
-//                ).show();
+//
 //            }
 //        }
-//    }
+
+        if (hasNotificationsPermissions(this)) {
+            CustomerStorage.setNotificationMode(true);
+        }
+
+        if (hasSensorsPermissions(this)) {
+            CustomerStorage.setNotificationMode(true);
+        }
+    }
+
+    public static boolean hasNearbyPermissions(Context context) {
+        return hasPermission(
+                context,
+                getNearbyRequiredPermissions()
+        );
+    }
+
+    private static boolean hasNotificationsPermissions(Context context) {
+        return hasPermission(
+                context,
+                getNotificationsRequiredPermissions()
+        );
+    }
+
+    private static boolean hasSensorsPermissions(Context context) {
+        return hasPermission(
+                context,
+                getSensorsRequiredPermissions()
+        );
+    }
 
     private static boolean hasPermission(Context context, String... permissions) {
         for (String permission : permissions) {
