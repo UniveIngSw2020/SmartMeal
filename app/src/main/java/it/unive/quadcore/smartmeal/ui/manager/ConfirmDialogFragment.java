@@ -18,6 +18,7 @@ public class ConfirmDialogFragment extends DialogFragment {
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
 
         String confirmLabel = getString(R.string.confirm_label_alert);
+        String closeLabel = getString(R.string.close_label_alert);
         String message = getString(R.string.confirm_text_alert);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -34,7 +35,13 @@ public class ConfirmDialogFragment extends DialogFragment {
                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivity(intent);
                     }
-                });
+                })
+        .setNegativeButton(closeLabel, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
 
         return builder.create();
     }
