@@ -26,7 +26,7 @@ public class LocalCustomerHandler extends CustomerHandler<LocalCustomerHandler.L
     @Nullable
     private static LocalCustomerHandler instance;
 
-    public synchronized static LocalCustomerHandler getInstance() {
+    synchronized static LocalCustomerHandler getInstance() {
         if (instance == null) {
             instance = new LocalCustomerHandler();
         }

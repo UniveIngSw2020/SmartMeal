@@ -20,7 +20,7 @@ class RemoteCustomerHandler extends CustomerHandler<RemoteCustomerHandler.Remote
     @Nullable
     private static RemoteCustomerHandler instance;
 
-    public synchronized static RemoteCustomerHandler getInstance() {
+    synchronized static RemoteCustomerHandler getInstance() {
         if (instance == null) {
             instance = new RemoteCustomerHandler();
         }
