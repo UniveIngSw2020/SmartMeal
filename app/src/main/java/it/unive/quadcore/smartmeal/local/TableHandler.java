@@ -7,11 +7,10 @@ import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+import it.unive.quadcore.smartmeal.model.Customer;
 import it.unive.quadcore.smartmeal.model.ManagerTable;
 import it.unive.quadcore.smartmeal.model.Table;
 import it.unive.quadcore.smartmeal.storage.ManagerStorage;
-
-import static it.unive.quadcore.smartmeal.communication.CustomerHandler.Customer;
 
 // TODO : gestione RACE CONDITION
 // Per ora gestisco con synchronized. Si potrebbe usare approcio più efficente tramite Lock lettori-scrittori.
@@ -19,7 +18,7 @@ import static it.unive.quadcore.smartmeal.communication.CustomerHandler.Customer
 // Visibile solo alla classe Locale (private o package-private)
 class TableHandler {
     // Mappa clienti-tavoli
-    private final Map<Customer,ManagerTable> customerTableMap ;
+    private final Map<Customer, ManagerTable> customerTableMap ;
 
     // Lista di tavoli liberi (usata come cache)
     private final SortedSet<ManagerTable> freeTableList ;
@@ -29,7 +28,7 @@ class TableHandler {
             - Tenere i soli tavoli significativi per il locale
             - Evitare casting a ManagerTable
      */
-    private final Map<Table,ManagerTable> tablesMap;
+    private final Map<Table, ManagerTable> tablesMap;
 
     // Costruttore con visibilità package
     TableHandler(){
@@ -44,7 +43,7 @@ class TableHandler {
         tablesMap = new HashMap<>();
         //tables.forEach(managerTable -> tableMap.put(managerTable,managerTable));
         for(ManagerTable managerTable : tables)
-            tablesMap.put(managerTable,managerTable);
+            tablesMap.put(managerTable, managerTable);
 
     }
 
@@ -112,7 +111,7 @@ class TableHandler {
 
         ManagerTable oldTable = getTable(customer);
         freeTable(oldTable);
-        assignTable(customer,newTable);
+        assignTable(customer, newTable);
 
 
 

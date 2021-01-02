@@ -5,7 +5,6 @@ import android.util.Log;
 
 import java.util.Set;
 import java.util.SortedSet;
-import java.util.TreeSet;
 
 import it.unive.quadcore.smartmeal.communication.ManagerCommunication;
 //import it.unive.quadcore.smartmeal.communication.ManagerCommunicationSTUB;
@@ -13,12 +12,10 @@ import it.unive.quadcore.smartmeal.communication.confirmation.Confirmation;
 import it.unive.quadcore.smartmeal.communication.confirmation.ConfirmationDenied;
 import it.unive.quadcore.smartmeal.communication.response.ErrorResponse;
 import it.unive.quadcore.smartmeal.communication.response.SuccessResponse;
+import it.unive.quadcore.smartmeal.model.Customer;
 import it.unive.quadcore.smartmeal.model.ManagerTable;
 import it.unive.quadcore.smartmeal.model.Table;
 import it.unive.quadcore.smartmeal.model.WaiterNotification;
-
-import static it.unive.quadcore.smartmeal.communication.CustomerHandler.Customer;
-
 
 // TODO : gestione RACE CONDITION
 // In realtà nella versione base (un solo dispositivo gestore) non ce ne dovrebbero essere di tali problemi
@@ -88,7 +85,7 @@ public class Local {
         });
         managerCommunication.onSelectTable( (customer,table) -> { // Callback da eseguire quando arriva selezione di un tavolo
             try{
-                tableHandler.assignTable(customer,table);
+                tableHandler.assignTable(customer, table);
                 return new Confirmation<>();
             }
             catch( TableException e){ // Eccezione : tale cliente non può prendere tale tavolo
@@ -149,7 +146,7 @@ public class Local {
         if(!roomState) // La stanza non è aperta
             throw new RoomStateException(false);
 
-        tableHandler.changeCustomerTable(customer,newTable);
+        tableHandler.changeCustomerTable(customer, newTable);
     }
 
     // Assegna un tavolo ad un cliente
@@ -157,7 +154,7 @@ public class Local {
         if(!roomState) // La stanza non è aperta
             throw new RoomStateException(false);
 
-        tableHandler.assignTable(customer,table);
+        tableHandler.assignTable(customer, table);
     }
 
     // Libera il tavolo selezionato
