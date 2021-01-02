@@ -11,6 +11,7 @@ import androidx.fragment.app.FragmentManager;
 import it.unive.quadcore.smartmeal.R;
 import it.unive.quadcore.smartmeal.storage.Storage;
 import it.unive.quadcore.smartmeal.ui.customer.CustomerSettingsFragment;
+import it.unive.quadcore.smartmeal.ui.manager.ManagerSettingsFragment;
 
 public class SettingsActivity extends AppCompatActivity {
 
@@ -28,8 +29,7 @@ public class SettingsActivity extends AppCompatActivity {
                 settingsFragment = new CustomerSettingsFragment();
                 break;
             case MANAGER:
-                // TODO creare ManagerSettingsFragment
-                // settingsFragment = new ManagerSettingsFragment();
+                settingsFragment = new ManagerSettingsFragment();
                 break;
             default:
                 Log.wtf(TAG, "ApplicationMode is neither CUSTOMER nor MANAGER");
