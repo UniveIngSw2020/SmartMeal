@@ -1,6 +1,7 @@
 package it.unive.quadcore.smartmeal.communication;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -16,6 +17,7 @@ class RemoteCustomerHandler extends CustomerHandler<RemoteCustomerHandler.Remote
         }
     }
 
+    @Nullable
     private static RemoteCustomerHandler instance;
 
     public synchronized static RemoteCustomerHandler getInstance() {
@@ -29,25 +31,5 @@ class RemoteCustomerHandler extends CustomerHandler<RemoteCustomerHandler.Remote
 
     synchronized void addCustomer(@NonNull String customerId, @NonNull String customerName) {
         addCustomer(new RemoteCustomer(customerId, customerName));
-    }
-
-    @Override
-    public synchronized void removeCustomer(String customerId) {
-        super.removeCustomer(customerId);
-    }
-
-    @Override
-    public RemoteCustomer getCustomer(String customerId) {
-        return super.getCustomer(customerId);
-    }
-
-    @Override
-    public boolean containsCustomer(String customerId) {
-        return super.containsCustomer(customerId);
-    }
-
-    @Override
-    public void removeAllCustomers() {
-        // TODO rimuovere tutti i customer
     }
 }

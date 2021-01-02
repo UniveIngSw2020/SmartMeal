@@ -1,6 +1,7 @@
 package it.unive.quadcore.smartmeal.local;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import it.unive.quadcore.smartmeal.model.Customer;
 import it.unive.quadcore.smartmeal.model.CustomerHandler;
@@ -12,15 +13,17 @@ public class LocalCustomerHandler extends CustomerHandler<LocalCustomerHandler.L
         }
     }
 
+    @NonNull
     private static Integer i=0;
 
     @NonNull
-    private static String getNewId() {
+    private synchronized static String getNewId() {
         String newId = i.toString();
         i++;
         return newId;
     }
 
+    @Nullable
     private static LocalCustomerHandler instance;
 
     public synchronized static LocalCustomerHandler getInstance() {
@@ -32,13 +35,10 @@ public class LocalCustomerHandler extends CustomerHandler<LocalCustomerHandler.L
 
     private LocalCustomerHandler() {}
 
-    synchronized void addCustomer(@NonNull String customerName) {
-        addCustomer(new LocalCustomerHandler.LocalCustomer(customerName));
-    }
-
-    @Override
-    public void removeAllCustomers() {
-        // TODO rimuovere tutti i customer
+    synchronized LocalCustomer addCustomer(@NonNull String customerName) {
+        LocalCustomer localCustomer = new LocalCustomerHandler.LocalCustomer(customerName);
+        addCustomer(localCustomer);
+        return localCustomer;
     }
 }
 

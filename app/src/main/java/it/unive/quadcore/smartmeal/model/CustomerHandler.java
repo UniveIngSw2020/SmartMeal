@@ -16,7 +16,7 @@ public abstract class CustomerHandler<C extends Customer> {
         this.customerMap = new HashMap<>();
     }
 
-    protected synchronized void addCustomer(C customer) {
+    protected synchronized void addCustomer(@NonNull C customer) {
         if (containsCustomer(customer.getId())) {
             throw new IllegalStateException("A customer with the given id already exists");
         }
@@ -28,29 +28,36 @@ public abstract class CustomerHandler<C extends Customer> {
         removeCustomer(customer.getId());
     }
 
-    protected synchronized void removeCustomer(String customerId) {
+    public synchronized void removeCustomer(String customerId) {
         if (!containsCustomer(customerId)) {
             throw new IllegalStateException("A customer with the given id doesn't exist");
         }
         customerMap.remove(customerId);
     }
 
-    protected C getCustomer(String customerId) {
+    public synchronized C getCustomer(@NonNull C customer) {
+        Objects.requireNonNull(customer);
+        return getCustomer(customer.getId());
+    }
+
+    public synchronized C getCustomer(String customerId) {
         if (!containsCustomer(customerId)) {
             throw new IllegalStateException("A customer with the given id doesn't exist");
         }
         return customerMap.get(customerId);
     }
 
-    protected boolean containsCustomer(String customerId) {
+    public synchronized boolean containsCustomer(String customerId) {
         return customerMap.containsKey(customerId);
     }
 
-    public boolean containsCustomer(@Nullable C customer) {
+    public synchronized boolean containsCustomer(@Nullable C customer) {
         if(customer==null)
             return false;
         return customerMap.containsKey(customer.getId());
     }
 
-    public abstract void removeAllCustomers();
+    public synchronized void removeAllCustomers(){
+        customerMap.clear();
+    }
 }
