@@ -254,7 +254,7 @@ public class ManagerCommunication extends Communication {
         Nearby.getConnectionsClient(activity).stopAllEndpoints();
         Nearby.getConnectionsClient(activity).stopAdvertising();
 
-        customerHandler.removeAllCustomers();
+        //TODO: customerHandler.removeAllCustomers();
 
         roomStarted = false;
         activity = null;
