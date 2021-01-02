@@ -43,11 +43,11 @@ public class CustomerSettingsFragment extends Fragment {
         // Inflate the layout for this fragment
         View root = inflater.inflate(R.layout.fragment_customer_settings, container, false);
 
-        notificationsSwitch = root.findViewById(R.id.notifications_switch);
-        sensorsSwitch = root.findViewById(R.id.sensors_switch);
-        changeNameTextView = root.findViewById(R.id.change_name_text_view);
-        logoutTextView = root.findViewById(R.id.logout_text_view);
-        aboutTextView = root.findViewById(R.id.about_text_view);
+        notificationsSwitch = root.findViewById(R.id.customer_notifications_switch);
+        sensorsSwitch = root.findViewById(R.id.customer_sensors_switch);
+        changeNameTextView = root.findViewById(R.id.customer_change_name_text_view);
+        logoutTextView = root.findViewById(R.id.customer_logout_text_view);
+        aboutTextView = root.findViewById(R.id.customer_about_text_view);
 
         boolean notificationsEnabled = CustomerStorage.getNotificationMode();
         notificationsSwitch.setChecked(notificationsEnabled);
