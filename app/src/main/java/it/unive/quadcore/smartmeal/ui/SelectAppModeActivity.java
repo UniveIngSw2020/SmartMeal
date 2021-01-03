@@ -22,51 +22,11 @@ import it.unive.quadcore.smartmeal.storage.CustomerStorage;
 import it.unive.quadcore.smartmeal.storage.Storage;
 import it.unive.quadcore.smartmeal.ui.customer.CustomerBottomNavigationActivity;
 import it.unive.quadcore.smartmeal.ui.customer.InsertPersonalDataActivity;
+import it.unive.quadcore.smartmeal.util.PermissionHandler;
 
 public class SelectAppModeActivity extends AppCompatActivity {
 
     private static final String TAG = "SelectAppModeActivity";
-
-    private static String[] getNearbyRequiredPermissions() {
-        return new String[] {
-                Manifest.permission.BLUETOOTH,
-                Manifest.permission.BLUETOOTH_ADMIN,
-                Manifest.permission.ACCESS_WIFI_STATE,
-                Manifest.permission.CHANGE_WIFI_STATE,
-                Manifest.permission.ACCESS_COARSE_LOCATION,
-                Manifest.permission.ACCESS_FINE_LOCATION
-        };
-    }
-
-    private static String[] getNotificationsRequiredPermissions() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            return new String[] {
-                    Manifest.permission.ACCESS_FINE_LOCATION,
-                    Manifest.permission.ACCESS_BACKGROUND_LOCATION
-            };
-        } else {
-            return new String[] {
-                    Manifest.permission.ACCESS_FINE_LOCATION
-            };
-        }
-    }
-
-    private static String[] getSensorsRequiredPermissions() {
-        return new String[] {
-            // TODO capire che permessi servono
-        };
-    }
-
-    private static String[] getAllRequiredPermissions() {
-        ArrayList<String> requiredPermissions = new ArrayList<>();
-        requiredPermissions.addAll(Arrays.asList(getNearbyRequiredPermissions()));
-        requiredPermissions.addAll(Arrays.asList(getNotificationsRequiredPermissions()));
-        requiredPermissions.addAll(Arrays.asList(getSensorsRequiredPermissions()));
-
-        return requiredPermissions.toArray(new String[0]);
-    }
-
-    private static final int REQUEST_CODE_REQUIRED_PERMISSIONS = 1;
 
     private Button customerButton;
     private Button managerButton;
@@ -124,19 +84,14 @@ public class SelectAppModeActivity extends AppCompatActivity {
         super.onStart();
 
         // TODO testare, in teoria le altre versioni hanno permessi in automatico
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            String[] requiredPermissions = getAllRequiredPermissions();
-            if (!hasPermission(this, requiredPermissions)) {
-                requestPermissions(requiredPermissions, REQUEST_CODE_REQUIRED_PERMISSIONS);
-            }
-        }
+        PermissionHandler.requestAllPermissions(this);
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
-        if (requestCode != REQUEST_CODE_REQUIRED_PERMISSIONS) {
+        if (requestCode != PermissionHandler.getRequestCodeRequiredPermissions()) {
             return;
         }
 
@@ -154,42 +109,13 @@ public class SelectAppModeActivity extends AppCompatActivity {
 //            }
 //        }
 
-        if (hasNotificationsPermissions(this)) {
+        if (PermissionHandler.hasNotificationsPermissions(this)) {
             CustomerStorage.setNotificationMode(true);
         }
 
-        if (hasSensorsPermissions(this)) {
+        if (PermissionHandler.hasSensorsPermissions(this)) {
             CustomerStorage.setNotificationMode(true);
         }
     }
 
-    public static boolean hasNearbyPermissions(Context context) {
-        return hasPermission(
-                context,
-                getNearbyRequiredPermissions()
-        );
-    }
-
-    private static boolean hasNotificationsPermissions(Context context) {
-        return hasPermission(
-                context,
-                getNotificationsRequiredPermissions()
-        );
-    }
-
-    private static boolean hasSensorsPermissions(Context context) {
-        return hasPermission(
-                context,
-                getSensorsRequiredPermissions()
-        );
-    }
-
-    private static boolean hasPermission(Context context, String... permissions) {
-        for (String permission : permissions) {
-            if (ContextCompat.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED) {
-                return false;
-            }
-        }
-        return true;
-    }
 }

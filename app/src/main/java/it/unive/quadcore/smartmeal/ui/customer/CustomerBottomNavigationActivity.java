@@ -23,6 +23,7 @@ import it.unive.quadcore.smartmeal.R;
 import it.unive.quadcore.smartmeal.ui.SelectAppModeActivity;
 import it.unive.quadcore.smartmeal.ui.SettingsActivity;
 import it.unive.quadcore.smartmeal.ui.customer.virtualroom.CustomerVirtualRoomActivity;
+import it.unive.quadcore.smartmeal.util.PermissionHandler;
 
 public class CustomerBottomNavigationActivity extends AppCompatActivity {
 
@@ -47,7 +48,7 @@ public class CustomerBottomNavigationActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // TODO probabilmente ha senso creare una classe apposita per controllo permessi
-                if (!SelectAppModeActivity.hasNearbyPermissions(CustomerBottomNavigationActivity.this)) {
+                if (!PermissionHandler.hasNearbyPermissions(CustomerBottomNavigationActivity.this)) {
                     Snackbar.make(
                             findViewById(android.R.id.content),
                             R.string.field_required_snackbar, // TODO cambiare stringa
