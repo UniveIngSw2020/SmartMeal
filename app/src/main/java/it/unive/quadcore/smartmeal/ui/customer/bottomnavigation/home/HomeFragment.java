@@ -33,6 +33,9 @@ public class HomeFragment extends Fragment {
         descriptionTextView = root.findViewById(R.id.description_text_view);
         localImageView = root.findViewById(R.id.local_image_view);
 
+        if (!CustomerStorage.isInitialized()) {
+            CustomerStorage.initializeStorage(getActivity());
+        }
         LocalDescription localDescription = CustomerStorage.getLocalDescription();
         localNameTextView.setText(localDescription.getName());
         descriptionTextView.setText(localDescription.getPresentation());

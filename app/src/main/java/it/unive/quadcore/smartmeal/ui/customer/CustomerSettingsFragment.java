@@ -1,9 +1,12 @@
 package it.unive.quadcore.smartmeal.ui.customer;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.fragment.app.Fragment;
 
@@ -14,10 +17,14 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.google.android.material.snackbar.BaseTransientBottomBar;
+import com.google.android.material.snackbar.Snackbar;
+
 import it.unive.quadcore.smartmeal.R;
 import it.unive.quadcore.smartmeal.storage.ApplicationMode;
 import it.unive.quadcore.smartmeal.storage.CustomerStorage;
 import it.unive.quadcore.smartmeal.ui.SelectAppModeActivity;
+import it.unive.quadcore.smartmeal.util.PermissionHandler;
 
 public class CustomerSettingsFragment extends Fragment {
 
@@ -52,9 +59,41 @@ public class CustomerSettingsFragment extends Fragment {
         boolean notificationsEnabled = CustomerStorage.getNotificationMode();
         notificationsSwitch.setChecked(notificationsEnabled);
         notificationsSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            CustomerStorage.setNotificationMode(isChecked);
+//            if (isChecked) {
+//                if (!PermissionHandler.hasNotificationsPermissions(getContext())) {
+//                    ActivityResultLauncher<String> requestPermissionLauncher =
+//                            registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
+//                                if (isGranted) {
+//                                    CustomerStorage.setNotificationMode(isChecked);
+//                                } else {
+//                                    notificationsSwitch.setChecked(false);
+//                                    CustomerStorage.setNotificationMode(false);
+//                                }
+//                            });
+//                    requestPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION);
+//                } else {
+//                    CustomerStorage.setNotificationMode(isChecked);
+//                }
+//            } else {
+//                CustomerStorage.setNotificationMode(isChecked);
+//            }
+
             // TODO abilitare notifica tramite android (GPS + notifica)
             // TODO capire discorso permessi
+
+
+            if (isChecked && !PermissionHandler.hasNotificationsPermissions(getContext())) {
+                notificationsSwitch.setChecked(false);
+                Snackbar.make(
+                        getActivity().findViewById(android.R.id.content),
+                        R.string.field_required_snackbar,       // TODO strings.xml
+                        BaseTransientBottomBar.LENGTH_LONG
+                ).show();
+                return;
+            }
+
+            CustomerStorage.setNotificationMode(isChecked);
+
 
             Log.i(TAG, "Customer changed notifications settings: " + isChecked);
         });
@@ -62,9 +101,20 @@ public class CustomerSettingsFragment extends Fragment {
         boolean sensorsEnabled = CustomerStorage.getSensorMode();
         sensorsSwitch.setChecked(sensorsEnabled);
         sensorsSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            CustomerStorage.setSensorMode(isChecked);
             // TODO abilitare sensore movimento
             // TODO capire discorso permessi
+
+            if (isChecked && !PermissionHandler.hasSensorsPermissions(getContext())) {
+                sensorsSwitch.setChecked(false);
+                Snackbar.make(
+                        getActivity().findViewById(android.R.id.content),
+                        R.string.field_required_snackbar,       // TODO strings.xml
+                        BaseTransientBottomBar.LENGTH_LONG
+                ).show();
+                return;
+            }
+
+            CustomerStorage.setSensorMode(isChecked);
 
             Log.i(TAG, "Customer changed sensors settings: " + isChecked);
         });
