@@ -20,19 +20,21 @@ public class AddTableActivity extends AppCompatActivity {
 
     private RecyclerView addTableRecyclerView;
     private AddTableAdapter addTableAdapter;
+    private TextView customerHint;
+    private TextView tableHint;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_table);
-
+        customerHint = findViewById(R.id.insert_new_costumer_hint_text_view);
+        tableHint = findViewById(R.id.select_table_hint_text_view);
         setupAddTableRecyclerView();
 
     }
 
     private void setupAddTableRecyclerView() {
         // TODO aggiungere sezioni a RecyclerView
-
         addTableRecyclerView = findViewById(R.id.add_table_recycler_view);
         RecyclerView.LayoutManager recyclerViewLayoutManager = new LinearLayoutManager(
                 this,

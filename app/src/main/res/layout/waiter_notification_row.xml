@@ -30,9 +30,10 @@
         android:id="@+id/waiter_notification_delete_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text="@string/delete_table_button_label"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.91"
+        app:layout_constraintHorizontal_bias="0.722"
         app:layout_constraintStart_toEndOf="@+id/date_hour_text_view"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0" />

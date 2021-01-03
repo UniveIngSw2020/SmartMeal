@@ -51,8 +51,10 @@
 
     <string name="no_new_customer_name_snackbar">Devi specificare il nome del cliente</string>
 
+    <string name="assign_table">Assegna</string>
     <string name="added_table_alert">Tavolo aggiunto correttamente!</string>
 
+    <string name="assign_table_description">Assegna un tavolo libero</string>
     <string name="modify_table_alert">Seleziona il nuovo tavolo per il cliente</string>
     <string name="confirm_label_alert">Conferma</string>
 

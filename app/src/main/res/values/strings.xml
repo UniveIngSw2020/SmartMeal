@@ -51,8 +51,10 @@
 
     <string name="no_new_customer_name_snackbar">You have to specify the customer name</string>
 
+    <string name="assign_table">Assign</string>
     <string name="added_table_alert">Table added correctly!</string>
 
+    <string name="assign_table_description">Assign a free table</string>
     <string name="modify_table_alert">Select the new table for the customer</string>
     <string name="confirm_label_alert">Confirm</string>
     <string name="modify_table_error_alert">Error : the table has not changed</string>

@@ -13,8 +13,7 @@
         android:id="@+id/insert_new_costumer_hint_text_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:gravity="center"
+        android:layout_weight="0"
         android:text="@string/insert_new_customer_hint"
         android:textSize="@dimen/text_size_large" />
 
@@ -22,7 +21,6 @@
         android:id="@+id/insert_new_costumer_edit_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="0.05"
         android:ems="10"
         android:hint="@string/name_edit_text_hint"
         android:inputType="textPersonName" />
@@ -31,12 +29,13 @@
         android:id="@+id/select_table_hint_text_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:text="@string/select_table_hint" />
+        android:layout_weight="0"
+        android:text="@string/select_table_hint"
+        android:textSize="@dimen/text_size_large" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/add_table_recycler_view"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="0.05" />
+        android:layout_height="match_parent"
+        android:layout_weight="0" />
 </LinearLayout>
