@@ -12,6 +12,9 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.snackbar.BaseTransientBottomBar;
+import com.google.android.material.snackbar.Snackbar;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.SortedSet;
@@ -61,25 +64,37 @@ public class WaiterNotificationAdapter extends RecyclerView.Adapter<WaiterNotifi
         WaiterNotification notification =  waiterNotifications.get(position);
 
         try {
+
             String prefix = activity.getString(R.string.table_prefix);
             holder.tableTextView.setText(String.format("%s %s", prefix, Local.getInstance().getTable(notification.getCustomer()).getId()));
-        } catch (TableException e) { // TODO :gestire eccezioni
-            e.printStackTrace();
+
+            holder.dateHourTextView.setText(notification.getPrettyTime());
+
+            holder.deleteButton.setOnClickListener(view->{
+                try {
+                    Local.getInstance().removeWaiterNotification(notification);
+
+                    int notificationToRemoveIndex = waiterNotifications.indexOf(notification);
+                    waiterNotifications.remove(notificationToRemoveIndex);
+                    notifyItemRemoved(notificationToRemoveIndex);
+
+                } catch (WaiterNotificationException e) {
+                    Snackbar.make(
+                            activity.findViewById(android.R.id.content),
+                            R.string.error_delete_notification_snackbar,
+                            BaseTransientBottomBar.LENGTH_LONG
+                    ).show();
+                }
+            });
+
+            // Setto la riga visibile
+            holder.itemView.setVisibility(View.VISIBLE);
+            holder.itemView.setLayoutParams(new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+
+        } catch (TableException e) { // Cliente della notifica non ha un tavolo: notifica non valida. Non mostro la riga di tale notifica
+            holder.itemView.setVisibility(View.GONE);
+            holder.itemView.setLayoutParams(new RecyclerView.LayoutParams(0, 0));
         }
-        holder.dateHourTextView.setText(notification.getPrettyTime());
-
-        holder.deleteButton.setOnClickListener(view->{
-            try {
-                Local.getInstance().removeWaiterNotification(notification);
-
-                int notificationToRemoveIndex = waiterNotifications.indexOf(notification);
-                waiterNotifications.remove(notificationToRemoveIndex);
-                notifyItemRemoved(notificationToRemoveIndex);
-
-            } catch (WaiterNotificationException e) {
-                e.printStackTrace();
-            }
-        });
     }
 
     @Override

@@ -61,4 +61,9 @@
 
     <string name="confirm_text_alert">You really want to close the room?</string>
 
+    <string name="error_delete_notification_snackbar">Is impossibile to remove this notification right now : try again after the reloading</string>
+    <string name="error_delete_table_snackbar">It is impossible to delete this table right now : try again after the reloading</string>
+    <string name="error_modify_table_snackbar">It is impossible to modify the tables right now : all the tables are alredy assigned</string>
+    <string name="error_add_table_snackbar">It is impossible to add a table right now  : all the tables are alredy assigned</string>
+
 </resources>

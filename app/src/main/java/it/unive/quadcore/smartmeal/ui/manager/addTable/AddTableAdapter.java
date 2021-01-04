@@ -84,11 +84,10 @@ public class AddTableAdapter extends RecyclerView.Adapter<AddTableAdapter.TableV
 
             try { // TODO : metodo migliore in local
                 Local.getInstance().assignTable(new CustomerHandler.Customer(""+random.nextInt(),customerName),table);
+                new AddedTableDialogFragment().show(((FragmentActivity)view.getContext()).getSupportFragmentManager(),"addedTable");
             } catch (TableException e) { // TODO : gestire eccezioni
                 e.printStackTrace();
             }
-
-            new AddedTableDialogFragment().show(((FragmentActivity)view.getContext()).getSupportFragmentManager(),"addedTable");
         });
     }
 

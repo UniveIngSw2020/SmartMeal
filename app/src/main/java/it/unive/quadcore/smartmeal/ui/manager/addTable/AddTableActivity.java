@@ -9,10 +9,16 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
+import com.google.android.material.snackbar.BaseTransientBottomBar;
+import com.google.android.material.snackbar.Snackbar;
+
+import java.util.Set;
+
 import it.unive.quadcore.smartmeal.R;
 import it.unive.quadcore.smartmeal.local.Local;
 import it.unive.quadcore.smartmeal.local.RoomStateException;
 import it.unive.quadcore.smartmeal.local.TableException;
+import it.unive.quadcore.smartmeal.model.ManagerTable;
 import it.unive.quadcore.smartmeal.ui.manager.bottomnavigation.EmptyListDialogFragment;
 import it.unive.quadcore.smartmeal.ui.manager.bottomnavigation.tableList.TableListAdapter;
 
@@ -49,7 +55,19 @@ public class AddTableActivity extends AppCompatActivity {
         } catch (RoomStateException | TableException e) {
             e.printStackTrace();
         }*/
-        addTableAdapter = new AddTableAdapter(this, Local.getInstance().getFreeTableList());
-        addTableRecyclerView.setAdapter(addTableAdapter);
+
+        Set<ManagerTable> freeTables = Local.getInstance().getFreeTableList();
+
+        if(freeTables.size()==0){ // TODO : sistemare ciò
+            Snackbar.make(
+                    findViewById(android.R.id.content),
+                    R.string.error_add_table_snackbar,
+                    BaseTransientBottomBar.LENGTH_LONG
+            ).show();
+        }
+        else {
+            addTableAdapter = new AddTableAdapter(this, Local.getInstance().getFreeTableList());
+            addTableRecyclerView.setAdapter(addTableAdapter);
+        }
     }
 }

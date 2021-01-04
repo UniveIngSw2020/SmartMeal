@@ -15,6 +15,7 @@ import it.unive.quadcore.smartmeal.R;
 import it.unive.quadcore.smartmeal.local.Local;
 import it.unive.quadcore.smartmeal.local.RoomStateException;
 import it.unive.quadcore.smartmeal.storage.ApplicationMode;
+import it.unive.quadcore.smartmeal.storage.ManagerStorage;
 import it.unive.quadcore.smartmeal.storage.Storage;
 import it.unive.quadcore.smartmeal.ui.SelectAppModeActivity;
 import it.unive.quadcore.smartmeal.ui.customer.CustomerBottomNavigationActivity;
@@ -42,6 +43,8 @@ public class ManagerHomeActivity extends AppCompatActivity {
 
             // Avvio la stanza virtuale
             try {
+                ManagerStorage.setName("LOCAL"); // TODO : spostare ciò in storage
+
                 Local.getInstance().createRoom(this);
 
                 Local.getInstance().testingUI(); // TODO : togliere. SOlo per testing

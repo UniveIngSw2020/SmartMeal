@@ -3,6 +3,7 @@ package it.unive.quadcore.smartmeal.local;
 import android.app.Activity;
 import android.util.Log;
 
+import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -220,7 +221,7 @@ public class Local {
         try {
             Table table = tableHandler.getFreeTableList().first();
             tableHandler.assignTable(customer,table);
-        } catch (TableException e) {
+        } catch (TableException | NoSuchElementException e ) {
             e.printStackTrace();
         }
         try {
@@ -237,7 +238,7 @@ public class Local {
         try {
             Table table = tableHandler.getFreeTableList().first();
             tableHandler.assignTable(customer1,table);
-        } catch (TableException e) {
+        } catch (TableException | NoSuchElementException e) {
             e.printStackTrace();
         }
         try {
@@ -252,7 +253,7 @@ public class Local {
         try {
             Table table = tableHandler.getFreeTableList().last();
             tableHandler.assignTable(customer,table);
-        } catch (TableException e) {
+        } catch (TableException | NoSuchElementException e) {
             e.printStackTrace();
         }
         try {
@@ -267,7 +268,7 @@ public class Local {
         try {
             Table table = tableHandler.getFreeTableList().last();
             tableHandler.assignTable(customer,table);
-        } catch (TableException e) {
+        } catch (TableException | NoSuchElementException e) {
             e.printStackTrace();
         }
         try {

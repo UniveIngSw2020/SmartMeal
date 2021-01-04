@@ -62,5 +62,10 @@
 
     <string name="confirm_text_alert">Sei sicuro di voler chiudere la stanza?</string>
 
+    <string name="error_delete_notification_snackbar">Impossibile rimuovere questa notifica ora : riprovare dopo aver aggiornato</string>
+    <string name="error_delete_table_snackbar">Impossibile rimuovere questo tavolo ora : riprovare dopo aver aggiornato</string>
+    <string name="error_modify_table_snackbar">Impossibile modificare questo tavolo ora : tutti i tavoli sono attualmente occupati</string>
+    <string name="error_add_table_snackbar">Impossibile aggiungere un tavolo ora : tutti i tavoli sono attualmente occupati</string>
+
 
 </resources>

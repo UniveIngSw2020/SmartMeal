@@ -39,7 +39,7 @@ public final class ManagerStorage extends Storage {
 
         Set<String> tables = new TreeSet<>();
         char supp = 'A';
-        while(supp<'Z'+1){
+        while(supp<'A'+1){ //
             for(int i=0;i<=9;i++)
                 tables.add(""+supp+i);
             supp+=1;

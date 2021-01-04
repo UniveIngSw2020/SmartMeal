@@ -9,7 +9,7 @@ import androidx.fragment.app.DialogFragment;
 
 import it.unive.quadcore.smartmeal.R;
 
-public class EmptyListDialogFragment extends DialogFragment { // TODO : tenere?
+public class EmptyListDialogFragment extends DialogFragment { // TODO : eliminare
 
     String label ;
 

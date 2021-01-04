@@ -31,7 +31,7 @@ public class AddTableDialogFragment extends DialogFragment {
     private AddTableAdapter addTableAdapter;
     private RecyclerView addTableRecyclerView;
 
-    private AddTableViewModel addTableViewModel;
+   // private AddTableViewModel addTableViewModel;
 
 
     public AddTableDialogFragment(Set<ManagerTable> freeTables, TableListAdapter tableListAdapter){
@@ -71,8 +71,8 @@ public class AddTableDialogFragment extends DialogFragment {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
-        addTableViewModel =
-                new ViewModelProvider(this).get(TableListViewModel.class);
+        /*addTableViewModel =
+                new ViewModelProvider(this).get(TableListViewModel.class);*/
         View root = inflater.inflate(R.layout.activity_add_table, container, false);
 
         setupAddTableRecyclerView(root);

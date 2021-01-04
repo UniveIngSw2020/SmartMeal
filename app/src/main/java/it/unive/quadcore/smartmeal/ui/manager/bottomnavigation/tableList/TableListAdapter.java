@@ -17,6 +17,9 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.snackbar.BaseTransientBottomBar;
+import com.google.android.material.snackbar.Snackbar;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -78,16 +81,35 @@ public class TableListAdapter extends RecyclerView.Adapter<TableListAdapter.Tabl
                 /*try {
                     new ModifyTableDialogFragment(customer,Local.getInstance().getFreeTableList(), this)
                             .show(((FragmentActivity)view.getContext()).getSupportFragmentManager(),"modifyTable");
-                } catch (RoomStateException e) {  // TODO : ECCEZIONI
+                } catch (RoomStateException e) {
                     e.printStackTrace();
                 } catch (TableException e) {
                     e.printStackTrace();
                 }*/
-                new ModifyTableDialogFragment(customer,Local.getInstance().getFreeTableList(), this)
-                        .show(((FragmentActivity)view.getContext()).getSupportFragmentManager(),"modifyTable");
+
+                Set<ManagerTable> freeTables = Local.getInstance().getFreeTableList();
+
+                if(freeTables.size()==0) {
+                    Snackbar.make(
+                            activity.findViewById(android.R.id.content),
+                            R.string.error_modify_table_snackbar,
+                            BaseTransientBottomBar.LENGTH_LONG
+                    ).show();
+
+                }
+                else {
+                    new ModifyTableDialogFragment(customer, freeTables, this)
+                            .show(((FragmentActivity) view.getContext()).getSupportFragmentManager(), "modifyTable");
+                }
             });
-        } catch (TableException e) { // TODO : gestire eccezioni
-            e.printStackTrace();
+
+            // Setto la riga visibile
+            holder.itemView.setVisibility(View.VISIBLE);
+            holder.itemView.setLayoutParams(new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+
+        } catch (TableException e) { // Errore : non esiste cliente con questo tavolo. La riga di questo tavolo non viene mostrata
+            holder.itemView.setVisibility(View.GONE);
+            holder.itemView.setLayoutParams(new RecyclerView.LayoutParams(0, 0));
         }
 
 
@@ -98,8 +120,12 @@ public class TableListAdapter extends RecyclerView.Adapter<TableListAdapter.Tabl
                 int tableToRemoveIndex = tableList.indexOf(table);
                 tableList.remove(tableToRemoveIndex);
                 notifyItemRemoved(tableToRemoveIndex);
-            } catch (TableException e) {
-                e.printStackTrace();
+            } catch (TableException e) { // Errore nell'eliminare il tavolo
+                Snackbar.make(
+                        activity.findViewById(android.R.id.content),
+                        R.string.error_delete_table_snackbar,
+                        BaseTransientBottomBar.LENGTH_LONG
+                ).show();
             }
 
         });
