@@ -75,16 +75,18 @@ public class TableListAdapter extends RecyclerView.Adapter<TableListAdapter.Tabl
             holder.customerTextView.setText(customer.getName());
 
             holder.modifyButton.setOnClickListener(view->{
-                try {
+                /*try {
                     new ModifyTableDialogFragment(customer,Local.getInstance().getFreeTableList(), this)
                             .show(((FragmentActivity)view.getContext()).getSupportFragmentManager(),"modifyTable");
                 } catch (RoomStateException e) {  // TODO : ECCEZIONI
                     e.printStackTrace();
                 } catch (TableException e) {
                     e.printStackTrace();
-                }
+                }*/
+                new ModifyTableDialogFragment(customer,Local.getInstance().getFreeTableList(), this)
+                        .show(((FragmentActivity)view.getContext()).getSupportFragmentManager(),"modifyTable");
             });
-        } catch (RoomStateException | TableException e) { // TODO : gestire eccezioni
+        } catch (TableException e) { // TODO : gestire eccezioni
             e.printStackTrace();
         }
 
@@ -96,7 +98,7 @@ public class TableListAdapter extends RecyclerView.Adapter<TableListAdapter.Tabl
                 int tableToRemoveIndex = tableList.indexOf(table);
                 tableList.remove(tableToRemoveIndex);
                 notifyItemRemoved(tableToRemoveIndex);
-            } catch (RoomStateException | TableException e) {
+            } catch (TableException e) {
                 e.printStackTrace();
             }
 
@@ -118,7 +120,7 @@ public class TableListAdapter extends RecyclerView.Adapter<TableListAdapter.Tabl
     }
 
     public void reload(){
-        try {
+        /*try {
             tableList.clear();
             tableList.addAll(Local.getInstance().getAssignedTableList());
             notifyDataSetChanged();
@@ -126,8 +128,10 @@ public class TableListAdapter extends RecyclerView.Adapter<TableListAdapter.Tabl
             e.printStackTrace();
         } catch (TableException e) {
             e.printStackTrace();
-        }
-
+        }*/
+        tableList.clear();
+        tableList.addAll(Local.getInstance().getAssignedTableList());
+        notifyDataSetChanged();
 
     }
 }

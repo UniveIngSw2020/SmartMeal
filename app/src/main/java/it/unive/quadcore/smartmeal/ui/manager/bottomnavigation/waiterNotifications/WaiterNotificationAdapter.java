@@ -63,7 +63,7 @@ public class WaiterNotificationAdapter extends RecyclerView.Adapter<WaiterNotifi
         try {
             String prefix = activity.getString(R.string.table_prefix);
             holder.tableTextView.setText(String.format("%s %s", prefix, Local.getInstance().getTable(notification.getCustomer()).getId()));
-        } catch (RoomStateException | TableException e) { // TODO :gestire eccezioni
+        } catch (TableException e) { // TODO :gestire eccezioni
             e.printStackTrace();
         }
         holder.dateHourTextView.setText(notification.getPrettyTime());
@@ -76,7 +76,7 @@ public class WaiterNotificationAdapter extends RecyclerView.Adapter<WaiterNotifi
                 waiterNotifications.remove(notificationToRemoveIndex);
                 notifyItemRemoved(notificationToRemoveIndex);
 
-            } catch (RoomStateException | WaiterNotificationException e) {
+            } catch (WaiterNotificationException e) {
                 e.printStackTrace();
             }
         });
@@ -88,14 +88,9 @@ public class WaiterNotificationAdapter extends RecyclerView.Adapter<WaiterNotifi
     }
 
     public void reload() {
-        try {
-            waiterNotifications.clear();
-            waiterNotifications.addAll(Local.getInstance().getWaiterNotificationList());
-            notifyDataSetChanged();
-        } catch (RoomStateException e) {
-            e.printStackTrace();
-        } catch (WaiterNotificationException e) {
-            e.printStackTrace();
-        }
+        waiterNotifications.clear();
+        waiterNotifications.addAll(Local.getInstance().getWaiterNotificationList());
+        notifyDataSetChanged();
+
     }
 }

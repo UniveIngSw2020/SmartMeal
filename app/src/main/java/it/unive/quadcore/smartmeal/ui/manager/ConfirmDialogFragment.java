@@ -25,11 +25,12 @@ public class ConfirmDialogFragment extends DialogFragment {
         builder.setMessage(message)
                 .setPositiveButton(confirmLabel, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        try {
+                        /*try {
                             Local.getInstance().closeRoom();
                         } catch (RoomStateException e) {
                             e.printStackTrace();
-                        }
+                        }*/
+                        Local.getInstance().closeRoom();
                         Intent intent = new Intent(getActivity(), ManagerHomeActivity.class);
                         // svuota il backstack
                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);

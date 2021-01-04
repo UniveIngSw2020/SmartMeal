@@ -57,16 +57,20 @@ public class WaiterNotificationsFragment extends Fragment {
                 false
         );
         waiterNotificationRecyclerView.setLayoutManager(recyclerViewLayoutManager);
-        try {
+
+        /*try {
             waiterNotificationAdapter = new WaiterNotificationAdapter(getActivity(), Local.getInstance().getWaiterNotificationList());
             waiterNotificationRecyclerView.setAdapter(waiterNotificationAdapter);
         } catch (RoomStateException e) {
             e.printStackTrace();
         } catch (WaiterNotificationException e) { // TODO : tenere ?
             // Non ci sono notifiche : mostro un dialog
-            new EmptyListDialogFragment(getString(R.string.empty_waiter_notification_list_alert))
-                        .show(requireFragmentManager(), "noNotifications"); // TODO : deprecato
-        }
+            //new EmptyListDialogFragment(getString(R.string.empty_waiter_notification_list_alert))
+            //            .show(requireFragmentManager(), "noNotifications"); // TODO : deprecato
+        }*/
+
+        waiterNotificationAdapter = new WaiterNotificationAdapter(getActivity(), Local.getInstance().getWaiterNotificationList());
+        waiterNotificationRecyclerView.setAdapter(waiterNotificationAdapter);
     }
 
 }

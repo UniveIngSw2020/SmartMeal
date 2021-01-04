@@ -1,5 +1,7 @@
 package it.unive.quadcore.smartmeal.local;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -19,9 +21,11 @@ import static it.unive.quadcore.smartmeal.communication.CustomerHandler.Customer
 // Visibile solo alla classe Locale (private o package-private)
 class TableHandler {
     // Mappa clienti-tavoli
+    @NotNull
     private final Map<Customer,ManagerTable> customerTableMap ;
 
     // Lista di tavoli liberi (usata come cache)
+    @NotNull
     private final SortedSet<ManagerTable> freeTableList ;
 
     /* Mappa tavoli-tavoli gestore.
@@ -29,6 +33,7 @@ class TableHandler {
             - Tenere i soli tavoli significativi per il locale
             - Evitare casting a ManagerTable
      */
+    @NotNull
     private final Map<Table,ManagerTable> tablesMap;
 
     // Costruttore con visibilità package
@@ -50,24 +55,24 @@ class TableHandler {
 
 
     // Ritorna la lista di tavoli liberi
-    synchronized TreeSet<ManagerTable> getFreeTableList() throws TableException { // SortedSet
+    synchronized TreeSet<ManagerTable> getFreeTableList() { // SortedSet
         // La lista di tavoli liberi è vuota
-        if(freeTableList==null || freeTableList.size()==0)
-            throw new TableException("There aren't free tables");
+        /*if(freeTableList==null || freeTableList.size()==0)
+            throw new TableException("There aren't free tables");*/
 
         // Ritorna lista tavoli liberi (una copia)
         return new TreeSet<>(freeTableList) ;
     }
 
     // Ritorna la lista di tavoli occupati
-    synchronized SortedSet<ManagerTable> getAssignedTableList() throws TableException{
+    synchronized SortedSet<ManagerTable> getAssignedTableList() {
 
         // Tutti i tavoli nella mappa customer-tables
         SortedSet<ManagerTable> assignedTableList = new TreeSet<>(customerTableMap.values()) ;
 
         // Non c'è nessun tavolo occupato
-        if(assignedTableList.size() == 0)
-            throw new TableException("There aren't assigned tables");
+       /* if(assignedTableList.size() == 0)
+            throw new TableException("There aren't assigned tables");*/
 
         return assignedTableList ;
     }

@@ -69,15 +69,19 @@ public class TableListFragment extends Fragment {
                 false
         );
         tableListRecyclerView.setLayoutManager(recyclerViewLayoutManager);
-        try {
+
+        /*try {
             tableListAdapter = new TableListAdapter(getActivity(), Local.getInstance().getAssignedTableList());
             tableListRecyclerView.setAdapter(tableListAdapter);
         } catch (RoomStateException e) {
             e.printStackTrace();
         } catch (TableException e) { // TODO : tenere ?
             // Non ci sono notifiche : mostro un dialog
-            new EmptyListDialogFragment(getString(R.string.empty_table_list_alert))
-                    .show(requireFragmentManager(), "noTablesAssigned"); // TODO : deprecato
-        }
+            //new EmptyListDialogFragment(getString(R.string.empty_table_list_alert))
+             //       .show(requireFragmentManager(), "noTablesAssigned"); // TODO : deprecato
+        }*/
+
+        tableListAdapter = new TableListAdapter(getActivity(), Local.getInstance().getAssignedTableList());
+        tableListRecyclerView.setAdapter(tableListAdapter);
     }
 }

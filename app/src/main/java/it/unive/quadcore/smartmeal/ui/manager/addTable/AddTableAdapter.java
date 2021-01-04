@@ -84,7 +84,7 @@ public class AddTableAdapter extends RecyclerView.Adapter<AddTableAdapter.TableV
 
             try { // TODO : metodo migliore in local
                 Local.getInstance().assignTable(new CustomerHandler.Customer(""+random.nextInt(),customerName),table);
-            } catch (RoomStateException | TableException e) { // TODO : gestire eccezioni
+            } catch (TableException e) { // TODO : gestire eccezioni
                 e.printStackTrace();
             }
 

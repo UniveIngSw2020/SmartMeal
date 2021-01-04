@@ -60,7 +60,7 @@ public class ModifyTableDialogFragment extends DialogFragment {
                             Local.getInstance().changeCustomerTable(customer, newTable);
 
                             adapter.reload();
-                        } catch (RoomStateException | TableException e) {
+                        } catch (TableException e) {
                             new ErrorDialogFragment(getActivity().getString(R.string.modify_table_error_alert))
                                     .show(((FragmentActivity)getContext()).getSupportFragmentManager(),"errorSelectedTable");
                         }

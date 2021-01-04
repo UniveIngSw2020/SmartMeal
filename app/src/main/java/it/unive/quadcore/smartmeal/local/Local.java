@@ -53,7 +53,7 @@ public class Local {
     }
 
     // Creazione stanza virtuale
-    public void createRoom(Activity activity) throws RoomStateException {
+    public void createRoom(Activity activity) {
         if(roomState) // Stanza virtuale già aperta
             throw new RoomStateException(true);
 
@@ -76,14 +76,15 @@ public class Local {
                     }
                 });
         managerCommunication.onRequestFreeTableList( () -> { // Callback da eseguire quando arriva richiesta lista tavoli liberi
-            try {
+            return new SuccessResponse<>(tableHandler.getFreeTableList());
+            /*try {
                 return new SuccessResponse<>(tableHandler.getFreeTableList());
             } catch (TableException e) { // Eccezione : la lista di tavoli liberi è vuota
                 // TODO : forwardare l'eccezione? in alternativa tale eccezione nel metodo getFreeTableList si potrebbe proprio
                 // non mettere
                 // Forwardo l'eccezione al customer
                 return new ErrorResponse<>(e); // Oppure new TreeSet<>();
-            }
+            }*/
         });
         managerCommunication.onSelectTable( (customer,table) -> { // Callback da eseguire quando arriva selezione di un tavolo
             try{
@@ -112,7 +113,7 @@ public class Local {
     }
 
     // Ritorna la lista delle chiamate cameriere
-    public SortedSet<WaiterNotification> getWaiterNotificationList() throws RoomStateException, WaiterNotificationException {
+    public SortedSet<WaiterNotification> getWaiterNotificationList()  {
         if(!roomState) // La stanza non è aperta
             throw new RoomStateException(false);
 
@@ -120,7 +121,7 @@ public class Local {
     }
 
     // Rimuove una notifica chiamata cameriere
-    public void removeWaiterNotification(WaiterNotification waiterNotification) throws RoomStateException, WaiterNotificationException {
+    public void removeWaiterNotification(WaiterNotification waiterNotification) throws WaiterNotificationException {
         if(!roomState) // La stanza non è aperta
             throw new RoomStateException(false);
 
@@ -128,7 +129,7 @@ public class Local {
     }
 
     // Ritorna la lista di tavoli liberi
-    public Set<ManagerTable> getFreeTableList() throws RoomStateException, TableException { // TODO : SortedSet ?
+    public Set<ManagerTable> getFreeTableList() { // TODO : SortedSet ?
         if(!roomState) // La stanza non è aperta
             throw new RoomStateException(false);
 
@@ -136,7 +137,7 @@ public class Local {
     }
 
     // Ritorna la lista di tavoli occupati
-    public Set<ManagerTable> getAssignedTableList() throws RoomStateException, TableException { // SortedSet ?
+    public Set<ManagerTable> getAssignedTableList() { // SortedSet ?
         if(!roomState) // La stanza non è aperta
             throw new RoomStateException(false);
 
@@ -144,7 +145,7 @@ public class Local {
     }
 
     // Cambia il tavolo associato ad un cliente
-    public void changeCustomerTable(Customer customer, Table newTable) throws RoomStateException, TableException {
+    public void changeCustomerTable(Customer customer, Table newTable) throws TableException {
         if(!roomState) // La stanza non è aperta
             throw new RoomStateException(false);
 
@@ -152,7 +153,7 @@ public class Local {
     }
 
     // Assegna un tavolo ad un cliente
-    public void assignTable(Customer customer, Table table) throws RoomStateException, TableException {
+    public void assignTable(Customer customer, Table table) throws TableException {
         if(!roomState) // La stanza non è aperta
             throw new RoomStateException(false);
 
@@ -160,7 +161,7 @@ public class Local {
     }
 
     // Libera il tavolo selezionato
-    public void freeTable(Table table) throws RoomStateException, TableException {
+    public void freeTable(Table table) throws TableException {
         if(!roomState) // La stanza non è aperta
             throw new RoomStateException(false);
 
@@ -170,14 +171,14 @@ public class Local {
     }
 
     // Ritorna il tavolo associato ad un cliente
-    public Table getTable(Customer customer) throws RoomStateException, TableException {
+    public Table getTable(Customer customer) throws TableException {
         if(!roomState) // La stanza non è aperta
             throw new RoomStateException(false);
 
         return tableHandler.getTable(customer);
     }
 
-    public Customer getCustomerByTable(Table table) throws RoomStateException, TableException {
+    public Customer getCustomerByTable(Table table) throws TableException {
         if(!roomState) // La stanza non è aperta
             throw new RoomStateException(false);
 
@@ -185,7 +186,7 @@ public class Local {
     }
 
     // Chiude la stanza virtuale
-    public void closeRoom() throws RoomStateException {
+    public void closeRoom() {
         if(!roomState) // La stanza non è aperta
             throw new RoomStateException(false);
 

@@ -42,12 +42,14 @@ public class AddTableActivity extends AppCompatActivity {
                 false
         );
         addTableRecyclerView.setLayoutManager(recyclerViewLayoutManager);
-        try {
+
+        /*try {
             addTableAdapter = new AddTableAdapter(this, Local.getInstance().getFreeTableList());
             addTableRecyclerView.setAdapter(addTableAdapter);
         } catch (RoomStateException | TableException e) {
             e.printStackTrace();
-        }
-
+        }*/
+        addTableAdapter = new AddTableAdapter(this, Local.getInstance().getFreeTableList());
+        addTableRecyclerView.setAdapter(addTableAdapter);
     }
 }
