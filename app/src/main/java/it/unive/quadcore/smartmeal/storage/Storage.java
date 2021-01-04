@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 
 import android.location.Location;
 import android.preference.PreferenceManager;
+import android.util.Log;
 
 import java.util.Set;
 import java.util.TreeSet;
@@ -17,6 +18,7 @@ import it.unive.quadcore.smartmeal.model.Money;
 import it.unive.quadcore.smartmeal.model.Product;
 
 public class Storage {
+    private static final String TAG = "Storage";
 
     // TODO : possibilità di fare Storage oggetto singletone
 
@@ -132,7 +134,7 @@ public class Storage {
         //Creiamo Local Description
         String presentation = "A delicious and friendly pub in a boat-like location"; // TODO :rimpiazzare con valori di res
         Location location = new Location("");
-        location.setLatitude(45.56121046165753d);
+        location.setLatitude(45.56121046165753);
         location.setLongitude(12.237328642473326);
         //int imageID = R.drawable.localpicture;
 

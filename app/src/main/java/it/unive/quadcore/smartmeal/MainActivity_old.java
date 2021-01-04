@@ -21,8 +21,6 @@ import it.unive.quadcore.smartmeal.storage.CustomerStorage;
 import it.unive.quadcore.smartmeal.storage.ManagerStorage;
 import it.unive.quadcore.smartmeal.storage.StorageException;
 
-import static it.unive.quadcore.smartmeal.communication.CustomerHandler.Customer;
-
 public class MainActivity_old extends AppCompatActivity {
 
     @Override

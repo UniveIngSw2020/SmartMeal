@@ -7,7 +7,9 @@
     <string name="manager">Manager</string>
     <string name="insert_personal_data_hint">Insert name</string>
     <string name="name_edit_text_hint">Name</string>
-    <string name="confirm_button_text">Confirm</string>
+
+    <string name="confirmation_button_text">Confirm</string>
+    <string name="cancellation_button_text">Cancel</string>
 
     <string name="field_required_snackbar">Field required</string>
 
@@ -16,6 +18,32 @@
     <string name="title_customer_maps_fragment">Maps</string>
 
     <string name="decimal_separator">.</string>
+
+    <string name="leave_room">Leave</string>
+    <string name="call_waiter">Call Waiter</string>
+    <string name="menu">Menu</string>
+    <string name="connected_message">You\'re connected</string>
+    <string name="selected_table_message">You\'re seating at table</string>
+
+    <string name="table">Table</string>
+
+    <string name="waiter_notification_confirmed">Call to waiter successfully sent</string>
+    <string name="waiter_notification_rejected">Too many calls to waiter</string>
+
+    <string name="already_occupied_table_snackbar">Selected table is already occupied</string>
+    <string name="unexpected_table_error_snackbar">Unexpected table selection error</string>
+
+    <!-- Settings -->
+    <string name="settings">Settings</string>
+    <string name="notifications_settings">Notifications</string>
+    <string name="sensors_settings">Sensors</string>
+    <string name="change_name_settings">Change name</string>
+    <string name="logout_settings">Logout</string>
+    <string name="about_settings">About</string>
+
+    <string name="table_confirmation_text">You have chosen the table</string>
+    <string name="select_table">Select table</string>
+
 
     <string name="insert_password_hint">Insert password</string>
     <string name="incorrect_password_snackbar">Incorrect password</string>
@@ -65,5 +93,4 @@
     <string name="error_delete_table_snackbar">It is impossible to delete this table right now : try again after the reloading</string>
     <string name="error_modify_table_snackbar">It is impossible to modify the tables right now : all the tables are alredy assigned</string>
     <string name="error_add_table_snackbar">It is impossible to add a table right now  : all the tables are alredy assigned</string>
-
 </resources>

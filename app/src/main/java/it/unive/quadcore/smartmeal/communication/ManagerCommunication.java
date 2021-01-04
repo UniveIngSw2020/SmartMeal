@@ -23,13 +23,14 @@ import it.unive.quadcore.smartmeal.communication.confirmation.ConfirmationDenied
 import it.unive.quadcore.smartmeal.communication.response.Response;
 import it.unive.quadcore.smartmeal.local.TableException;
 import it.unive.quadcore.smartmeal.local.WaiterNotificationException;
+import it.unive.quadcore.smartmeal.model.Customer;
 import it.unive.quadcore.smartmeal.model.ManagerTable;
 import it.unive.quadcore.smartmeal.model.Table;
 import it.unive.quadcore.smartmeal.model.WaiterNotification;
 import it.unive.quadcore.smartmeal.storage.ManagerStorage;
 import it.unive.quadcore.smartmeal.util.BiFunction;
 
-import static it.unive.quadcore.smartmeal.communication.CustomerHandler.Customer;
+import static it.unive.quadcore.smartmeal.communication.RemoteCustomerHandler.RemoteCustomer;
 import static it.unive.quadcore.smartmeal.communication.RequestType.CUSTOMER_NAME;
 import static it.unive.quadcore.smartmeal.communication.RequestType.FREE_TABLE_LIST;
 import static it.unive.quadcore.smartmeal.communication.RequestType.NOTIFY_WAITER;
@@ -40,7 +41,7 @@ public class ManagerCommunication extends Communication {
     private static final String TAG = "ManagerCommunication";
 
     @NonNull
-    private final CustomerHandler customerHandler;
+    private final RemoteCustomerHandler customerHandler;
 
     @Nullable
     private Supplier<Response<TreeSet<? extends Table>, ? extends TableException>> onRequestFreeTableListCallback;
@@ -65,7 +66,7 @@ public class ManagerCommunication extends Communication {
 
     private ManagerCommunication() {
         roomStarted = false;
-        customerHandler = CustomerHandler.getInstance();
+        customerHandler = RemoteCustomerHandler.getInstance();
     }
 
 
@@ -123,7 +124,14 @@ public class ManagerCommunication extends Communication {
                 super.onDisconnected(endpointId);
                 Objects.requireNonNull(onCustomerLeftRoomCallback);
 
-                onCustomerLeftRoomCallback.accept(customerHandler.getCustomer(endpointId));
+                if (customerHandler.containsCustomer(endpointId)) {
+                    RemoteCustomer customer = customerHandler.getCustomer(endpointId);
+                    Log.i(TAG, "Customer disconnected: " + customer);
+                    onCustomerLeftRoomCallback.accept(customer);
+                    customerHandler.removeCustomer(endpointId);
+                } else {
+                    Log.i(TAG, "Unrecognized customer tried to disconnect");
+                }
             }
         };
     }
@@ -249,6 +257,9 @@ public class ManagerCommunication extends Communication {
 
         Nearby.getConnectionsClient(activity).stopAllEndpoints();
         Nearby.getConnectionsClient(activity).stopAdvertising();
+
+        //TODO: customerHandler.removeAllCustomers();
+
         roomStarted = false;
         activity = null;
     }

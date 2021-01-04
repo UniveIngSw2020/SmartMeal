@@ -4,10 +4,9 @@ import java.util.Iterator;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+import it.unive.quadcore.smartmeal.model.Customer;
 import it.unive.quadcore.smartmeal.model.WaiterNotification;
 import it.unive.quadcore.smartmeal.storage.ManagerStorage;
-
-import static it.unive.quadcore.smartmeal.communication.CustomerHandler.Customer;
 
 // TODO : gestione RACE CONDITION
 // Si può semplicemente mettere tutti i metodi syncrhonized (per ora gestito così)

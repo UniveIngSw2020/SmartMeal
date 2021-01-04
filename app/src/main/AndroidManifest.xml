@@ -8,6 +8,7 @@
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
 
     <application
         android:allowBackup="true"
@@ -36,6 +37,10 @@
             android:name=".ui.customer.InsertPersonalDataActivity"
             android:windowSoftInputMode="adjustResize" />
         <activity android:name=".ui.customer.CustomerBottomNavigationActivity" />
+        <activity android:name=".ui.customer.virtualroom.CustomerVirtualRoomActivity" />
+        <activity
+            android:name=".ui.SettingsActivity"
+            android:label="@string/settings" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"

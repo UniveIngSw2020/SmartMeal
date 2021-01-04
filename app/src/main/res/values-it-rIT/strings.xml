@@ -7,7 +7,9 @@
     <string name="manager">Gestore</string>
     <string name="insert_personal_data_hint">Inserisci nome</string>
     <string name="name_edit_text_hint">Nome</string>
-    <string name="confirm_button_text">Conferma</string>
+
+    <string name="confirmation_button_text">Conferma</string>
+    <string name="cancellation_button_text">Annulla</string>
 
     <string name="field_required_snackbar">Campo obbligatorio</string>
 
@@ -16,6 +18,31 @@
     <string name="title_customer_maps_fragment">Mappa</string>
 
     <string name="decimal_separator">,</string>
+
+    <string name="leave_room">Esci</string>
+    <string name="call_waiter">Chiama cameriere</string>
+    <string name="menu">Menù</string>
+    <string name="connected_message">Sei connesso</string>
+    <string name="selected_table_message">Sei seduto al tavolo</string>
+
+    <string name="table">Tavolo</string>
+
+    <string name="waiter_notification_confirmed">Chiamata al cameriere inviata correttamente</string>
+    <string name="waiter_notification_rejected">Troppe chiamate al cameriere</string>
+
+    <string name="already_occupied_table_snackbar">Il tavolo selezionato è già occupato</string>
+    <string name="unexpected_table_error_snackbar">Errore imprevisto nella selezione del tavolo</string>
+
+    <!-- Settings -->
+    <string name="settings">Impostazioni</string>
+    <string name="notifications_settings">Notifiche</string>
+    <string name="sensors_settings">Sensori</string>
+    <string name="change_name_settings">Modifica nome</string>
+    <string name="logout_settings">Logout</string>
+    <string name="about_settings">About</string>
+
+    <string name="table_confirmation_text">Hai scelto il tavolo</string>
+    <string name="select_table">Seleziona tavolo</string>
 
     <string name="insert_password_hint">Inserisci password</string>
     <string name="incorrect_password_snackbar">Password sbagliata</string>
@@ -66,6 +93,4 @@
     <string name="error_delete_table_snackbar">Impossibile rimuovere questo tavolo ora : riprovare dopo aver aggiornato</string>
     <string name="error_modify_table_snackbar">Impossibile modificare questo tavolo ora : tutti i tavoli sono attualmente occupati</string>
     <string name="error_add_table_snackbar">Impossibile aggiungere un tavolo ora : tutti i tavoli sono attualmente occupati</string>
-
-
 </resources>

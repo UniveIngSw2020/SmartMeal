@@ -1,22 +1,37 @@
 package it.unive.quadcore.smartmeal.ui;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
+import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 
 import it.unive.quadcore.smartmeal.R;
 import it.unive.quadcore.smartmeal.local.Local;
 import it.unive.quadcore.smartmeal.local.RoomStateException;
 import it.unive.quadcore.smartmeal.storage.ApplicationMode;
+import it.unive.quadcore.smartmeal.storage.CustomerStorage;
 import it.unive.quadcore.smartmeal.storage.Storage;
 import it.unive.quadcore.smartmeal.ui.customer.CustomerBottomNavigationActivity;
 import it.unive.quadcore.smartmeal.ui.customer.InsertPersonalDataActivity;
 import it.unive.quadcore.smartmeal.ui.manager.InsertPasswordActivity;
 import it.unive.quadcore.smartmeal.ui.manager.ManagerHomeActivity;
 
+import it.unive.quadcore.smartmeal.util.PermissionHandler;
+
 public class SelectAppModeActivity extends AppCompatActivity {
+
+    private static final String TAG = "SelectAppModeActivity";
 
     private Button customerButton;
     private Button managerButton;
@@ -27,6 +42,7 @@ public class SelectAppModeActivity extends AppCompatActivity {
 
         // inizializza Storage se non lo è già
         if (!Storage.isInitialized()) {
+            Log.i(TAG, "Storage initialized");
             Storage.initializeStorage(this);
         }
 
@@ -63,6 +79,45 @@ public class SelectAppModeActivity extends AppCompatActivity {
 
             startActivity(new Intent(SelectAppModeActivity.this, InsertPasswordActivity.class));
         });
-
     }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        // TODO testare, in teoria le altre versioni hanno permessi in automatico
+        PermissionHandler.requestAllPermissions(this);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        if (requestCode != PermissionHandler.getRequestCodeRequiredPermissions()) {
+            return;
+        }
+
+//        for (int i = 0; i < permissions.length; i++) {
+//            if (permissions[i] = P)
+//        }
+//
+//
+//        for (int grantResult : grantResults) {
+//            if
+//
+//
+//            if (grantResult == PackageManager.PERMISSION_DENIED) {
+//
+//            }
+//        }
+
+        if (PermissionHandler.hasNotificationsPermissions(this)) {
+            CustomerStorage.setNotificationMode(true);
+        }
+
+        if (PermissionHandler.hasSensorsPermissions(this)) {
+            CustomerStorage.setNotificationMode(true);
+        }
+    }
+
 }

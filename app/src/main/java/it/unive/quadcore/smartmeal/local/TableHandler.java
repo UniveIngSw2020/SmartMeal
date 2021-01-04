@@ -9,11 +9,10 @@ import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+import it.unive.quadcore.smartmeal.model.Customer;
 import it.unive.quadcore.smartmeal.model.ManagerTable;
 import it.unive.quadcore.smartmeal.model.Table;
 import it.unive.quadcore.smartmeal.storage.ManagerStorage;
-
-import static it.unive.quadcore.smartmeal.communication.CustomerHandler.Customer;
 
 // TODO : gestione RACE CONDITION
 // Per ora gestisco con synchronized. Si potrebbe usare approcio più efficente tramite Lock lettori-scrittori.
@@ -49,7 +48,7 @@ class TableHandler {
         tablesMap = new HashMap<>();
         //tables.forEach(managerTable -> tableMap.put(managerTable,managerTable));
         for(ManagerTable managerTable : tables)
-            tablesMap.put(managerTable,managerTable);
+            tablesMap.put(managerTable, managerTable);
 
     }
 
@@ -68,7 +67,7 @@ class TableHandler {
     synchronized SortedSet<ManagerTable> getAssignedTableList() {
 
         // Tutti i tavoli nella mappa customer-tables
-        SortedSet<ManagerTable> assignedTableList = new TreeSet<>(customerTableMap.values()) ;
+        SortedSet<ManagerTable> assignedTableList = new TreeSet<>(customerTableMap.values());
 
         // Non c'è nessun tavolo occupato
        /* if(assignedTableList.size() == 0)
@@ -109,15 +108,15 @@ class TableHandler {
         // QUESTI 2 CONTROLLI SONO GIA' FATTI IN ASSIGNTABLE FATTO IN FONDO. PERO' DEVO FARLI ORA, SE NO LIBERO UN TAVOLO CHE NON
         // AVREI DOVUTO LIBERARE
         if(!tablesMap.containsKey(newTable)) // Tavolo specificato non esiste
-            throw new TableException("The selected table doesn't exist");
+            throw new NoSuchTableException("The selected table doesn't exist");
         ManagerTable managerTable = tablesMap.get(newTable) ;
 
         if(!freeTableList.contains(managerTable)) // Tavolo già occupato
-            throw new TableException("This table is alredy assigned");
+            throw new AlreadyOccupiedTableException("This table is already occupied");
 
         ManagerTable oldTable = getTable(customer);
         freeTable(oldTable);
-        assignTable(customer,newTable);
+        assignTable(customer, newTable);
 
 
 
@@ -128,16 +127,16 @@ class TableHandler {
 
         // Il tavolo specificato non è un tavolo corretto per il locale
         if(!tablesMap.containsKey(table))
-            throw new TableException("The selected table doesn't exist");
+            throw new NoSuchTableException("The selected table doesn't exist");
         ManagerTable managerTable = tablesMap.get(table) ;
 
         // Tavolo già occupato
         if(!freeTableList.contains(managerTable))
-            throw new TableException("This table is alredy assigned");
+            throw new AlreadyOccupiedTableException("This table is already occupied");
 
         // Cliente ha già un tavolo
         if(customerTableMap.containsKey(customer))
-            throw new TableException("This customer has alredy a table");
+            throw new AlreadyAssignedTableException("This customer already has a table");
 
         // Assegno tavolo al cliente
         customerTableMap.put(customer, managerTable);
@@ -173,7 +172,7 @@ class TableHandler {
     synchronized ManagerTable getTable(Customer customer) throws TableException {
         // Cliente non ha un tavolo
         if(!customerTableMap.containsKey(customer))
-            throw new TableException("This customer doesn't have a table assigned");
+            throw new TableException("This customer doesn't have a table assigned"); //TODO: Forse null? altrimenti serve un metodo boolean hasTable(Customer customer)
 
         // Ritorno tavolo occupato (posso ritornarlo direttamente senza copiarlo perchè è immutable)
         return customerTableMap.get(customer);
@@ -183,12 +182,12 @@ class TableHandler {
     synchronized Customer getCustomer(Table table) throws TableException {
         // Il tavolo specificato non è un tavolo corretto per il locale
         if(!tablesMap.containsKey(table))
-            throw new TableException("The selected table doesn't exist");
+            throw new NoSuchTableException("The selected table doesn't exist");
         ManagerTable managerTable = tablesMap.get(table) ;
 
         // Tavolo non è occupato da nessun cliente
         if(freeTableList.contains(managerTable))
-            throw new TableException("This table isn't assigned");
+            throw new TableException("This table isn't assigned"); //TODO: Forse null? altrimenti serve un metodo boolean hasCustomer(Table table)
 
         /*Customer customer = null;
         for(Customer supp : customerTableMap.keySet()){
