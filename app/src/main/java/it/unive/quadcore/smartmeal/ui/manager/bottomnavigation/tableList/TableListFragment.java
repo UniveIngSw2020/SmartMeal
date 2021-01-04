@@ -64,15 +64,17 @@ public class TableListFragment extends Fragment {
             FragmentManager fragmentManager = ((FragmentActivity)v.getContext()).getSupportFragmentManager();
 
             AddTableDialogFragment newFragment = new AddTableDialogFragment(Local.getInstance().getFreeTableList(),tableListAdapter);
-            //newFragment.show(fragmentManager,"addTable");
+            newFragment.show(fragmentManager,"addTable");
 
-            FragmentTransaction transaction = fragmentManager.beginTransaction();
+            //newFragment.getWindow().setLayout(600, 400);
+
+            /*FragmentTransaction transaction = fragmentManager.beginTransaction();
             // For a little polish, specify a transition animation
             transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
             // To make it fullscreen, use the 'content' root view as the container
             // for the fragment, which is always the root view for the activity
-            transaction.add(R.id.content, newFragment)
-                    .addToBackStack(null).commit();
+            transaction.add(R.id., newFragment)
+                    .addToBackStack(null).commit();*/
 
             //newFragment.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
         });

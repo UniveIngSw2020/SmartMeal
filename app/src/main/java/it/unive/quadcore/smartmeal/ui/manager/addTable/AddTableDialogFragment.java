@@ -51,6 +51,7 @@ public class AddTableDialogFragment extends DialogFragment {
 
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+
         builder.setTitle(title)
                 .setView(R.layout.activity_add_table)
                 .setPositiveButton(confirmLabel,new DialogInterface.OnClickListener() {
@@ -74,6 +75,10 @@ public class AddTableDialogFragment extends DialogFragment {
         /*addTableViewModel =
                 new ViewModelProvider(this).get(AddTableViewModel.class);*/
         View root = inflater.inflate(R.layout.activity_add_table, container, false);
+
+        int width = 1000;//getResources().getDimensionPixelSize(R.dimen.popup_width);
+        int height = 1000;//getResources().getDimensionPixelSize(R.dimen.popup_height);
+        getDialog().getWindow().setLayout(width, height);
 
         setupAddTableRecyclerView(root);
 
