@@ -14,20 +14,20 @@ import java.util.List;
 import java.util.Set;
 
 import it.unive.quadcore.smartmeal.R;
-import it.unive.quadcore.smartmeal.communication.CustomerHandler;
 import it.unive.quadcore.smartmeal.local.Local;
 import it.unive.quadcore.smartmeal.local.RoomStateException;
 import it.unive.quadcore.smartmeal.local.TableException;
+import it.unive.quadcore.smartmeal.model.Customer;
 import it.unive.quadcore.smartmeal.model.ManagerTable;
 import it.unive.quadcore.smartmeal.ui.manager.ErrorDialogFragment;
 
 public class ModifyTableDialogFragment extends DialogFragment {
-    private final CustomerHandler.Customer customer;
+    private final Customer customer;
     private final TableListAdapter adapter;
     private final List<ManagerTable> freeTables;
 
 
-   public ModifyTableDialogFragment(CustomerHandler.Customer customer, Set<ManagerTable> freeTables, TableListAdapter adapter){
+   public ModifyTableDialogFragment(Customer customer, Set<ManagerTable> freeTables, TableListAdapter adapter){
        super();
        this.customer = customer;
        this.adapter = adapter;

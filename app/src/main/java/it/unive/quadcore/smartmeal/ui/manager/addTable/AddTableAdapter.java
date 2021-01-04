@@ -21,10 +21,10 @@ import java.util.Random;
 import java.util.Set;
 
 import it.unive.quadcore.smartmeal.R;
-import it.unive.quadcore.smartmeal.communication.CustomerHandler;
 import it.unive.quadcore.smartmeal.local.Local;
 import it.unive.quadcore.smartmeal.local.RoomStateException;
 import it.unive.quadcore.smartmeal.local.TableException;
+import it.unive.quadcore.smartmeal.model.Customer;
 import it.unive.quadcore.smartmeal.model.ManagerTable;
 
 import android.app.FragmentManager;
@@ -83,7 +83,7 @@ public class AddTableAdapter extends RecyclerView.Adapter<AddTableAdapter.TableV
             }
 
             try { // TODO : metodo migliore in local
-                Local.getInstance().assignTable(new CustomerHandler.Customer(""+random.nextInt(),customerName),table);
+                Local.getInstance().assignTable(new Customer(""+random.nextInt(),customerName),table); // TODO : rimettere abstract e protected
                 new AddedTableDialogFragment().show(((FragmentActivity)view.getContext()).getSupportFragmentManager(),"addedTable");
             } catch (TableException e) { // TODO : gestire eccezioni
                 e.printStackTrace();

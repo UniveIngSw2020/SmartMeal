@@ -14,9 +14,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import it.unive.quadcore.smartmeal.R;
 import it.unive.quadcore.smartmeal.local.Local;
-import it.unive.quadcore.smartmeal.local.RoomStateException;
-import it.unive.quadcore.smartmeal.local.WaiterNotificationException;
-import it.unive.quadcore.smartmeal.ui.manager.bottomnavigation.EmptyListDialogFragment;
 
 
 public class WaiterNotificationsFragment extends Fragment {

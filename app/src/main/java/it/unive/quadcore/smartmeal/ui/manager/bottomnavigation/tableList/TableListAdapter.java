@@ -25,10 +25,10 @@ import java.util.List;
 import java.util.Set;
 
 import it.unive.quadcore.smartmeal.R;
-import it.unive.quadcore.smartmeal.communication.CustomerHandler;
 import it.unive.quadcore.smartmeal.local.Local;
 import it.unive.quadcore.smartmeal.local.RoomStateException;
 import it.unive.quadcore.smartmeal.local.TableException;
+import it.unive.quadcore.smartmeal.model.Customer;
 import it.unive.quadcore.smartmeal.model.ManagerTable;
 import it.unive.quadcore.smartmeal.ui.manager.ManagerRoomBottomNavigationActivity;
 import it.unive.quadcore.smartmeal.ui.manager.addTable.AddedTableDialogFragment;
@@ -74,7 +74,7 @@ public class TableListAdapter extends RecyclerView.Adapter<TableListAdapter.Tabl
         holder.tableTextView.setText(String.format("%s %s", prefix, table.getId()));
 
         try {
-            CustomerHandler.Customer customer = Local.getInstance().getCustomerByTable(table);
+            Customer customer = Local.getInstance().getCustomerByTable(table);
             holder.customerTextView.setText(customer.getName());
 
             holder.modifyButton.setOnClickListener(view->{

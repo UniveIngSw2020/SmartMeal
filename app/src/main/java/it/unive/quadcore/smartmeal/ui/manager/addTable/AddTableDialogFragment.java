@@ -31,7 +31,7 @@ public class AddTableDialogFragment extends DialogFragment {
     private AddTableAdapter addTableAdapter;
     private RecyclerView addTableRecyclerView;
 
-   // private AddTableViewModel addTableViewModel;
+    //private AddTableViewModel addTableViewModel;
 
 
     public AddTableDialogFragment(Set<ManagerTable> freeTables, TableListAdapter tableListAdapter){
@@ -47,7 +47,7 @@ public class AddTableDialogFragment extends DialogFragment {
         String confirmLabel = getActivity().getString(R.string.confirm_label_alert);
         String closeLabel = getActivity().getString(R.string.close_label_alert);
 
-        String title = getActivity().getString(R.string.modify_table_alert);
+        String title = getActivity().getString(R.string.add_table_alert);
 
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -72,7 +72,7 @@ public class AddTableDialogFragment extends DialogFragment {
                              ViewGroup container, Bundle savedInstanceState) {
 
         /*addTableViewModel =
-                new ViewModelProvider(this).get(TableListViewModel.class);*/
+                new ViewModelProvider(this).get(AddTableViewModel.class);*/
         View root = inflater.inflate(R.layout.activity_add_table, container, false);
 
         setupAddTableRecyclerView(root);
@@ -102,7 +102,7 @@ public class AddTableDialogFragment extends DialogFragment {
              //       .show(requireFragmentManager(), "noTablesAssigned"); // TODO : deprecato
         }*/
 
-        addTableAdapter = new AddTableAdapter(getActivity(), Local.getInstance().getAssignedTableList());
+        addTableAdapter = new AddTableAdapter(getActivity(), Local.getInstance().getFreeTableList());
         addTableRecyclerView.setAdapter(addTableAdapter);
     }
 

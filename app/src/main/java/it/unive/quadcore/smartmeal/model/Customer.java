@@ -4,7 +4,7 @@ import androidx.annotation.NonNull;
 
 import java.util.Objects;
 
-public abstract class Customer {
+public class Customer {
 
     // id
     @NonNull
@@ -13,7 +13,7 @@ public abstract class Customer {
     @NonNull
     private final String name;
 
-    protected Customer(@NonNull String id, @NonNull String name) {
+    public Customer(@NonNull String id, @NonNull String name) {
         Objects.requireNonNull(id, name);
         this.id = id;
         this.name = name;

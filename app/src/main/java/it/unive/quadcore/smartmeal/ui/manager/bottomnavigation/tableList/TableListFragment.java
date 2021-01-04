@@ -1,6 +1,7 @@
 package it.unive.quadcore.smartmeal.ui.manager.bottomnavigation.tableList;
 
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +10,9 @@ import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -20,6 +24,8 @@ import it.unive.quadcore.smartmeal.local.Local;
 import it.unive.quadcore.smartmeal.local.RoomStateException;
 import it.unive.quadcore.smartmeal.local.TableException;
 import it.unive.quadcore.smartmeal.ui.manager.addTable.AddTableActivity;
+import it.unive.quadcore.smartmeal.ui.manager.addTable.AddTableDialogFragment;
+import it.unive.quadcore.smartmeal.ui.manager.addTable.AddedTableDialogFragment;
 import it.unive.quadcore.smartmeal.ui.manager.bottomnavigation.EmptyListDialogFragment;
 
 public class TableListFragment extends Fragment {
@@ -52,8 +58,23 @@ public class TableListFragment extends Fragment {
         floatingButton = root.findViewById(R.id.floating_button_add_table);
         floatingButton.setOnClickListener(v -> {
             // avvia l'activity principale del Gestore
-            Intent intent = new Intent(v.getContext(), AddTableActivity.class);
-            startActivity(intent);
+            /*Intent intent = new Intent(v.getContext(), AddTableActivity.class);
+            startActivity(intent);*/
+
+            FragmentManager fragmentManager = ((FragmentActivity)v.getContext()).getSupportFragmentManager();
+
+            AddTableDialogFragment newFragment = new AddTableDialogFragment(Local.getInstance().getFreeTableList(),tableListAdapter);
+            //newFragment.show(fragmentManager,"addTable");
+
+            FragmentTransaction transaction = fragmentManager.beginTransaction();
+            // For a little polish, specify a transition animation
+            transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+            // To make it fullscreen, use the 'content' root view as the container
+            // for the fragment, which is always the root view for the activity
+            transaction.add(R.id.content, newFragment)
+                    .addToBackStack(null).commit();
+
+            //newFragment.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
         });
 
         return root;

@@ -26,12 +26,12 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:defaultNavHost="true"
-        app:layout_constraintBottom_toTopOf="@id/nav_view"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:navGraph="@navigation/customer_navigation" />
+    <!-- app:layout_constraintBottom_toTopOf="@id/nav_view" -->
 
     <!-- TODO change icon -->
     <com.google.android.material.floatingactionbutton.FloatingActionButton
