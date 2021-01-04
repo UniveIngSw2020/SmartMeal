@@ -76,9 +76,9 @@ public class AddTableDialogFragment extends DialogFragment {
                 new ViewModelProvider(this).get(AddTableViewModel.class);*/
         View root = inflater.inflate(R.layout.activity_add_table, container, false);
 
-        int width = 1000;//getResources().getDimensionPixelSize(R.dimen.popup_width);
+       /* int width = 1000;//getResources().getDimensionPixelSize(R.dimen.popup_width);
         int height = 1000;//getResources().getDimensionPixelSize(R.dimen.popup_height);
-        getDialog().getWindow().setLayout(width, height);
+        getDialog().getWindow().setLayout(width, height);*/
 
         setupAddTableRecyclerView(root);
 
