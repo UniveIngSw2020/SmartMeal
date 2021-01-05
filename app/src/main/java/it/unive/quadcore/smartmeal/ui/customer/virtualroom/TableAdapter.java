@@ -2,6 +2,7 @@ package it.unive.quadcore.smartmeal.ui.customer.virtualroom;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,6 +31,8 @@ import it.unive.quadcore.smartmeal.local.AlreadyOccupiedTableException;
 import it.unive.quadcore.smartmeal.local.NoSuchTableException;
 import it.unive.quadcore.smartmeal.local.TableException;
 import it.unive.quadcore.smartmeal.model.Table;
+import it.unive.quadcore.smartmeal.ui.customer.CustomerBottomNavigationActivity;
+import it.unive.quadcore.smartmeal.ui.customer.CustomerNearbyTimeoutAction;
 
 public class TableAdapter extends RecyclerView.Adapter<TableAdapter.TableViewHolder> {
     private static final String TAG = "TableAdapter";
@@ -98,52 +101,52 @@ public class TableAdapter extends RecyclerView.Adapter<TableAdapter.TableViewHol
                                         return;
                                     }
 
-                                    customerCommunication.selectTable(table, new Consumer<Confirmation<? extends TableException>>() {
-                                        @Override
-                                        public void accept(Confirmation<? extends TableException> confirmation) {
-                                            try {
-                                                confirmation.obtain();
-                                                // mostra la pagina della virtual room
-                                                startCustomerVirtualRoomFragment(table);
-                                            } catch (TableException e) {
-                                                // gestione eccezioni
-                                                if (e instanceof AlreadyOccupiedTableException) {
-                                                    // 1. Tavolo già occupato
-                                                    // avvisare cliente, aggiornare lista tavoli e far scegliere un altro tavolo
-                                                    Log.i(TAG, "AlreadyOccupiedTableException happened: " + e.getMessage());
-                                                    Snackbar.make(
-                                                            v.findViewById(android.R.id.content),
-                                                            R.string.already_occupied_table_snackbar,
-                                                            BaseTransientBottomBar.LENGTH_LONG
-                                                    ).show();
-                                                } else if (e instanceof NoSuchTableException) {
-                                                    // 2. Tavolo non esiste
-                                                    // avvisare il cliente con un errore generico e farlo ritentare
-                                                    Log.i(TAG, "NoSuchTableException happened: " + e.getMessage());
-                                                    Snackbar.make(
-                                                            v.findViewById(android.R.id.content),
-                                                            R.string.unexpected_table_error_snackbar,
-                                                            BaseTransientBottomBar.LENGTH_LONG
-                                                    ).show();
-                                                } else if (e instanceof AlreadyAssignedTableException) {
-                                                    // TODO: needs to have priority in Local over AlreadyOccupiedException
+                                    customerCommunication.selectTable(table,
+                                            confirmation -> {
+                                                try {
+                                                    confirmation.obtain();
+                                                    // mostra la pagina della virtual room
+                                                    startCustomerVirtualRoomFragment(table);
+                                                } catch (TableException e) {
+                                                    // gestione eccezioni
+                                                    if (e instanceof AlreadyOccupiedTableException) {
+                                                        // 1. Tavolo già occupato
+                                                        // avvisare cliente, aggiornare lista tavoli e far scegliere un altro tavolo
+                                                        Log.i(TAG, "AlreadyOccupiedTableException happened: " + e.getMessage());
+                                                        Snackbar.make(
+                                                                v.findViewById(android.R.id.content),
+                                                                R.string.already_occupied_table_snackbar,
+                                                                BaseTransientBottomBar.LENGTH_LONG
+                                                        ).show();
+                                                    } else if (e instanceof NoSuchTableException) {
+                                                        // 2. Tavolo non esiste
+                                                        // avvisare il cliente con un errore generico e farlo ritentare
+                                                        Log.i(TAG, "NoSuchTableException happened: " + e.getMessage());
+                                                        Snackbar.make(
+                                                                v.findViewById(android.R.id.content),
+                                                                R.string.unexpected_table_error_snackbar,
+                                                                BaseTransientBottomBar.LENGTH_LONG
+                                                        ).show();
+                                                    } else if (e instanceof AlreadyAssignedTableException) {
+                                                        // TODO: needs to have priority in Local over AlreadyOccupiedException
 
-                                                    // 3. Il cliente ha già il tavolo che ha richiesto
-                                                    // 4. Il cliente ha già un tavolo (diverso da quello richiesto)
+                                                        // 3. Il cliente ha già il tavolo che ha richiesto
+                                                        // 4. Il cliente ha già un tavolo (diverso da quello richiesto)
 
-                                                    Log.i(TAG, "AlreadyAssignedTableException happened: " + e.getMessage());
-                                                } else {
-                                                    // errore inaspettato
-                                                    Log.i(TAG, "TableException happened: " + e.getMessage());
-                                                    Snackbar.make(
-                                                            v.findViewById(android.R.id.content),
-                                                            R.string.unexpected_table_error_snackbar,
-                                                            BaseTransientBottomBar.LENGTH_LONG
-                                                    ).show();
+                                                        Log.i(TAG, "AlreadyAssignedTableException happened: " + e.getMessage());
+                                                    } else {
+                                                        // errore inaspettato
+                                                        Log.i(TAG, "TableException happened: " + e.getMessage());
+                                                        Snackbar.make(
+                                                                v.findViewById(android.R.id.content),
+                                                                R.string.unexpected_table_error_snackbar,
+                                                                BaseTransientBottomBar.LENGTH_LONG
+                                                        ).show();
+                                                    }
                                                 }
-                                            }
-                                        }
-                                    });
+                                            },
+                                            new CustomerNearbyTimeoutAction(activity)
+                                    );
                                 }
                         )
                         .setNegativeButton(

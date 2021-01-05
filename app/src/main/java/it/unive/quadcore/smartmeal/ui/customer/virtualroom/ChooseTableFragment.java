@@ -10,10 +10,12 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ProgressBar;
 
 import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
@@ -28,8 +30,11 @@ import it.unive.quadcore.smartmeal.local.TableException;
 import it.unive.quadcore.smartmeal.model.ManagerTable;
 import it.unive.quadcore.smartmeal.model.Table;
 import it.unive.quadcore.smartmeal.ui.customer.CustomerBottomNavigationActivity;
+import it.unive.quadcore.smartmeal.ui.customer.CustomerNearbyTimeoutAction;
 
 public class ChooseTableFragment extends Fragment {
+
+    private static final String TAG = "ChooseTableFragment";
 
     private RecyclerView tableRecyclerView;
     private TableAdapter tableAdapter;
@@ -109,26 +114,37 @@ public class ChooseTableFragment extends Fragment {
                 ).show();
             }));
 
-            customerCommunication.joinRoom(getActivity(), () -> requestFreeTableList(root));
+            // TODO progress bar ?
+//            ProgressBar connectionProgressBar = new ProgressBar(getContext());
+//            connectionProgressBar.setIndeterminate(true);
+//            connectionProgressBar.setVisibility(View.VISIBLE);
+
+            Log.i(TAG, "join room");
+
+            customerCommunication.joinRoom(
+                    getActivity(),
+                    () -> requestFreeTableList(root),
+                    new CustomerNearbyTimeoutAction(getActivity())
+            );
         }
     }
 
     private void requestFreeTableList(View root) {
         CustomerCommunication customerCommunication = CustomerCommunication.getInstance();
 
-        customerCommunication.requestFreeTableList(new Consumer<Response<TreeSet<Table>, ? extends TableException>>() {
-            @Override
-            public void accept(Response<TreeSet<Table>, ? extends TableException> response) {
-                try {
-                    TreeSet<Table> tableSet = response.getContent();
+        customerCommunication.requestFreeTableList(
+                response -> {
+                    try {
+                        TreeSet<Table> tableSet = response.getContent();
 
-                    getActivity().runOnUiThread(() -> setupTableRecyclerView(root, tableSet));
+                        getActivity().runOnUiThread(() -> setupTableRecyclerView(root, tableSet));
 
-                } catch (TableException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
+                    } catch (TableException e) {
+                        e.printStackTrace();
+                    }
+                },
+                new CustomerNearbyTimeoutAction(getActivity())
+        );
     }
 
     private void setupTableRecyclerView(View root, SortedSet<Table> tableSortedSet) {

@@ -16,9 +16,12 @@ import com.google.android.gms.nearby.connection.PayloadCallback;
 
 import java.io.Serializable;
 import java.util.Objects;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.TreeSet;
 
 import it.unive.quadcore.smartmeal.communication.confirmation.Confirmation;
+import it.unive.quadcore.smartmeal.communication.confirmation.ConfirmationDenied;
 import it.unive.quadcore.smartmeal.communication.response.Response;
 import it.unive.quadcore.smartmeal.local.TableException;
 import it.unive.quadcore.smartmeal.local.WaiterNotificationException;
@@ -69,14 +72,30 @@ public class CustomerCommunication extends Communication {
     // eventualmente prendere callback con costruttore
 
 
-    public void joinRoom(@NonNull Activity activity, @NonNull Runnable onConnectionSuccessCallback) {
+    public synchronized void joinRoom(@NonNull Activity activity, @NonNull Runnable onConnectionSuccessCallback,
+                         @NonNull Runnable onConnectionFailureCallback) {
+        if (isConnected()) {
+            Log.w(TAG, "joinRoom called, but already connected");
+            return;
+        }
         Objects.requireNonNull(onConnectionSuccessCallback);
+        Objects.requireNonNull(onConnectionFailureCallback);
         Objects.requireNonNull(onCloseRoomCallback);
 
         this.activity = activity;
         this.onConnectionSuccessCallback = onConnectionSuccessCallback;
 
         final EndpointDiscoveryCallback endpointDiscoveryCallback = endpointDiscoveryCallback();
+
+        nearbyTimer(() -> {
+            synchronized (CustomerCommunication.this) {
+                if (!isConnected()) {
+                    leaveRoom();
+                    onConnectionFailureCallback.run();
+                    Log.i(TAG, "joinRoom failed for timeout");
+                }
+            }
+        });
 
         DiscoveryOptions discoveryOptions = new DiscoveryOptions.Builder().setStrategy(STRATEGY).build();
         Nearby.getConnectionsClient(activity)
@@ -157,12 +176,13 @@ public class CustomerCommunication extends Communication {
 
             @Override
             public void onDisconnected(@NonNull String endpointId) {
-                super.onDisconnected(endpointId);
-                Objects.requireNonNull(onCloseRoomCallback);
+                synchronized (CustomerCommunication.this) {
+                    super.onDisconnected(endpointId);
+                    Objects.requireNonNull(onCloseRoomCallback);
 
-                leaveRoom();
-                connected = false;
-                onCloseRoomCallback.run();
+                    leaveRoom();
+                    onCloseRoomCallback.run();
+                }
             }
         };
     }
@@ -188,7 +208,7 @@ public class CustomerCommunication extends Communication {
         sendMessage(managerEndpointId, new Message(RequestType.CUSTOMER_NAME, CustomerStorage.getName()));
     }
 
-    protected void handleCustomerNameConfirmation(@NonNull Serializable content) {
+    protected synchronized void handleCustomerNameConfirmation(@NonNull Serializable content) {
         Objects.requireNonNull(content);
 
         @SuppressWarnings("unchecked")
@@ -197,6 +217,8 @@ public class CustomerCommunication extends Communication {
             confirmation.obtain();
             connected = true;
             onConnectionSuccessCallback.run();
+
+            // TODO eventuale stopDiscovery()
 
             Log.i(TAG, "Connection confirmed");
         } catch (CustomerNotRecognizedException e) {
@@ -216,32 +238,62 @@ public class CustomerCommunication extends Communication {
     }
 
 
-    public void notifyWaiter(@NonNull Consumer<Confirmation<? extends WaiterNotificationException>> onNotifyWaiterConfirmationCallback) {
+    public void notifyWaiter(@NonNull Consumer<Confirmation<? extends WaiterNotificationException>> onNotifyWaiterConfirmationCallback, @NonNull Runnable onTimeoutCallback) {
         Objects.requireNonNull(onNotifyWaiterConfirmationCallback);
+        Objects.requireNonNull(onTimeoutCallback);
         ensureConnection();
 
-        this.onNotifyWaiterConfirmationCallback = onNotifyWaiterConfirmationCallback;
+        Timer timer = nearbyTimer(onTimeoutCallback);
+        this.onNotifyWaiterConfirmationCallback = response -> {
+            timer.cancel();
+            onNotifyWaiterConfirmationCallback.accept(response);
+        };
 
         sendMessage(managerEndpointId, new Message(RequestType.NOTIFY_WAITER, null));
     }
 
-    public void selectTable(@NonNull Table table, @NonNull Consumer<Confirmation<? extends TableException>> onSelectTableConfirmationCallback) {
+    public void selectTable(@NonNull Table table, @NonNull Consumer<Confirmation<? extends TableException>> onSelectTableConfirmationCallback, @NonNull Runnable onTimeoutCallback) {
         Objects.requireNonNull(table);
         Objects.requireNonNull(onSelectTableConfirmationCallback);
+        Objects.requireNonNull(onTimeoutCallback);
         ensureConnection();
 
-        this.onSelectTableConfirmationCallback = onSelectTableConfirmationCallback;
+        Timer timer = nearbyTimer(onTimeoutCallback);
+        this.onSelectTableConfirmationCallback = response -> {
+            timer.cancel();
+            onSelectTableConfirmationCallback.accept(response);
+        };
 
         sendMessage(managerEndpointId, new Message(RequestType.SELECT_TABLE, table));
     }
 
-    public void requestFreeTableList(@NonNull Consumer<Response<TreeSet<Table>, ? extends TableException>> freeTableListCallback) {
+    public void requestFreeTableList(@NonNull Consumer<Response<TreeSet<Table>, ? extends TableException>> freeTableListCallback,
+                                     @NonNull Runnable onTimeoutCallback) {
         Objects.requireNonNull(freeTableListCallback);
+        Objects.requireNonNull(onTimeoutCallback);
         ensureConnection();
 
-        this.freeTableListCallback = freeTableListCallback;
+        Timer timer = nearbyTimer(onTimeoutCallback);
+        this.freeTableListCallback = response -> {
+            timer.cancel();
+            freeTableListCallback.accept(response);
+        };
 
         sendMessage(managerEndpointId, new Message(RequestType.FREE_TABLE_LIST, null)); //TODO content
+    }
+
+    private Timer nearbyTimer(Runnable onTimeoutCallback) {
+        final long NEARBY_TIMEOUT = 20 * 1000;      // 20 secondi
+
+        Timer timer = new Timer();
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                onTimeoutCallback.run();
+            }
+        }, NEARBY_TIMEOUT);
+
+        return timer;
     }
 
     private void ensureConnection() {
@@ -267,16 +319,16 @@ public class CustomerCommunication extends Communication {
     /**
      * Disconnette il cliente dalla stanza del gestore.
      */
-    public void leaveRoom() {
+    public synchronized void leaveRoom() {
         if (connected) {
             Nearby.getConnectionsClient(activity).disconnectFromEndpoint(managerEndpointId);
             connected = false;
+            activity = null;
         }
         if (isDiscovering) {
             Nearby.getConnectionsClient(activity).stopDiscovery();
             isDiscovering = false;
         }
-        activity = null;
     }
 
 
@@ -285,7 +337,7 @@ public class CustomerCommunication extends Communication {
      *
      * @return true se il cliente è connesso alla stanza del gestore, false altrimenti
      */
-    public boolean isConnected() {
+    public synchronized boolean isConnected() {
         return connected;
     }
 }

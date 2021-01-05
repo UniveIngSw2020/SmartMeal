@@ -2,6 +2,7 @@ package it.unive.quadcore.smartmeal.ui.customer;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -27,12 +28,27 @@ import it.unive.quadcore.smartmeal.util.PermissionHandler;
 
 public class CustomerBottomNavigationActivity extends AppCompatActivity {
 
+    private static final String TAG = "CustomerBottomNav";
+
+    public static final String NEARBY_TIMEOUT_ARG = "NEARBY_TIMEOUT";
+
     private FloatingActionButton startCustomerVirtualRoomFab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_customer_bottom_navigation);
+
+        // Mostra snackbar in caso di timeout nearby
+        Bundle bundle = getIntent().getExtras();
+        if (bundle != null && bundle.getBoolean(NEARBY_TIMEOUT_ARG)) {
+            Snackbar.make(
+                    findViewById(android.R.id.content),
+                    "Timeout error",  // TODO strings.xml
+                    BaseTransientBottomBar.LENGTH_LONG
+            ).show();
+        }
+
         BottomNavigationView navView = findViewById(R.id.customer_nav_view);
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.

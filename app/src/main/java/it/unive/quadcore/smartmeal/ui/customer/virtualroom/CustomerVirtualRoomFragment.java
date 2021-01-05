@@ -1,5 +1,6 @@
 package it.unive.quadcore.smartmeal.ui.customer.virtualroom;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.core.util.Consumer;
@@ -21,6 +22,8 @@ import it.unive.quadcore.smartmeal.R;
 import it.unive.quadcore.smartmeal.communication.CustomerCommunication;
 import it.unive.quadcore.smartmeal.communication.confirmation.Confirmation;
 import it.unive.quadcore.smartmeal.local.WaiterNotificationException;
+import it.unive.quadcore.smartmeal.ui.customer.CustomerBottomNavigationActivity;
+import it.unive.quadcore.smartmeal.ui.customer.CustomerNearbyTimeoutAction;
 import it.unive.quadcore.smartmeal.ui.customer.bottomnavigation.menu.MenuFragment;
 
 public class CustomerVirtualRoomFragment extends Fragment {
@@ -106,30 +109,30 @@ public class CustomerVirtualRoomFragment extends Fragment {
 
                 // TODO eventualmente se dopo tot secondi non è arrivata la conferma, inviare nuovamente
 //                Thread thread;
-                customerCommunication.notifyWaiter(new Consumer<Confirmation<? extends WaiterNotificationException>>() {
-                    @Override
-                    public void accept(Confirmation<? extends WaiterNotificationException> confirmation) {
-//                        thread.interrupt();
-                        int snackbarMessageId;
+                customerCommunication.notifyWaiter(
+                        (Consumer<Confirmation<? extends WaiterNotificationException>>) confirmation -> {
+        //                        thread.interrupt();
+                            int snackbarMessageId;
 
-                        try {
-                            confirmation.obtain();
-                            snackbarMessageId = R.string.waiter_notification_confirmed;
-                        } catch (WaiterNotificationException e) {
-                            Log.i(TAG, "Waiter notification rejected: " + e.getMessage());
-                            snackbarMessageId = R.string.waiter_notification_rejected;
-                        }
+                            try {
+                                confirmation.obtain();
+                                snackbarMessageId = R.string.waiter_notification_confirmed;
+                            } catch (WaiterNotificationException e) {
+                                Log.i(TAG, "Waiter notification rejected: " + e.getMessage());
+                                snackbarMessageId = R.string.waiter_notification_rejected;
+                            }
 
-                        final int snackbarMessageIdFinal = snackbarMessageId;
-                        getActivity().runOnUiThread(() -> {
-                            Snackbar.make(
-                                    v.findViewById(android.R.id.content),
-                                    snackbarMessageIdFinal,
-                                    BaseTransientBottomBar.LENGTH_LONG
-                            ).show();
-                        });
-                    }
-                });
+                            final int snackbarMessageIdFinal = snackbarMessageId;
+                            getActivity().runOnUiThread(() -> {
+                                Snackbar.make(
+                                        v.findViewById(android.R.id.content),
+                                        snackbarMessageIdFinal,
+                                        BaseTransientBottomBar.LENGTH_LONG
+                                ).show();
+                            });
+                        },
+                        new CustomerNearbyTimeoutAction(getActivity())
+                );
             }
         });
 
