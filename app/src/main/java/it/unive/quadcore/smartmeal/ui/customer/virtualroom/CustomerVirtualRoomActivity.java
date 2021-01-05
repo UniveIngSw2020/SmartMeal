@@ -47,9 +47,7 @@ public class CustomerVirtualRoomActivity extends AppCompatActivity {
 
         // mostra un Dialog di conferma
         TextView confirmTextView = new TextView(this);
-        // TODO strings.xml and append tableId
-//        String tableConfirmationText = activity.getString(R.string.table_confirmation_text);
-        String leaveConfirmationText = "Sicuro di voler uscire?";
+        String leaveConfirmationText = getString(R.string.leave_virtual_room_dialog_text);
 
         confirmTextView.setText(leaveConfirmationText);
         confirmTextView.setPadding(48, 0, 48, 0);

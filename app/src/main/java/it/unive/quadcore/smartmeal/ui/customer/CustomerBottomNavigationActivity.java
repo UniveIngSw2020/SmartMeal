@@ -44,7 +44,7 @@ public class CustomerBottomNavigationActivity extends AppCompatActivity {
         if (bundle != null && bundle.getBoolean(NEARBY_TIMEOUT_ARG)) {
             Snackbar.make(
                     findViewById(android.R.id.content),
-                    "Timeout error",  // TODO strings.xml
+                    R.string.timeout_error,
                     BaseTransientBottomBar.LENGTH_LONG
             ).show();
         }
@@ -67,7 +67,7 @@ public class CustomerBottomNavigationActivity extends AppCompatActivity {
                 if (!PermissionHandler.hasNearbyPermissions(CustomerBottomNavigationActivity.this)) {
                     Snackbar.make(
                             findViewById(android.R.id.content),
-                            R.string.field_required_snackbar, // TODO cambiare stringa
+                            R.string.grant_permission_snackbar_text,
                             BaseTransientBottomBar.LENGTH_LONG
                     ).show();
                     return;

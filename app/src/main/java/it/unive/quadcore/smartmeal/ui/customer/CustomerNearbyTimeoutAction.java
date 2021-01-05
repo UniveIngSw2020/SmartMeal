@@ -11,6 +11,8 @@ import com.google.android.material.snackbar.Snackbar;
 
 import java.util.Objects;
 
+import it.unive.quadcore.smartmeal.R;
+
 /**
  * Classe che implementa la callback da eseguire quando una richiesta
  * Nearby va in timeout.
@@ -28,7 +30,7 @@ public class CustomerNearbyTimeoutAction implements Runnable {
     public void run() {
         Snackbar.make(
                 activity.findViewById(android.R.id.content),
-                "Timeout error",  // TODO strings.xml
+                R.string.timeout_error,
                 BaseTransientBottomBar.LENGTH_LONG
         ).show();
 

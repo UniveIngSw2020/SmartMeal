@@ -109,7 +109,7 @@ public class ChooseTableFragment extends Fragment {
 
                 Snackbar.make(
                         root.findViewById(android.R.id.content),
-                        "Manager closed the virtual room",  // TODO strings.xml
+                        R.string.manager_closed_virtual_room,
                         BaseTransientBottomBar.LENGTH_LONG
                 ).show();
             }));

@@ -77,7 +77,6 @@ public class TableAdapter extends RecyclerView.Adapter<TableAdapter.TableViewHol
 
                 // mostra un Dialog di conferma
                 TextView confirmTextView = new TextView(activity);
-                // TODO strings.xml and append tableId
                 String tableConfirmationText = activity.getString(R.string.table_confirmation_text);
                 confirmTextView.setText(String.format("%s %s", tableConfirmationText, table.getId()));
                 confirmTextView.setPadding(48, 0, 48, 0);
