@@ -15,12 +15,13 @@ import java.util.Set;
 
 import it.unive.quadcore.smartmeal.R;
 import it.unive.quadcore.smartmeal.local.Local;
-import it.unive.quadcore.smartmeal.local.RoomStateException;
 import it.unive.quadcore.smartmeal.local.TableException;
 import it.unive.quadcore.smartmeal.model.Customer;
 import it.unive.quadcore.smartmeal.model.ManagerTable;
 import it.unive.quadcore.smartmeal.ui.manager.ErrorDialogFragment;
 
+
+// Dialog per la modifica di tavoli
 public class ModifyTableDialogFragment extends DialogFragment {
     private final Customer customer;
     private final TableListAdapter adapter;
@@ -42,6 +43,7 @@ public class ModifyTableDialogFragment extends DialogFragment {
 
         String title = getActivity().getString(R.string.modify_table_alert);
 
+        // Lista di tavoli liberi. Lista di stringhe
         List<String> freeTablesStrings = new ArrayList<>();
         String prefix = getActivity().getString(R.string.table_prefix);
         for(ManagerTable table : freeTables){
@@ -50,14 +52,15 @@ public class ModifyTableDialogFragment extends DialogFragment {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle(String.format("%s %s", title , customer.getName()))
+                // Setto la lista di tavoli liberi
                 .setAdapter(new ArrayAdapter<>(getContext(),R.layout.table_dialog_row , freeTablesStrings),new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
+                    public void onClick(DialogInterface dialog, int which) { // Callback di selezione di un tavolo
                         try {
 
                            // throw new RoomStateException(true); // TEsting
 
                             ManagerTable newTable = freeTables.get(which);
-                            Local.getInstance().changeCustomerTable(customer, newTable);
+                            Local.getInstance().changeCustomerTable(customer, newTable); // Modifico il tavolo associato al cliente
 
                             adapter.reload();
 

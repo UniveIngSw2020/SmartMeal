@@ -1,17 +1,16 @@
 package it.unive.quadcore.smartmeal.ui.manager;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.DialogFragment;
 
 import it.unive.quadcore.smartmeal.R;
-import it.unive.quadcore.smartmeal.ui.manager.addTable.AddTableActivity;
 
+
+// Dialog generici di errore
 public class ErrorDialogFragment extends DialogFragment {
 
     private final String message;

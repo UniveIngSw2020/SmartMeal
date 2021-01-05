@@ -10,13 +10,12 @@ import java.util.TreeSet;
 // Classe che rappresenta Menù. Nella versione più semplice è un insieme di prodotti. In generale è una mappa tra tipi di prodotto
 // (tipi di pasto) e insieme di prodotti di quella categoria.
 public class Menu {
-    // SortedSet<Product>
-    //private Set<Product> products;
 
     // Mappa tra le categorie di pasto e i prodotti
-    private Map<FoodCategory, Set<Product>> categoriesProductsMap;
+    @NonNull
+    private final Map<FoodCategory, Set<Product>> categoriesProductsMap;
 
-    public Menu(Set<Product> products) {
+    public Menu(@NonNull Set<Product> products) {
         categoriesProductsMap = new TreeMap<>();
 
         for(FoodCategory foodCategory : FoodCategory.values()) {
@@ -33,10 +32,12 @@ public class Menu {
         }
     }
 
+    @NonNull
     public Map<FoodCategory, Set<Product>> getCategoriesProductsMap() {
         return categoriesProductsMap;
     }
 
+    @NonNull
     public Set<Product> getProducts() {
         Set<Product> res = new TreeSet<>();
         //categoryProductsMap.forEach(((foodCategory, products) -> res.addAll(products)));

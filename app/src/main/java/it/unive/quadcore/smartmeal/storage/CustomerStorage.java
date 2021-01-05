@@ -4,6 +4,8 @@ import android.content.SharedPreferences;
 
 public final class CustomerStorage extends Storage {
 
+    private static final String SENSOR_MODE_SHARED_PREFERENCE_KEY = "SensorMode";
+    private static final String NOTIFICATION_MODE_SHARED_PREFERENCE_KEY = "NotificationMode";
     /**
      * Rende non instanziabile questa classe.
      */
@@ -14,13 +16,13 @@ public final class CustomerStorage extends Storage {
             throw new StorageException("The storage hasn't been initialize yet");
 
         // Preference non esistente (prima creazione della preference). Metto valore di default
-        if(!defaultSharedPreferences.contains("SensorMode")) { // TODO : rimpiazzare con stringa di res
+        if(!defaultSharedPreferences.contains(SENSOR_MODE_SHARED_PREFERENCE_KEY)) {
             SharedPreferences.Editor editor = defaultSharedPreferences.edit();
-            editor.putBoolean("SensorMode",true);
+            editor.putBoolean(SENSOR_MODE_SHARED_PREFERENCE_KEY,true);
             editor.apply();
         }
 
-        return defaultSharedPreferences.getBoolean("SensorMode",true);
+        return defaultSharedPreferences.getBoolean(SENSOR_MODE_SHARED_PREFERENCE_KEY,true);
     }
 
     public static void setSensorMode(boolean mode) {
@@ -30,7 +32,7 @@ public final class CustomerStorage extends Storage {
         SharedPreferences.Editor editor = defaultSharedPreferences.edit();
 
         // Se preference non esiste viene creata
-        editor.putBoolean("SensorMode",mode); // TODO : rimpiazzare con stringa di res
+        editor.putBoolean(SENSOR_MODE_SHARED_PREFERENCE_KEY,mode);
         editor.apply();
     }
 
@@ -39,13 +41,13 @@ public final class CustomerStorage extends Storage {
             throw new StorageException("The storage hasn't been initialize yet");
 
         // Preference non esistente (prima creazione della preference). Metto valore di default
-        if(!defaultSharedPreferences.contains("NotificationMode")) { // TODO : rimpiazzare con stringa di res
+        if(!defaultSharedPreferences.contains(NOTIFICATION_MODE_SHARED_PREFERENCE_KEY)) {
             SharedPreferences.Editor editor = defaultSharedPreferences.edit();
-            editor.putBoolean("NotificationMode",true);
+            editor.putBoolean(NOTIFICATION_MODE_SHARED_PREFERENCE_KEY,true);
             editor.apply();
         }
 
-        return defaultSharedPreferences.getBoolean("NotificationMode",true);
+        return defaultSharedPreferences.getBoolean(NOTIFICATION_MODE_SHARED_PREFERENCE_KEY,true);
     }
 
     public static void setNotificationMode(boolean mode) {
@@ -55,7 +57,7 @@ public final class CustomerStorage extends Storage {
         SharedPreferences.Editor editor = defaultSharedPreferences.edit();
 
         // Se preference non esiste viene creata
-        editor.putBoolean("NotificationMode",mode); // TODO : rimpiazzare con stringa di res
+        editor.putBoolean(NOTIFICATION_MODE_SHARED_PREFERENCE_KEY,mode);
         editor.apply();
     }
 

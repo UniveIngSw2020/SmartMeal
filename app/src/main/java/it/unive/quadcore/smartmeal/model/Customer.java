@@ -4,7 +4,7 @@ import androidx.annotation.NonNull;
 
 import java.util.Objects;
 
-public class Customer {
+public abstract class Customer {
 
     // id
     @NonNull

@@ -34,7 +34,7 @@ public class WaiterNotificationsFragment extends Fragment {
         setupWaiterNotificationRecyclerView(root);
 
         reloadButton = root.findViewById(R.id.reload_button_waiter_notifications);
-        reloadButton.setOnClickListener(v -> {
+        reloadButton.setOnClickListener(v -> { // Ricarica lista notifiche
             Local.getInstance().testingUI_1(); // TODO : togliere, solo per testing
 
             //setupWaiterNotificationRecyclerView(root);
@@ -55,16 +55,6 @@ public class WaiterNotificationsFragment extends Fragment {
         );
         waiterNotificationRecyclerView.setLayoutManager(recyclerViewLayoutManager);
 
-        /*try {
-            waiterNotificationAdapter = new WaiterNotificationAdapter(getActivity(), Local.getInstance().getWaiterNotificationList());
-            waiterNotificationRecyclerView.setAdapter(waiterNotificationAdapter);
-        } catch (RoomStateException e) {
-            e.printStackTrace();
-        } catch (WaiterNotificationException e) { // TODO : tenere ?
-            // Non ci sono notifiche : mostro un dialog
-            //new EmptyListDialogFragment(getString(R.string.empty_waiter_notification_list_alert))
-            //            .show(requireFragmentManager(), "noNotifications"); // TODO : deprecato
-        }*/
 
         waiterNotificationAdapter = new WaiterNotificationAdapter(getActivity(), Local.getInstance().getWaiterNotificationList());
         waiterNotificationRecyclerView.setAdapter(waiterNotificationAdapter);

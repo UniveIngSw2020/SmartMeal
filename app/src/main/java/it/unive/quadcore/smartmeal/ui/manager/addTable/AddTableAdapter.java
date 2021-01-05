@@ -1,7 +1,6 @@
 package it.unive.quadcore.smartmeal.ui.manager.addTable;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,18 +16,14 @@ import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 import java.util.Set;
 
 import it.unive.quadcore.smartmeal.R;
 import it.unive.quadcore.smartmeal.local.Local;
-import it.unive.quadcore.smartmeal.local.RoomStateException;
 import it.unive.quadcore.smartmeal.local.TableException;
-import it.unive.quadcore.smartmeal.model.Customer;
 import it.unive.quadcore.smartmeal.model.ManagerTable;
 
-import android.app.FragmentManager;
-
+// Lista di tavoli liberi, visibile dalla schermata di aggiunta tavolo
 public class AddTableAdapter extends RecyclerView.Adapter<AddTableAdapter.TableViewHolder>{
     public static final class TableViewHolder extends RecyclerView.ViewHolder {
         private TextView tableTextView;
@@ -45,8 +40,6 @@ public class AddTableAdapter extends RecyclerView.Adapter<AddTableAdapter.TableV
 
     private final Activity activity;
     private final List<ManagerTable> tableList;
-
-    private Random random = new Random(); // TODO : rimuovere, solo per testing
 
     public AddTableAdapter(Activity activity, Set<ManagerTable> freeTables) {
         this.activity = activity;
@@ -68,12 +61,12 @@ public class AddTableAdapter extends RecyclerView.Adapter<AddTableAdapter.TableV
         holder.tableTextView.setText(String.format("%s %s", prefix, table.getId()));
 
 
-        holder.selectButton.setOnClickListener(view->{
+        holder.selectButton.setOnClickListener(view->{ // Voglio aggiungere questo tavolo
 
             TextView customerTextView = activity.findViewById(R.id.insert_new_costumer_edit_text);
             String customerName = customerTextView.getText().toString().trim();
 
-            if (customerName.isEmpty()) {
+            if (customerName.isEmpty()) { // Non è stato inserito il nome cliente
                 Snackbar.make(
                         activity.findViewById(android.R.id.content),
                         R.string.no_new_customer_name_snackbar,
@@ -82,11 +75,15 @@ public class AddTableAdapter extends RecyclerView.Adapter<AddTableAdapter.TableV
                 return;
             }
 
-            try { // TODO : metodo migliore in local
-                Local.getInstance().assignTable(new Customer(""+random.nextInt(),customerName),table); // TODO : rimettere abstract e protected
-                new AddedTableDialogFragment().show(((FragmentActivity)view.getContext()).getSupportFragmentManager(),"addedTable");
-            } catch (TableException e) { // TODO : gestire eccezioni
-                e.printStackTrace();
+            try { // Provo ad aggiungere il tavolo
+                Local.getInstance().assignTable(customerName,table);
+                String message = activity.getString(R.string.added_table_alert);
+                new AddedingTableDialogFragment(message)
+                        .show(((FragmentActivity)view.getContext()).getSupportFragmentManager(),"addedTable");
+            } catch (TableException e) { // Errore nell'aggiungere questo tavolo
+                String message = activity.getString(R.string.error_add_table_alert);
+                new AddedingTableDialogFragment(message)
+                        .show(((FragmentActivity)view.getContext()).getSupportFragmentManager(),"addedTable");
             }
         });
     }

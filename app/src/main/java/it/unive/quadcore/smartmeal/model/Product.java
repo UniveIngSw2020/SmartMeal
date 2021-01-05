@@ -5,28 +5,36 @@ import androidx.annotation.NonNull;
 import java.util.Objects;
 
 public class Product implements Comparable<Product>{
+    @NonNull
     private final String name;
+    @NonNull
     private final Money price;
     // Categoria del prodotto
+    @NonNull
     private final FoodCategory category;
+    @NonNull
     private final String description;
 
-    public Product(String name, Money price, FoodCategory category, String description) {
+    public Product(@NonNull String name,@NonNull Money price,@NonNull FoodCategory category,@NonNull String description) {
         this.name = name;
         this.price = price;
         this.category = category;
         this.description = description;
     }
 
+    @NonNull
     public String getName() {
         return name;
     }
+    @NonNull
     public Money getPrice() {
         return price;
     }
+    @NonNull
     public String getDescription() {
         return description;
     }
+    @NonNull
     public FoodCategory getCategory() {
         return category;
     }

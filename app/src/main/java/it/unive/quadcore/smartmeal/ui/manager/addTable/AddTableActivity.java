@@ -4,9 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.TextView;
 
 import com.google.android.material.snackbar.BaseTransientBottomBar;
@@ -16,12 +14,9 @@ import java.util.Set;
 
 import it.unive.quadcore.smartmeal.R;
 import it.unive.quadcore.smartmeal.local.Local;
-import it.unive.quadcore.smartmeal.local.RoomStateException;
-import it.unive.quadcore.smartmeal.local.TableException;
 import it.unive.quadcore.smartmeal.model.ManagerTable;
-import it.unive.quadcore.smartmeal.ui.manager.bottomnavigation.EmptyListDialogFragment;
-import it.unive.quadcore.smartmeal.ui.manager.bottomnavigation.tableList.TableListAdapter;
 
+// Activity aggiunta tavolo
 public class AddTableActivity extends AppCompatActivity {
 
     private RecyclerView addTableRecyclerView;
@@ -49,16 +44,10 @@ public class AddTableActivity extends AppCompatActivity {
         );
         addTableRecyclerView.setLayoutManager(recyclerViewLayoutManager);
 
-        /*try {
-            addTableAdapter = new AddTableAdapter(this, Local.getInstance().getFreeTableList());
-            addTableRecyclerView.setAdapter(addTableAdapter);
-        } catch (RoomStateException | TableException e) {
-            e.printStackTrace();
-        }*/
 
         Set<ManagerTable> freeTables = Local.getInstance().getFreeTableList();
 
-        if(freeTables.size()==0){ // TODO : sistemare ciò
+        if(freeTables.size()==0){ // Non ci sono tavoli liberi
             Snackbar.make(
                     findViewById(android.R.id.content),
                     R.string.error_add_table_snackbar,

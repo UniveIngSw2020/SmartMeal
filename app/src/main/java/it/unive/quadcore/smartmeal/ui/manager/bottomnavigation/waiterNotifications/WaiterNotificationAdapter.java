@@ -1,8 +1,6 @@
 package it.unive.quadcore.smartmeal.ui.manager.bottomnavigation.waiterNotifications;
 
 import android.app.Activity;
-import android.content.Context;
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,13 +19,11 @@ import java.util.SortedSet;
 
 import it.unive.quadcore.smartmeal.R;
 import it.unive.quadcore.smartmeal.local.Local;
-import it.unive.quadcore.smartmeal.local.RoomStateException;
 import it.unive.quadcore.smartmeal.local.TableException;
 import it.unive.quadcore.smartmeal.local.WaiterNotificationException;
 import it.unive.quadcore.smartmeal.model.WaiterNotification;
-import it.unive.quadcore.smartmeal.ui.manager.ManagerRoomBottomNavigationActivity;
-import it.unive.quadcore.smartmeal.ui.manager.bottomnavigation.EmptyListDialogFragment;
 
+// Lista di notifiche, visibile dalla schermata delle notifiche cameriere
 public class WaiterNotificationAdapter extends RecyclerView.Adapter<WaiterNotificationAdapter.NotificationViewHolder>{
     public static final class NotificationViewHolder extends RecyclerView.ViewHolder {
         private TextView tableTextView;
@@ -63,22 +59,22 @@ public class WaiterNotificationAdapter extends RecyclerView.Adapter<WaiterNotifi
     public void onBindViewHolder(@NonNull WaiterNotificationAdapter.NotificationViewHolder holder, int position) {
         WaiterNotification notification =  waiterNotifications.get(position);
 
-        try {
+        try { // Mostro la notifica cameriere
 
             String prefix = activity.getString(R.string.table_prefix);
             holder.tableTextView.setText(String.format("%s %s", prefix, Local.getInstance().getTable(notification.getCustomer()).getId()));
 
             holder.dateHourTextView.setText(notification.getPrettyTime());
 
-            holder.deleteButton.setOnClickListener(view->{
+            holder.deleteButton.setOnClickListener(view->{ // Voglio eliminare la notifica cameriere
                 try {
-                    Local.getInstance().removeWaiterNotification(notification);
+                    Local.getInstance().removeWaiterNotification(notification); // Rimuovo la notifica
 
-                    int notificationToRemoveIndex = waiterNotifications.indexOf(notification);
+                    int notificationToRemoveIndex = waiterNotifications.indexOf(notification); // Ricarico adapter
                     waiterNotifications.remove(notificationToRemoveIndex);
                     notifyItemRemoved(notificationToRemoveIndex);
 
-                } catch (WaiterNotificationException e) {
+                } catch (WaiterNotificationException e) { // Errore nel rimuovere la notifica
                     Snackbar.make(
                             activity.findViewById(android.R.id.content),
                             R.string.error_delete_notification_snackbar,
@@ -102,6 +98,7 @@ public class WaiterNotificationAdapter extends RecyclerView.Adapter<WaiterNotifi
         return waiterNotifications.size();
     }
 
+    // Ricarico la lista notifiche
     public void reload() {
         waiterNotifications.clear();
         waiterNotifications.addAll(Local.getInstance().getWaiterNotificationList());

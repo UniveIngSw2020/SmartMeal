@@ -1,37 +1,40 @@
 package it.unive.quadcore.smartmeal.model;
 
 import android.location.Location;
-import android.media.Image;
 
 import androidx.annotation.NonNull;
 
 public class LocalDescription {
 
+    @NonNull
     private final String name;
+    @NonNull
     private final String presentation ;
+    @NonNull
     private final Location location;
-    //private final int imageID; // Immagine non dovrebbe servire : dovrebbe essere direttamente mostrata nell'interfaccia grafica tramite xml
+    @NonNull
     private final Menu menu;
 
-    public LocalDescription(String name,String presentation,Location location/*,int imageID*/,Menu menu){
+    public LocalDescription(@NonNull String name,@NonNull String presentation,@NonNull Location location,@NonNull Menu menu){
         this.name = name;
         this.presentation = presentation;
         this.location = location;
         //this.imageID = imageID;
         this.menu = menu;
     }
+    @NonNull
     public String getName(){
         return name;
     }
+    @NonNull
     public String getPresentation(){
         return presentation;
     }
+    @NonNull
     public Location getLocation(){
         return location;
     }
-   /* public int getImageID(){
-        return imageID;
-    }*/
+    @NonNull
     public Menu getMenu(){
         return menu;
     }

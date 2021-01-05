@@ -45,35 +45,55 @@
     <string name="select_table">Select table</string>
 
 
+
+    <!-- alert dialogs -->
+    <string name="close_label_alert">Close</string>
+    <string name="confirm_label_alert">Confirm</string>
+
+    <!-- insert password activity -->
     <string name="insert_password_hint">Insert password</string>
     <string name="incorrect_password_snackbar">Incorrect password</string>
 
+    <!-- manager home activity -->
     <string name="button_manager_home_room_text">Create room</string>
     <string name="button_manager_home_menu_text">Show menu</string>
     <string name="button_manager_home_description_text">Show description</string>
-
+    <string name="error_manager_room_snackbar">It is impossible to create a room right now</string>
     <string name="title_manager_home">Home</string>
+
+    <!-- menu e description manager activity -->
     <string name="title_manager_description">Description</string>
     <string name="title_manager_menu">Menu</string>
 
-    <string name="title_activity_manager_room_bottom_navigation">MainActivity</string>
+    <string name="title_activity_manager_room_bottom_navigation">MainActivity</string> <!-- -->
 
+    <!-- manager room bottom navigation activity -->
     <string name="title_manager_room_waiterNotifications_fragment">Waiter notifications</string>
     <string name="title_manager_room_tableList_fragment">Table list</string>
 
     <string name="table_prefix">Table:</string>
 
-    <string name="empty_waiter_notification_list_alert">No current notifications</string>
-    <string name="close_label_alert">Close</string>
-    <string name="empty_table_list_alert">No tables assigned yet</string>
-
-    <string name="error_manager_room_snackbar">It is impossible to create a room right now</string>
-
-    <string name="modify_table_button_label">Modify</string>
-    <string name="delete_table_button_label">Delete</string>
-
     <string name="reload_button_label">Reload</string>
 
+    <string name="confirm_close_room_alert">You really want to close the room?</string>
+
+    <!-- waiter notifications fragment-->
+    <string name="empty_waiter_notification_list_alert">No current notifications</string> <!-- -->
+    <string name="error_delete_notification_snackbar">Is impossibile to remove this notification right now : try again after the reloading</string>
+
+    <string name="delete_table_button_label">Delete</string>
+
+    <!-- table list fragment-->
+    <string name="empty_table_list_alert">No tables assigned yet</string>
+    <string name="error_modify_table_snackbar">It is impossible to modify the tables right now : all the tables are alredy assigned</string>
+    <string name="error_delete_table_snackbar">It is impossible to delete this table right now : try again after the reloading</string>
+
+    <string name="modify_table_button_label">Modify</string>
+
+    <string name="modify_table_alert">Select the new table for the customer</string>
+    <string name="modify_table_error_alert">Error : the table has not changed</string>
+
+    <!-- add table activity-->
     <string name="insert_new_customer_hint">Insert customer name</string>
     <string name="select_table_hint">Select a table</string>
 
@@ -81,17 +101,11 @@
 
     <string name="assign_table">Assign</string>
     <string name="added_table_alert">Table added correctly!</string>
+    <string name="error_add_table_alert">Error : something happened during the operation</string>
 
     <string name="assign_table_description">Assign a free table</string>
-    <string name="modify_table_alert">Select the new table for the customer</string>
-    <string name="confirm_label_alert">Confirm</string>
-    <string name="modify_table_error_alert">Error : the table has not changed</string>
 
-    <string name="confirm_text_alert">You really want to close the room?</string>
-
-    <string name="error_delete_notification_snackbar">Is impossibile to remove this notification right now : try again after the reloading</string>
-    <string name="error_delete_table_snackbar">It is impossible to delete this table right now : try again after the reloading</string>
-    <string name="error_modify_table_snackbar">It is impossible to modify the tables right now : all the tables are alredy assigned</string>
     <string name="error_add_table_snackbar">It is impossible to add a table right now  : all the tables are alredy assigned</string>
     <string name="add_table_alert">Add a new assigned table</string>
+
 </resources>

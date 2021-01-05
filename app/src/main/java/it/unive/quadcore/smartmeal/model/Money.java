@@ -1,10 +1,8 @@
 package it.unive.quadcore.smartmeal.model;
 
-import android.content.Context;
 
 import androidx.annotation.NonNull;
 
-import it.unive.quadcore.smartmeal.R;
 
 public class Money {
     private final int value;
@@ -17,10 +15,12 @@ public class Money {
         return value;
     }
 
+    @NonNull
     public String getEuroString() {
         return String.format("%d", getValue() / 100);
     }
 
+    @NonNull
     public String getCentString() {
         int cent = getValue() % 100;
         return cent <= 9 ? String.format("0%d", cent) : String.format("%d", cent);

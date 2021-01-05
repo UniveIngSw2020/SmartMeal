@@ -1,6 +1,6 @@
 package it.unive.quadcore.smartmeal.local;
 
-import org.jetbrains.annotations.NotNull;
+import androidx.annotation.NonNull;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -14,17 +14,18 @@ import it.unive.quadcore.smartmeal.model.ManagerTable;
 import it.unive.quadcore.smartmeal.model.Table;
 import it.unive.quadcore.smartmeal.storage.ManagerStorage;
 
-// TODO : gestione RACE CONDITION
+// Gestione RACE CONDITION
 // Per ora gestisco con synchronized. Si potrebbe usare approcio più efficente tramite Lock lettori-scrittori.
 
-// Visibile solo alla classe Locale (private o package-private)
+// Visibile solo alla classe Locale (package-private)
 class TableHandler {
+
     // Mappa clienti-tavoli
-    @NotNull
+    @NonNull
     private final Map<Customer,ManagerTable> customerTableMap ;
 
     // Lista di tavoli liberi (usata come cache)
-    @NotNull
+    @NonNull
     private final SortedSet<ManagerTable> freeTableList ;
 
     /* Mappa tavoli-tavoli gestore.
@@ -32,7 +33,7 @@ class TableHandler {
             - Tenere i soli tavoli significativi per il locale
             - Evitare casting a ManagerTable
      */
-    @NotNull
+    @NonNull
     private final Map<Table,ManagerTable> tablesMap;
 
     // Costruttore con visibilità package
@@ -54,6 +55,7 @@ class TableHandler {
 
 
     // Ritorna la lista di tavoli liberi
+    @NonNull
     synchronized TreeSet<ManagerTable> getFreeTableList() { // SortedSet
         // La lista di tavoli liberi è vuota
         /*if(freeTableList==null || freeTableList.size()==0)
@@ -64,45 +66,20 @@ class TableHandler {
     }
 
     // Ritorna la lista di tavoli occupati
+    @NonNull
     synchronized SortedSet<ManagerTable> getAssignedTableList() {
 
         // Tutti i tavoli nella mappa customer-tables
-        SortedSet<ManagerTable> assignedTableList = new TreeSet<>(customerTableMap.values());
 
         // Non c'è nessun tavolo occupato
        /* if(assignedTableList.size() == 0)
             throw new TableException("There aren't assigned tables");*/
 
-        return assignedTableList ;
+        return new TreeSet<>(customerTableMap.values());
     }
 
     // Cambia il tavolo associato ad un dato cliente
-    synchronized void changeCustomerTable(Customer customer, Table newTable) throws TableException {
-        /*
-        // Il tavolo specificato non è un tavolo corretto per il locale
-        if(!tableMap.containsKey(newTable))
-            throw new TableException("The selected table doesn't exist");
-        ManagerTable managerTable = tableMap.get(newTable) ; // Versione ManagerTable di newTable
-
-        // Cliente non ha nessun tavolo
-        if(!customerTableMap.containsKey(customer))
-            throw new TableException("This customer doesn't have alredy a table");
-
-        // Tavolo già occupato
-        if(!freeTableList.contains(managerTable))
-            throw new TableException("This table is alredy assigned");
-
-        // Vecchio tavolo di quel cliente
-        ManagerTable oldTable = customerTableMap.get(customer);
-
-        // Cambio tavolo associato al cliente
-        customerTableMap.put(customer,managerTable);
-
-        freeTableList.add(oldTable); // Ora tavolo vecchio è libero
-        freeTableList.remove(managerTable); // Tavolo specificato ora è occupato
-
-         */
-
+    synchronized void changeCustomerTable(@NonNull Customer customer,@NonNull Table newTable) throws TableException {
 
         // Siccome metodo è syncrhonized, posso anche fare più semplicemente così :
         // QUESTI 2 CONTROLLI SONO GIA' FATTI IN ASSIGNTABLE FATTO IN FONDO. PERO' DEVO FARLI ORA, SE NO LIBERO UN TAVOLO CHE NON
@@ -123,7 +100,7 @@ class TableHandler {
     }
 
     // Assegna un tavolo ad un cliente senza tavolo
-    synchronized void assignTable(Customer customer, Table table) throws TableException {
+    synchronized void assignTable(@NonNull Customer customer,@NonNull Table table) throws TableException {
 
         // Il tavolo specificato non è un tavolo corretto per il locale
         if(!tablesMap.containsKey(table))
@@ -146,16 +123,7 @@ class TableHandler {
     }
 
     // Libera un tavolo
-    synchronized void freeTable(Table table) throws TableException {
-
-        /* // Il tavolo specificato non è un tavolo corretto per il locale
-        if(!tablesMap.containsKey(table))
-            throw new TableException("The selected table doesn't exist");
-        ManagerTable managerTable = tablesMap.get(table) ;
-
-        // Tavolo non è occupato da nessun cliente
-        if(freeTableList.contains(managerTable))
-            throw new TableException("This table isn't assigned");*/
+    synchronized void freeTable(@NonNull Table table) throws TableException {
 
         Customer customer = getCustomer(table); // Controllo se tavolo esiste e se è occupato
         ManagerTable managerTable = tablesMap.get(table) ;
@@ -168,8 +136,8 @@ class TableHandler {
     }
 
     // Ritorna il tavolo occupato da un certo cliente
-    // ManagerTable o Table ?
-    synchronized ManagerTable getTable(Customer customer) throws TableException {
+    @NonNull
+    synchronized ManagerTable getTable(@NonNull Customer customer) throws TableException {
         // Cliente non ha un tavolo
         if(!customerTableMap.containsKey(customer))
             throw new TableException("This customer doesn't have a table assigned"); //TODO: Forse null? altrimenti serve un metodo boolean hasTable(Customer customer)
@@ -179,7 +147,8 @@ class TableHandler {
     }
 
     // Ritorna il cliente che occupa un certo tavolo
-    synchronized Customer getCustomer(Table table) throws TableException {
+    @NonNull
+    synchronized Customer getCustomer(@NonNull Table table) throws TableException {
         // Il tavolo specificato non è un tavolo corretto per il locale
         if(!tablesMap.containsKey(table))
             throw new NoSuchTableException("The selected table doesn't exist");

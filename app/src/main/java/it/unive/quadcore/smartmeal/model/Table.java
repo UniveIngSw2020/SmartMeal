@@ -5,19 +5,20 @@ import androidx.annotation.NonNull;
 import java.io.Serializable;
 import java.util.Objects;
 
-public abstract class Table implements Comparable<Table>, Serializable { // TODO : Togliere l'abstract ?
+public abstract class Table implements Comparable<Table>, Serializable { // Togliere l'abstract ?
     // possibile costruttore package-private chiamato da un'altra classe
 
     // eventuale array esterno di tavoli (classe che si occupa di istanziare i tavoli
     // disponibili nel locale)
 
-    // TODO : si potrebbe fare intero
+    @NonNull
     private final String id ;
 
-    protected Table(String id){
+    protected Table(@NonNull String id){
         this.id = id;
     }
 
+    @NonNull
     public String getId(){
         return id ;
     }

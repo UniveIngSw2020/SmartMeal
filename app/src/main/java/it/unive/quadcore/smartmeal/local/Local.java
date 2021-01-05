@@ -3,6 +3,9 @@ package it.unive.quadcore.smartmeal.local;
 import android.app.Activity;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.SortedSet;
@@ -18,21 +21,25 @@ import it.unive.quadcore.smartmeal.model.ManagerTable;
 import it.unive.quadcore.smartmeal.model.Table;
 import it.unive.quadcore.smartmeal.model.WaiterNotification;
 
-// TODO : gestione RACE CONDITION
+// Gestione RACE CONDITION
 // In realtà nella versione base (un solo dispositivo gestore) non ce ne dovrebbero essere di tali problemi
 
-// CLasse locale (usata dal codice di gestione dell'interfaccia grafica)
+// Classe che rappresenta locale
 public class Local {
     private static final String TAG = "Local";
 
     // Singletone
+    @Nullable
     private static Local instance = null;
 
     // Oggetti gestori tavoli e notifiche cameriere
+    @Nullable
     private TableHandler tableHandler;
+    @Nullable
     private WaiterNotificationHandler waiterNotificationHandler;
 
     // Oggetto per la comunicazione
+    @Nullable
     private ManagerCommunication managerCommunication ;
 
     // Stato della stanza: roomState=true -> stanza aperta ; roomState=false -> stanza chiusa
@@ -44,6 +51,7 @@ public class Local {
     }
 
     // Instanziamento singletone
+    @NonNull
     public static Local getInstance() {
         if(instance==null)
             instance = new Local();
@@ -51,7 +59,7 @@ public class Local {
     }
 
     // Creazione stanza virtuale
-    public void createRoom(Activity activity) {
+    public void createRoom(@NonNull Activity activity) {
         if(roomState) // Stanza virtuale già aperta
             throw new RoomStateException(true);
 
@@ -60,10 +68,10 @@ public class Local {
         waiterNotificationHandler = new WaiterNotificationHandler();
 
         // Creazione oggetto comunicazione
-//        managerCommunication = ManagerCommunicationSTUB.getInstance(); // TODO : ricambiare a MAnagerCOmmunication
-        managerCommunication = ManagerCommunication.getInstance(); // TODO : ricambiare a MAnagerCOmmunication
+//        managerCommunication = ManagerCommunicationSTUB.getInstance(); // Per testing
+        managerCommunication = ManagerCommunication.getInstance();
 
-        // Passo le varie callback all gestore della comunicazione
+        // Passo le varie callback allgestore della comunicazione
         managerCommunication.onNotifyWaiter( // Callback da eseguire quando arriva notifica cameriere
                 waiterNotification -> {
                     try {
@@ -75,14 +83,6 @@ public class Local {
                 });
         managerCommunication.onRequestFreeTableList( () -> { // Callback da eseguire quando arriva richiesta lista tavoli liberi
             return new SuccessResponse<>(tableHandler.getFreeTableList());
-            /*try {
-                return new SuccessResponse<>(tableHandler.getFreeTableList());
-            } catch (TableException e) { // Eccezione : la lista di tavoli liberi è vuota
-                // TODO : forwardare l'eccezione? in alternativa tale eccezione nel metodo getFreeTableList si potrebbe proprio
-                // non mettere
-                // Forwardo l'eccezione al customer
-                return new ErrorResponse<>(e); // Oppure new TreeSet<>();
-            }*/
         });
         managerCommunication.onSelectTable( (customer,table) -> { // Callback da eseguire quando arriva selezione di un tavolo
             try{
@@ -93,11 +93,10 @@ public class Local {
                 return new ConfirmationDenied<>(e); // Forwardo l'eccezione al customer
             }
         });
-
-        managerCommunication.onCustomerLeftRoom( customer -> {
+        managerCommunication.onCustomerLeftRoom( customer -> { // Callback da eseguire quando cliente esce dalla stanza virtuale
             try{
                 tableHandler.freeTable(tableHandler.getTable(customer));
-            }catch( TableException e){
+            }catch( TableException e){ // Eccezione
                 Log.e(TAG,"Customer that left the room didn't have a table");
             }
         });
@@ -111,6 +110,7 @@ public class Local {
     }
 
     // Ritorna la lista delle chiamate cameriere
+    @NonNull
     public SortedSet<WaiterNotification> getWaiterNotificationList()  {
         if(!roomState) // La stanza non è aperta
             throw new RoomStateException(false);
@@ -119,7 +119,7 @@ public class Local {
     }
 
     // Rimuove una notifica chiamata cameriere
-    public void removeWaiterNotification(WaiterNotification waiterNotification) throws WaiterNotificationException {
+    public void removeWaiterNotification(@NonNull WaiterNotification waiterNotification) throws WaiterNotificationException {
         if(!roomState) // La stanza non è aperta
             throw new RoomStateException(false);
 
@@ -127,7 +127,8 @@ public class Local {
     }
 
     // Ritorna la lista di tavoli liberi
-    public Set<ManagerTable> getFreeTableList() { // TODO : SortedSet ?
+    @NonNull
+    public Set<ManagerTable> getFreeTableList() {
         if(!roomState) // La stanza non è aperta
             throw new RoomStateException(false);
 
@@ -135,7 +136,8 @@ public class Local {
     }
 
     // Ritorna la lista di tavoli occupati
-    public Set<ManagerTable> getAssignedTableList() { // SortedSet ?
+    @NonNull
+    public Set<ManagerTable> getAssignedTableList() {
         if(!roomState) // La stanza non è aperta
             throw new RoomStateException(false);
 
@@ -143,7 +145,7 @@ public class Local {
     }
 
     // Cambia il tavolo associato ad un cliente
-    public void changeCustomerTable(Customer customer, Table newTable) throws TableException {
+    public void changeCustomerTable(@NonNull Customer customer,@NonNull Table newTable) throws TableException {
         if(!roomState) // La stanza non è aperta
             throw new RoomStateException(false);
 
@@ -151,32 +153,37 @@ public class Local {
     }
 
     // Assegna un tavolo ad un cliente
-    public void assignTable(Customer customer, Table table) throws TableException {
+    public void assignTable(@NonNull String customerName,@NonNull Table table) throws TableException {
         if(!roomState) // La stanza non è aperta
             throw new RoomStateException(false);
 
-        tableHandler.assignTable(customer, table);
+        Customer newCustomer = LocalCustomerHandler.getInstance().getCustomer(customerName);
+        tableHandler.assignTable(newCustomer, table);
     }
 
     // Libera il tavolo selezionato
-    public void freeTable(Table table) throws TableException {
+    public void freeTable(@NonNull Table table) throws TableException {
         if(!roomState) // La stanza non è aperta
             throw new RoomStateException(false);
 
+        // Elimino tutte le notifiche effettuate da quel cliente
         waiterNotificationHandler.removeCustomerNotifications(getCustomerByTable(table));
 
         tableHandler.freeTable(table);
     }
 
     // Ritorna il tavolo associato ad un cliente
-    public Table getTable(Customer customer) throws TableException {
+    @NonNull
+    public Table getTable(@NonNull Customer customer) throws TableException {
         if(!roomState) // La stanza non è aperta
             throw new RoomStateException(false);
 
         return tableHandler.getTable(customer);
     }
 
-    public Customer getCustomerByTable(Table table) throws TableException {
+    // Ritorna il cliente con tale tavolo, se esiste
+    @NonNull
+    public Customer getCustomerByTable(@NonNull Table table) throws TableException {
         if(!roomState) // La stanza non è aperta
             throw new RoomStateException(false);
 
@@ -201,7 +208,8 @@ public class Local {
         roomState = false;
     }
 /*
-    // TODO : rimuovere ciò. Solo per testing
+
+    // Solo per testing
     public void testingTableHandler(){
         ((ManagerCommunicationSTUB)managerCommunication).beginTableHandler();
     }
@@ -213,8 +221,8 @@ public class Local {
 
  */
 
-    public void testingUI() { // TODO : rimettere costruttore Customer a private
-        Customer customer = new Customer("12334","Enrico");
+    public void testingUI() {
+        Customer customer = LocalCustomerHandler.getInstance().getCustomer("Enrico");
         try {
             Table table = tableHandler.getFreeTableList().first();
             tableHandler.assignTable(customer,table);
@@ -231,7 +239,7 @@ public class Local {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        Customer customer1 = new Customer("1","Matteo");
+        Customer customer1 = LocalCustomerHandler.getInstance().getCustomer("Matteo");
         try {
             Table table = tableHandler.getFreeTableList().first();
             tableHandler.assignTable(customer1,table);
@@ -246,7 +254,7 @@ public class Local {
     }
 
     public void testingUI_1() {
-        Customer customer = new Customer("111111","Giacomo");
+        Customer customer = LocalCustomerHandler.getInstance().getCustomer("Giacomo");
         try {
             Table table = tableHandler.getFreeTableList().last();
             tableHandler.assignTable(customer,table);
@@ -261,7 +269,7 @@ public class Local {
     }
 
     public void testingUI_2() {
-        Customer customer = new Customer("12345555555","Davide");
+        Customer customer = LocalCustomerHandler.getInstance().getCustomer("Davide");
         try {
             Table table = tableHandler.getFreeTableList().last();
             tableHandler.assignTable(customer,table);

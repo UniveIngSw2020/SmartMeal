@@ -8,5 +8,4 @@ public class WaiterNotificationException extends Exception{
         super(message);
     }
 
-    // TODO : aggiungere/overraidare
 }

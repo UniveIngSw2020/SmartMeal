@@ -5,31 +5,35 @@ import android.text.format.DateFormat;
 import androidx.annotation.NonNull;
 
 import java.util.Date;
-import java.util.Objects;;
+import java.util.Objects;
 
 // Classe che rappresenta le notifiche al cameriere
 public class WaiterNotification implements Comparable<WaiterNotification> {
 
     // Tipo per la data e ora
+    @NonNull
     private final Date dateTime;
     // Cliente che ha inviato la notifica
+    @NonNull
     private final Customer customer;
 
-    public WaiterNotification(Customer customer) {
+    public WaiterNotification(@NonNull Customer customer) {
         dateTime = new Date(System.currentTimeMillis()); //Data attuale
         this.customer = customer;
     }
 
+    @NonNull
     public Customer getCustomer() {
         return customer;
     }
 
-    // Data e orario
-    // TODO : può essere tolto
-    public Date getTime(){
+    // Data e orario.
+    // Può essere tolto
+    /* public Date getTime(){
         return new Date(dateTime.getTime());
-    }
+    } */
 
+    @NonNull
     public String getPrettyTime(){
         return DateFormat.format("kk:mm", dateTime).toString();
     }

@@ -12,5 +12,4 @@ public class RoomStateException extends RuntimeException{ // possibilità di far
         this.roomState = roomState;
     }
 
-    // TODO : perfezionare classe overraidando o aggiungendo metodi
 }

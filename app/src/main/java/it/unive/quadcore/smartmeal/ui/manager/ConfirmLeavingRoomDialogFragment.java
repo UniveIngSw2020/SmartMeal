@@ -11,15 +11,16 @@ import androidx.fragment.app.DialogFragment;
 
 import it.unive.quadcore.smartmeal.R;
 import it.unive.quadcore.smartmeal.local.Local;
-import it.unive.quadcore.smartmeal.local.RoomStateException;
 
-public class ConfirmDialogFragment extends DialogFragment {
+
+// Dialog di uscita dalla stanza virtuale
+public class ConfirmLeavingRoomDialogFragment extends DialogFragment {
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
 
         String confirmLabel = getString(R.string.confirm_label_alert);
         String closeLabel = getString(R.string.close_label_alert);
-        String message = getString(R.string.confirm_text_alert);
+        String message = getString(R.string.confirm_close_room_alert);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setMessage(message)
@@ -32,7 +33,7 @@ public class ConfirmDialogFragment extends DialogFragment {
                         }*/
                         Local.getInstance().closeRoom();
                         Intent intent = new Intent(getActivity(), ManagerHomeActivity.class);
-                        // svuota il backstack
+                        // Non si può tornare indietro
                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivity(intent);
                     }

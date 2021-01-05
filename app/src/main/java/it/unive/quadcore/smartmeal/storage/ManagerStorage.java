@@ -4,37 +4,29 @@ package it.unive.quadcore.smartmeal.storage;
 import android.content.SharedPreferences;
 
 
+import androidx.annotation.NonNull;
+
 import java.nio.charset.StandardCharsets;
-import java.security.InvalidKeyException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Set;
 import java.util.TreeSet;
-
-
-import javax.crypto.BadPaddingException;
-import javax.crypto.Cipher;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.KeyGenerator;
-import javax.crypto.NoSuchPaddingException;
-import javax.crypto.SecretKey;
 
 import it.unive.quadcore.smartmeal.model.ManagerTable;
 
 
 public final class ManagerStorage extends Storage {
 
-    // TODO : fare SharedPreference apposito per ManagerStorage
-    //private static SharedPreferences managerSharedPref = null;
+    private static final String TABLES_SHARED_PREFERENCE_KEY = "Tables";
+    private static final String MAX_NOTIFICATION_NUMBER_SHARED_PREFERENCE_KEY = "MaxNotificationNumber";
 
     /**
      * Rende non instanziabile questa classe.
      */
     private ManagerStorage() {}
 
-    // TODO : cambiare
-
     // Genera i tavoli di default
+    @NonNull
     private static Set<String> generateTablesStrings(){
 
         Set<String> tables = new TreeSet<>();
@@ -49,29 +41,19 @@ public final class ManagerStorage extends Storage {
     }
 
     // Possibilità di non tenere i tavoli in memoria secondaria ma generarli e basta
+    @NonNull
     public static Set<ManagerTable> getTables() {
-        //throw new UnsupportedOperationException("Not implemented yet");
-       /* ManagerTable t1 = new ManagerTable("A1");
-        ManagerTable t2 = new ManagerTable("A2");
-        ManagerTable t3 = new ManagerTable("B7");
-        ManagerTable t4 = new ManagerTable("C1");
-
-        Set<ManagerTable> tables = new TreeSet<>();
-        tables.add(t1);
-        tables.add(t2);
-        tables.add(t3);
-        tables.add(t4);*/
 
         if(!initialized)
             throw new StorageException("The storage hasn't been initialize yet");
 
         // Preference non esistente. Primo accesso a tale preference. Scrivo valore di deafult
-        if(!sharedPreferences.contains("Tables")){ // TODO : rimpiazzare con stringa di res
+        if(!sharedPreferences.contains(TABLES_SHARED_PREFERENCE_KEY)){
             SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putStringSet("Tables",generateTablesStrings());
+            editor.putStringSet(TABLES_SHARED_PREFERENCE_KEY,generateTablesStrings());
             editor.apply();
         }
-        Set<String> tablesString = sharedPreferences.getStringSet("Tables",new TreeSet<>());
+        Set<String> tablesString = sharedPreferences.getStringSet(TABLES_SHARED_PREFERENCE_KEY,new TreeSet<>());
 
         Set<ManagerTable> tables = new TreeSet<>();
         for(String tableId : tablesString){
@@ -94,54 +76,19 @@ public final class ManagerStorage extends Storage {
             throw new StorageException("The storage hasn't been initialize yet");
 
         // Preference non esistente. Primo accesso a tale preference. Scrivo valore di deafult
-        if(!sharedPreferences.contains("MaxNotificationNumber")){ // TODO : rimpiazzare con stringa di res
+        if(!sharedPreferences.contains(MAX_NOTIFICATION_NUMBER_SHARED_PREFERENCE_KEY)){
             SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putInt("MaxNotificationNumber",generateMaxNotificationNumber());
+            editor.putInt(MAX_NOTIFICATION_NUMBER_SHARED_PREFERENCE_KEY,generateMaxNotificationNumber());
             editor.apply();
         }
 
-        return sharedPreferences.getInt("MaxNotificationNumber",generateMaxNotificationNumber());
+        return sharedPreferences.getInt(MAX_NOTIFICATION_NUMBER_SHARED_PREFERENCE_KEY,generateMaxNotificationNumber());
     }
 
+    // Ritorna la password reale cifrata
+    @NonNull
     private static String getEncryptedPassword(){
-        // TODO : sostituire con solo password cifrata
-        String password = "Password";
-
-        /*
-        byte[] plaintext = password.getBytes();
-
-        KeyGenerator keygen = null;
-        try {
-            keygen = KeyGenerator.getInstance("AES");
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        }
-        keygen.init(256);
-        SecretKey key = keygen.generateKey();
-        Cipher cipher = null;
-        try {
-            cipher = Cipher.getInstance("AES/CBC/PKCS5PADDING");
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        } catch (NoSuchPaddingException e) {
-            e.printStackTrace();
-        }
-        try {
-            cipher.init(Cipher.ENCRYPT_MODE, key);
-        } catch (InvalidKeyException e) {
-            e.printStackTrace();
-        }
-        try {
-            byte[] ciphertext = cipher.doFinal(plaintext);
-        } catch (BadPaddingException e) {
-            e.printStackTrace();
-        } catch (IllegalBlockSizeException e) {
-            e.printStackTrace();
-        }
-        byte[] iv = cipher.getIV();
-
-        return new String(iv, StandardCharsets.UTF_8);
-        */
+        /* String password = "Password";
 
         MessageDigest md = null;
         try {
@@ -151,46 +98,18 @@ public final class ManagerStorage extends Storage {
         }
         md.update(password.getBytes());
         byte[] digest = md.digest();
-        return new String(digest, StandardCharsets.UTF_8);
+        String res = new String(digest, StandardCharsets.UTF_8);;
+        System.out.println(res);
+        return res;*/
+
+        // Stringa cifrata di "Password". E' la password cifrata.
+        return "��>��|9��O,oa.���[\u0010&��N\u00199�#�8�\"\u001A";
     }
 
+    // Cifra la password ricevuta
+    @NonNull
     private static String encryptPassword(String password){
 
-        /*byte[] plaintext = password.getBytes();
-
-        KeyGenerator keygen = null;
-        try {
-            keygen = KeyGenerator.getInstance("AES");
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        }
-        keygen.init(256);
-        SecretKey key = keygen.generateKey();
-        Cipher cipher = null;
-        try {
-            cipher = Cipher.getInstance("AES/CBC/PKCS5PADDING");
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        } catch (NoSuchPaddingException e) {
-            e.printStackTrace();
-        }
-        try {
-            cipher.init(Cipher.ENCRYPT_MODE, key);
-        } catch (InvalidKeyException e) {
-            e.printStackTrace();
-        }
-        try {
-            byte[] ciphertext = cipher.doFinal(plaintext);
-        } catch (BadPaddingException e) {
-            e.printStackTrace();
-        } catch (IllegalBlockSizeException e) {
-            e.printStackTrace();
-        }
-        byte[] iv = cipher.getIV();
-
-        return new String(iv, StandardCharsets.UTF_8);
-        */
-
         MessageDigest md = null;
         try {
             md = MessageDigest.getInstance("SHA-256");
@@ -202,8 +121,10 @@ public final class ManagerStorage extends Storage {
         return new String(digest, StandardCharsets.UTF_8);
     }
 
+    // Verifica se la password inserita è corretta
     public static boolean checkPassword(String password){
 
+        // Confronto password reale cifrata con password inserita cifrata
         String realEncryptedPassword = getEncryptedPassword();
 
         String encryptedPassword = encryptPassword(password);

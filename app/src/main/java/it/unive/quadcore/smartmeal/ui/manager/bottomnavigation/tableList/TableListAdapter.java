@@ -1,8 +1,6 @@
 package it.unive.quadcore.smartmeal.ui.manager.bottomnavigation.tableList;
 
 import android.app.Activity;
-import android.content.Context;
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,11 +8,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.snackbar.BaseTransientBottomBar;
@@ -26,13 +20,11 @@ import java.util.Set;
 
 import it.unive.quadcore.smartmeal.R;
 import it.unive.quadcore.smartmeal.local.Local;
-import it.unive.quadcore.smartmeal.local.RoomStateException;
 import it.unive.quadcore.smartmeal.local.TableException;
 import it.unive.quadcore.smartmeal.model.Customer;
 import it.unive.quadcore.smartmeal.model.ManagerTable;
-import it.unive.quadcore.smartmeal.ui.manager.ManagerRoomBottomNavigationActivity;
-import it.unive.quadcore.smartmeal.ui.manager.addTable.AddedTableDialogFragment;
 
+// Lista tavoli occupati, visibile dalla schermata di gestione tavoli
 public class TableListAdapter extends RecyclerView.Adapter<TableListAdapter.TableViewHolder>{
     public static final class TableViewHolder extends RecyclerView.ViewHolder {
         private TextView tableTextView;
@@ -73,11 +65,11 @@ public class TableListAdapter extends RecyclerView.Adapter<TableListAdapter.Tabl
         String prefix = activity.getString(R.string.table_prefix);
         holder.tableTextView.setText(String.format("%s %s", prefix, table.getId()));
 
-        try {
+        try { // Mostro la riga di questo tavolo
             Customer customer = Local.getInstance().getCustomerByTable(table);
             holder.customerTextView.setText(customer.getName());
 
-            holder.modifyButton.setOnClickListener(view->{
+            holder.modifyButton.setOnClickListener(view->{ // Voglio modificare un tavolo
                 /*try {
                     new ModifyTableDialogFragment(customer,Local.getInstance().getFreeTableList(), this)
                             .show(((FragmentActivity)view.getContext()).getSupportFragmentManager(),"modifyTable");
@@ -89,7 +81,7 @@ public class TableListAdapter extends RecyclerView.Adapter<TableListAdapter.Tabl
 
                 Set<ManagerTable> freeTables = Local.getInstance().getFreeTableList();
 
-                if(freeTables.size()==0) {
+                if(freeTables.size()==0) { // Lista tavoli liberi è vuota : non si può modificare il tavolo
                     Snackbar.make(
                             activity.findViewById(android.R.id.content),
                             R.string.error_modify_table_snackbar,
@@ -97,7 +89,7 @@ public class TableListAdapter extends RecyclerView.Adapter<TableListAdapter.Tabl
                     ).show();
 
                 }
-                else {
+                else { // Vado al dialog di modifica del tavolo
                     new ModifyTableDialogFragment(customer, freeTables, this)
                             .show(((FragmentActivity) view.getContext()).getSupportFragmentManager(), "modifyTable");
                 }
@@ -113,7 +105,7 @@ public class TableListAdapter extends RecyclerView.Adapter<TableListAdapter.Tabl
         }
 
 
-        holder.deleteButton.setOnClickListener(view->{
+        holder.deleteButton.setOnClickListener(view->{ // Voglio eliminare il tavolo
             try {
                 Local.getInstance().freeTable(table);
 
@@ -136,25 +128,8 @@ public class TableListAdapter extends RecyclerView.Adapter<TableListAdapter.Tabl
         return tableList.size();
     }
 
-
-    public void changeTable(ManagerTable oldTable, ManagerTable newTable){
-        tableList.remove(oldTable);
-
-        tableList.add(newTable);
-
-        notifyDataSetChanged();
-    }
-
+    // Ricarica la lista tavoli
     public void reload(){
-        /*try {
-            tableList.clear();
-            tableList.addAll(Local.getInstance().getAssignedTableList());
-            notifyDataSetChanged();
-        } catch (RoomStateException e) {
-            e.printStackTrace();
-        } catch (TableException e) {
-            e.printStackTrace();
-        }*/
         tableList.clear();
         tableList.addAll(Local.getInstance().getAssignedTableList());
         notifyDataSetChanged();

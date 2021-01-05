@@ -13,11 +13,7 @@ import com.google.android.material.snackbar.Snackbar;
 
 import it.unive.quadcore.smartmeal.R;
 import it.unive.quadcore.smartmeal.storage.ApplicationMode;
-import it.unive.quadcore.smartmeal.storage.CustomerStorage;
 import it.unive.quadcore.smartmeal.storage.ManagerStorage;
-import it.unive.quadcore.smartmeal.storage.Storage;
-import it.unive.quadcore.smartmeal.ui.customer.CustomerBottomNavigationActivity;
-import it.unive.quadcore.smartmeal.ui.customer.InsertPersonalDataActivity;
 
 public class InsertPasswordActivity extends AppCompatActivity {
     private static final String TAG = "InsertPasswordAct";

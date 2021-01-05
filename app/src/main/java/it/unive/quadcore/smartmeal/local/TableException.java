@@ -6,5 +6,4 @@ public class TableException extends Exception {
         super(message);
     }
 
-    // TODO : aggiungere/overraidare
 }
