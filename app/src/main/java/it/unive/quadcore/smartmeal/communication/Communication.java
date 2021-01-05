@@ -3,6 +3,9 @@ package it.unive.quadcore.smartmeal.communication;
 import android.app.Activity;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import com.google.android.gms.nearby.Nearby;
 import com.google.android.gms.nearby.connection.Payload;
 import com.google.android.gms.nearby.connection.Strategy;
@@ -12,11 +15,15 @@ import java.io.IOException;
 import java.io.ObjectOutputStream;
 
 abstract class Communication {
+    @NonNull
     private static final String TAG = "Communication";
 
+    @NonNull
     protected static final Strategy STRATEGY = Strategy.P2P_STAR;
+    @NonNull
     protected static final String SERVICE_ID = "it.unive.quadcore.smartmeal";
 
+    @Nullable
     protected Activity activity;                  // TODO assegnare valore
 
 

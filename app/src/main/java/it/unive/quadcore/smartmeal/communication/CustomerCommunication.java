@@ -8,6 +8,7 @@ import androidx.annotation.Nullable;
 import androidx.core.util.Consumer;
 
 import com.google.android.gms.nearby.Nearby;
+import com.google.android.gms.nearby.connection.ConnectionInfo;
 import com.google.android.gms.nearby.connection.ConnectionLifecycleCallback;
 import com.google.android.gms.nearby.connection.DiscoveredEndpointInfo;
 import com.google.android.gms.nearby.connection.DiscoveryOptions;
@@ -29,6 +30,13 @@ import it.unive.quadcore.smartmeal.model.Table;
 import it.unive.quadcore.smartmeal.storage.CustomerStorage;
 
 public class CustomerCommunication extends Communication {
+
+    private enum ConnectionState{
+        DISCONNECTED,
+        CONNECTING,
+        CONNECTED
+    }
+
     @NonNull
     private static final String TAG = "CustomerCommunication";
 
@@ -38,10 +46,25 @@ public class CustomerCommunication extends Communication {
     @Nullable
     private Consumer<Response<TreeSet<Table>, ? extends TableException>> freeTableListCallback;
 
-    private boolean connected;
-    private boolean isDiscovering;
+    @NonNull
+    private ConnectionState connectionState;
+    // default: DISCONNECTED
+    // set to CONNECTED: handleCustomerNameConfirmation()
+    // set to DISCONNECTED: disconnect()
+    // set to CONNECTING: onConnectionInitiated() in ConnectionListener settato connectionLifecycleCallback()
+    // method wrapper isConnected()
 
-    private boolean stillOnThePage;
+    private boolean isDiscovering;
+    // default: false
+    // set to true: onSuccessListener di Nearby settato in joinRoom()
+    // set to false: stopDiscovery()
+
+    private boolean insideTheRoom;
+    // default: false
+    // set to true: joinRoom()
+    // set to false: leaveRoom()
+    // dipendenze: activity == null   <==>   insideTheRoom == false
+
     @Nullable
     private Consumer<Confirmation<? extends WaiterNotificationException>> onNotifyWaiterConfirmationCallback;
 
@@ -66,8 +89,9 @@ public class CustomerCommunication extends Communication {
     }
 
     private CustomerCommunication() {
-        this.connected = false;
+        this.connectionState = ConnectionState.DISCONNECTED;
         this.isDiscovering = false;
+        this.insideTheRoom = false;
     }
 
     // eventualmente prendere callback con costruttore
@@ -75,11 +99,11 @@ public class CustomerCommunication extends Communication {
 
     public synchronized void joinRoom(@NonNull Activity activity, @NonNull Runnable onConnectionSuccessCallback,
                                       @NonNull Runnable onConnectionFailureCallback) {
-        if (isConnected()) {
-            Log.w(TAG, "joinRoom called, but already connected");
+        if (insideTheRoom) {
+            Log.w(TAG, "joinRoom called, but already inside the room");
             return;
         }
-        stillOnThePage = true;
+        insideTheRoom = true;
         Objects.requireNonNull(onConnectionSuccessCallback);
         Objects.requireNonNull(onConnectionFailureCallback);
         Objects.requireNonNull(onCloseRoomCallback);
@@ -91,7 +115,7 @@ public class CustomerCommunication extends Communication {
 
         nearbyTimer(() -> {
             synchronized (CustomerCommunication.this) {
-                if (!isConnected() && stillOnThePage) {
+                if (!isConnected() && insideTheRoom) {
                     leaveRoom();
                     onConnectionFailureCallback.run();
                     Log.i(TAG, "joinRoom failed for timeout");
@@ -108,7 +132,9 @@ public class CustomerCommunication extends Communication {
                 )
                 .addOnSuccessListener((Void unused) -> {
                     Log.i(TAG, "Successfully started discovery");
-                    isDiscovering = true;
+                    synchronized (CustomerCommunication.this) {
+                        isDiscovering = true;
+                    }
                 })
                 .addOnFailureListener((Exception e) -> Log.e(TAG, "Discovery failed"));
     }
@@ -167,13 +193,22 @@ public class CustomerCommunication extends Communication {
         };
 
         return new ConnectionListener(activity, payloadCallback) {
+
+            @Override
+            public void onConnectionInitiated(@NonNull String endpointId, @NonNull ConnectionInfo connectionInfo) {
+                synchronized (CustomerCommunication.this) {
+                    super.onConnectionInitiated(endpointId, connectionInfo);
+                    managerEndpointId = endpointId;
+                    connectionState = ConnectionState.CONNECTING;
+                }
+            }
+
             @Override
             protected void onConnectionSuccess(@NonNull String endpointId) {
-                Nearby.getConnectionsClient(activity).stopDiscovery();
-                isDiscovering = false;
-
-                managerEndpointId = endpointId;
-                sendName();
+                synchronized (CustomerCommunication.this) {
+                    stopDiscovery();
+                    sendName();
+                }
             }
 
             @Override
@@ -213,13 +248,13 @@ public class CustomerCommunication extends Communication {
     protected synchronized void handleCustomerNameConfirmation(@NonNull Serializable content) {
         Objects.requireNonNull(content);
 
-        if(stillOnThePage) {
+        if(insideTheRoom) {
 
             @SuppressWarnings("unchecked")
             Confirmation<CustomerNotRecognizedException> confirmation = (Confirmation<CustomerNotRecognizedException>) content;
             try {
                 confirmation.obtain();
-                connected = true;
+                connectionState = ConnectionState.CONNECTED;
                 onConnectionSuccessCallback.run();
 
                 // TODO eventuale stopDiscovery()
@@ -232,9 +267,6 @@ public class CustomerCommunication extends Communication {
                 // TODO eventualmente limitare i tentativi di connessione
             }
         }
-
-        else
-            disconnect();
     }
 
     private void handleFreeTableListResponse(Serializable content) {
@@ -324,31 +356,34 @@ public class CustomerCommunication extends Communication {
     }
 
     public synchronized void cancelJoinRoom() {
-        if(stillOnThePage) {
-            leaveRoom();
-            stillOnThePage = false;
-        }
-        else
-            Log.w(TAG, "trying to cancel joinRoom while not joining the Room");
+        leaveRoom(); //TODO: replace with leaveRoom()
     }
 
     /**
      * Disconnette il cliente dalla stanza del gestore.
      */
     public synchronized void leaveRoom() {
-        if (connected) {
-            disconnect();
+        if(!insideTheRoom) {
+            Log.w(TAG, "trying to leave the Room while not in the Room");
         }
-        if (isDiscovering) {
-            Nearby.getConnectionsClient(activity).stopDiscovery();
-            isDiscovering = false;
-        }
+        insideTheRoom = false;
+        stopDiscovery();
+        disconnect();
+        activity = null;
     }
 
     private synchronized void disconnect() {
-        Nearby.getConnectionsClient(activity).disconnectFromEndpoint(managerEndpointId);
-        connected = false;
-        activity = null;
+        if(connectionState != ConnectionState.DISCONNECTED) {
+            Nearby.getConnectionsClient(activity).disconnectFromEndpoint(managerEndpointId);
+            connectionState = ConnectionState.DISCONNECTED;
+        }
+    }
+
+    private synchronized void stopDiscovery() {
+        if(isDiscovering) {
+            Nearby.getConnectionsClient(activity).stopDiscovery();
+            isDiscovering = false;
+        }
     }
 
 
@@ -358,6 +393,6 @@ public class CustomerCommunication extends Communication {
      * @return true se il cliente è connesso alla stanza del gestore, false altrimenti
      */
     public synchronized boolean isConnected() {
-        return connected;
+        return connectionState == ConnectionState.CONNECTED;
     }
 }
