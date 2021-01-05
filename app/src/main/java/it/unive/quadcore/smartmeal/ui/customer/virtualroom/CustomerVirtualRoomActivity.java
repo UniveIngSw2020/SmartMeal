@@ -60,7 +60,8 @@ public class CustomerVirtualRoomActivity extends AppCompatActivity {
                 .setPositiveButton(
                         R.string.confirmation_button_text,
                         (dialog, which) -> {
-                            Log.i(TAG, "Leave virtual room confirmed:");
+                            Log.i(TAG, "Leave virtual room confirmed");
+                            CustomerCommunication.getInstance().cancelJoinRoom();
                             finish();
                         }
                 )

@@ -88,6 +88,7 @@ public class ChooseTableFragment extends Fragment {
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                CustomerCommunication.getInstance().cancelJoinRoom();
                 getActivity().finish();
             }
         });

@@ -91,7 +91,7 @@ public class CustomerCommunication extends Communication {
 
         nearbyTimer(() -> {
             synchronized (CustomerCommunication.this) {
-                if (!isConnected()) {
+                if (!isConnected() && stillOnThePage) {
                     leaveRoom();
                     onConnectionFailureCallback.run();
                     Log.i(TAG, "joinRoom failed for timeout");
