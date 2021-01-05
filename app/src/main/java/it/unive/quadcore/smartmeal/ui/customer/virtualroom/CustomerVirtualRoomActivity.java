@@ -11,6 +11,7 @@ import android.util.Log;
 import android.widget.TextView;
 
 import it.unive.quadcore.smartmeal.R;
+import it.unive.quadcore.smartmeal.communication.CustomerCommunication;
 
 public class CustomerVirtualRoomActivity extends AppCompatActivity {
 
@@ -50,7 +51,7 @@ public class CustomerVirtualRoomActivity extends AppCompatActivity {
                         R.string.confirmation_button_text,
                         (dialog, which) -> {
                             Log.i(TAG, "Leave virtual room confirmed");
-                            CustomerCommunication.getInstance().cancelJoinRoom();
+                            CustomerCommunication.getInstance().leaveRoom();
                             finish();
                         }
                 )

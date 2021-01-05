@@ -136,8 +136,7 @@ public class CustomerVirtualRoomFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 CustomerCommunication customerCommunication = CustomerCommunication.getInstance();
-                customerCommunication.cancelJoinRoom();
-//                customerCommunication.leaveRoom();
+                customerCommunication.leaveRoom();
             }
         });
 
