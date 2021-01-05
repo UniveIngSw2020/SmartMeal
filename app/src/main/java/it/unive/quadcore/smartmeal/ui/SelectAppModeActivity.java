@@ -2,25 +2,17 @@ package it.unive.quadcore.smartmeal.ui;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
 
-import android.Manifest;
-import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
-
-import java.util.ArrayList;
-import java.util.Arrays;
 
 import it.unive.quadcore.smartmeal.R;
 import it.unive.quadcore.smartmeal.storage.ApplicationMode;
 import it.unive.quadcore.smartmeal.storage.CustomerStorage;
 import it.unive.quadcore.smartmeal.storage.Storage;
-import it.unive.quadcore.smartmeal.ui.customer.CustomerBottomNavigationActivity;
+import it.unive.quadcore.smartmeal.ui.customer.bottomnavigation.CustomerBottomNavigationActivity;
 import it.unive.quadcore.smartmeal.ui.customer.InsertPersonalDataActivity;
 import it.unive.quadcore.smartmeal.util.PermissionHandler;
 

@@ -1,8 +1,7 @@
-package it.unive.quadcore.smartmeal.ui.customer;
+package it.unive.quadcore.smartmeal.ui.customer.bottomnavigation;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -21,7 +20,6 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import it.unive.quadcore.smartmeal.R;
-import it.unive.quadcore.smartmeal.ui.SelectAppModeActivity;
 import it.unive.quadcore.smartmeal.ui.SettingsActivity;
 import it.unive.quadcore.smartmeal.ui.customer.virtualroom.CustomerVirtualRoomActivity;
 import it.unive.quadcore.smartmeal.util.PermissionHandler;
@@ -44,7 +42,7 @@ public class CustomerBottomNavigationActivity extends AppCompatActivity {
         if (bundle != null && bundle.getBoolean(NEARBY_TIMEOUT_ARG)) {
             Snackbar.make(
                     findViewById(android.R.id.content),
-                    "Timeout error",  // TODO strings.xml
+                    R.string.timeout_error,
                     BaseTransientBottomBar.LENGTH_LONG
             ).show();
         }
@@ -63,11 +61,10 @@ public class CustomerBottomNavigationActivity extends AppCompatActivity {
         startCustomerVirtualRoomFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO probabilmente ha senso creare una classe apposita per controllo permessi
                 if (!PermissionHandler.hasNearbyPermissions(CustomerBottomNavigationActivity.this)) {
                     Snackbar.make(
                             findViewById(android.R.id.content),
-                            R.string.field_required_snackbar, // TODO cambiare stringa
+                            R.string.grant_permission_snackbar_text,
                             BaseTransientBottomBar.LENGTH_LONG
                     ).show();
                     return;
