@@ -19,14 +19,11 @@ import it.unive.quadcore.smartmeal.storage.CustomerStorage;
 public class HomeFragment extends Fragment {
     private static final String TAG = "HomeFragment";
 
-    private HomeViewModel homeViewModel;
-
     private TextView localNameTextView;
     private TextView descriptionTextView;
     private ImageView localImageView;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        homeViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
         View root = inflater.inflate(R.layout.fragment_customer_home, container, false);
 
         localNameTextView = root.findViewById(R.id.local_name_text_view);

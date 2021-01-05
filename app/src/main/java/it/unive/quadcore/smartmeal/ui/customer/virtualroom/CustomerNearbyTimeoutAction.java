@@ -1,4 +1,4 @@
-package it.unive.quadcore.smartmeal.ui.customer;
+package it.unive.quadcore.smartmeal.ui.customer.virtualroom;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -12,6 +12,7 @@ import com.google.android.material.snackbar.Snackbar;
 import java.util.Objects;
 
 import it.unive.quadcore.smartmeal.R;
+import it.unive.quadcore.smartmeal.ui.customer.bottomnavigation.CustomerBottomNavigationActivity;
 
 /**
  * Classe che implementa la callback da eseguire quando una richiesta

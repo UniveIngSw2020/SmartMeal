@@ -1,6 +1,5 @@
 package it.unive.quadcore.smartmeal.ui.customer.virtualroom;
 
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.core.util.Consumer;
@@ -22,8 +21,6 @@ import it.unive.quadcore.smartmeal.R;
 import it.unive.quadcore.smartmeal.communication.CustomerCommunication;
 import it.unive.quadcore.smartmeal.communication.confirmation.Confirmation;
 import it.unive.quadcore.smartmeal.local.WaiterNotificationException;
-import it.unive.quadcore.smartmeal.ui.customer.CustomerBottomNavigationActivity;
-import it.unive.quadcore.smartmeal.ui.customer.CustomerNearbyTimeoutAction;
 import it.unive.quadcore.smartmeal.ui.customer.bottomnavigation.menu.MenuFragment;
 
 public class CustomerVirtualRoomFragment extends Fragment {

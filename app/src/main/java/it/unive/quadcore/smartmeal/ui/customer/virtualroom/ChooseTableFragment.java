@@ -3,10 +3,7 @@ package it.unive.quadcore.smartmeal.ui.customer.virtualroom;
 import android.content.Intent;
 import android.os.Bundle;
 
-import androidx.core.util.Consumer;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -15,7 +12,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ProgressBar;
 
 import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
@@ -25,12 +21,10 @@ import java.util.TreeSet;
 
 import it.unive.quadcore.smartmeal.R;
 import it.unive.quadcore.smartmeal.communication.CustomerCommunication;
-import it.unive.quadcore.smartmeal.communication.response.Response;
 import it.unive.quadcore.smartmeal.local.TableException;
 import it.unive.quadcore.smartmeal.model.ManagerTable;
 import it.unive.quadcore.smartmeal.model.Table;
-import it.unive.quadcore.smartmeal.ui.customer.CustomerBottomNavigationActivity;
-import it.unive.quadcore.smartmeal.ui.customer.CustomerNearbyTimeoutAction;
+import it.unive.quadcore.smartmeal.ui.customer.bottomnavigation.CustomerBottomNavigationActivity;
 
 public class ChooseTableFragment extends Fragment {
 

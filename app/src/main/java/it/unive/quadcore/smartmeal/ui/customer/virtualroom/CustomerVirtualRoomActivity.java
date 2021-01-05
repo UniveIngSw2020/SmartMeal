@@ -10,16 +10,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
 
-import com.google.android.material.snackbar.BaseTransientBottomBar;
-import com.google.android.material.snackbar.Snackbar;
-
 import it.unive.quadcore.smartmeal.R;
-import it.unive.quadcore.smartmeal.communication.CustomerCommunication;
-import it.unive.quadcore.smartmeal.local.AlreadyAssignedTableException;
-import it.unive.quadcore.smartmeal.local.AlreadyOccupiedTableException;
-import it.unive.quadcore.smartmeal.local.NoSuchTableException;
-import it.unive.quadcore.smartmeal.local.TableException;
-import it.unive.quadcore.smartmeal.ui.customer.CustomerNearbyTimeoutAction;
 
 public class CustomerVirtualRoomActivity extends AppCompatActivity {
 

@@ -1,8 +1,7 @@
-package it.unive.quadcore.smartmeal.ui.customer;
+package it.unive.quadcore.smartmeal.ui.customer.bottomnavigation;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -21,7 +20,6 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import it.unive.quadcore.smartmeal.R;
-import it.unive.quadcore.smartmeal.ui.SelectAppModeActivity;
 import it.unive.quadcore.smartmeal.ui.SettingsActivity;
 import it.unive.quadcore.smartmeal.ui.customer.virtualroom.CustomerVirtualRoomActivity;
 import it.unive.quadcore.smartmeal.util.PermissionHandler;

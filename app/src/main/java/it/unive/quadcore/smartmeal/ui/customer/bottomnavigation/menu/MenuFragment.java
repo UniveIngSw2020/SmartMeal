@@ -22,12 +22,9 @@ public class MenuFragment extends Fragment {
     private RecyclerView menuRecyclerView;
     private MenuAdapter menuAdapter;
 
-    private MenuViewModel dashboardViewModel;
-
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        dashboardViewModel =
-                new ViewModelProvider(this).get(MenuViewModel.class);
+
         View root = inflater.inflate(R.layout.fragment_menu, container, false);
 
         setupMenuRecyclerView(root);

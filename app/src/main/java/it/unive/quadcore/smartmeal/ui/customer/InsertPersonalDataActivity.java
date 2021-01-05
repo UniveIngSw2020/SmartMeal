@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -15,6 +14,7 @@ import com.google.android.material.snackbar.Snackbar;
 import it.unive.quadcore.smartmeal.R;
 import it.unive.quadcore.smartmeal.storage.ApplicationMode;
 import it.unive.quadcore.smartmeal.storage.CustomerStorage;
+import it.unive.quadcore.smartmeal.ui.customer.bottomnavigation.CustomerBottomNavigationActivity;
 
 public class InsertPersonalDataActivity extends AppCompatActivity {
     private static final String TAG = "InsertPersonalDataAct";
