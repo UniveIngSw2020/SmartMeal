@@ -68,9 +68,10 @@ public class Storage {
 
         // Preference non esistente (primo uso della preference). Metto valore di default
         if(!defaultSharedPreferences.contains(APPLICATION_MODE_SHARED_PREFERENCE_KEY)) {
-            SharedPreferences.Editor editor = defaultSharedPreferences.edit();
+            /*SharedPreferences.Editor editor = defaultSharedPreferences.edit();
             editor.putString(APPLICATION_MODE_SHARED_PREFERENCE_KEY,ApplicationMode.UNDEFINED.name());
-            editor.apply();
+            editor.apply();*/
+            setApplicationMode(ApplicationMode.UNDEFINED);
         }
         // Prende l'ApplicationMode dallo storage : è codificato come stringa
         String applicationModeString = defaultSharedPreferences.getString(APPLICATION_MODE_SHARED_PREFERENCE_KEY,ApplicationMode.UNDEFINED.name());
@@ -102,12 +103,20 @@ public class Storage {
         if(!initialized)
             throw new StorageException("The storage hasn't been initialize yet");
 
-        // Preference non esistente : lancio eccezione. Alternativa è settare valore di default (nome "Username")
+        // Preference non esistente
         if(!sharedPreferences.contains(NAME_SHARED_PREFERENCE_KEY)) {
-            /*SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putString("Name","Username");
-            editor.apply();*/
-            throw new StorageException("The name was not found in storage"); // Eccezione o valore di default?
+
+            if(getApplicationMode()==ApplicationMode.MANAGER){ // Se è gestore setto il nome al nome del locale
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putString(NAME_SHARED_PREFERENCE_KEY, LOCAL_NAME);
+                editor.apply();
+            }
+            else {   // Lancio eccezione
+                /*SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putString("Name","Username");
+                editor.apply();*/
+                throw new StorageException("The name was not found in storage"); // Eccezione o valore di default?
+            }
         }
 
         // Prendo il nome dallo storage
@@ -118,12 +127,13 @@ public class Storage {
         if(!initialized)
             throw new StorageException("The storage hasn't been initialize yet");
 
+        if(getApplicationMode()==ApplicationMode.MANAGER) // Non si può cambiare nome lato Manager
+            return;
+
         // Scrivo il nome nello storage. Se non esiste tale preference viene creata.
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        if(getApplicationMode()==ApplicationMode.MANAGER)
-            editor.putString(NAME_SHARED_PREFERENCE_KEY, LOCAL_NAME);
-        else
-            editor.putString(NAME_SHARED_PREFERENCE_KEY, name);
+
+        editor.putString(NAME_SHARED_PREFERENCE_KEY, name);
         editor.apply();
     }
 

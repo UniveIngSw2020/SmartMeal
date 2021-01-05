@@ -157,7 +157,7 @@ public class Local {
         if(!roomState) // La stanza non è aperta
             throw new RoomStateException(false);
 
-        Customer newCustomer = LocalCustomerHandler.getInstance().getCustomer(customerName);
+        Customer newCustomer = LocalCustomerHandler.getInstance().addCustomer(customerName);
         tableHandler.assignTable(newCustomer, table);
     }
 
@@ -222,7 +222,7 @@ public class Local {
  */
 
     public void testingUI() {
-        Customer customer = LocalCustomerHandler.getInstance().getCustomer("Enrico");
+        Customer customer = LocalCustomerHandler.getInstance().addCustomer("Enrico");
         try {
             Table table = tableHandler.getFreeTableList().first();
             tableHandler.assignTable(customer,table);
@@ -239,7 +239,7 @@ public class Local {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        Customer customer1 = LocalCustomerHandler.getInstance().getCustomer("Matteo");
+        Customer customer1 = LocalCustomerHandler.getInstance().addCustomer("Matteo");
         try {
             Table table = tableHandler.getFreeTableList().first();
             tableHandler.assignTable(customer1,table);
@@ -254,7 +254,7 @@ public class Local {
     }
 
     public void testingUI_1() {
-        Customer customer = LocalCustomerHandler.getInstance().getCustomer("Giacomo");
+        Customer customer = LocalCustomerHandler.getInstance().addCustomer("Giacomo");
         try {
             Table table = tableHandler.getFreeTableList().last();
             tableHandler.assignTable(customer,table);
@@ -269,7 +269,7 @@ public class Local {
     }
 
     public void testingUI_2() {
-        Customer customer = LocalCustomerHandler.getInstance().getCustomer("Davide");
+        Customer customer = LocalCustomerHandler.getInstance().addCustomer("Davide");
         try {
             Table table = tableHandler.getFreeTableList().last();
             tableHandler.assignTable(customer,table);

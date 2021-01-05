@@ -17,9 +17,10 @@ public final class CustomerStorage extends Storage {
 
         // Preference non esistente (prima creazione della preference). Metto valore di default
         if(!defaultSharedPreferences.contains(SENSOR_MODE_SHARED_PREFERENCE_KEY)) {
-            SharedPreferences.Editor editor = defaultSharedPreferences.edit();
+            /*SharedPreferences.Editor editor = defaultSharedPreferences.edit();
             editor.putBoolean(SENSOR_MODE_SHARED_PREFERENCE_KEY,true);
-            editor.apply();
+            editor.apply();*/
+            setSensorMode(true);
         }
 
         return defaultSharedPreferences.getBoolean(SENSOR_MODE_SHARED_PREFERENCE_KEY,true);
@@ -42,9 +43,10 @@ public final class CustomerStorage extends Storage {
 
         // Preference non esistente (prima creazione della preference). Metto valore di default
         if(!defaultSharedPreferences.contains(NOTIFICATION_MODE_SHARED_PREFERENCE_KEY)) {
-            SharedPreferences.Editor editor = defaultSharedPreferences.edit();
+            /*SharedPreferences.Editor editor = defaultSharedPreferences.edit();
             editor.putBoolean(NOTIFICATION_MODE_SHARED_PREFERENCE_KEY,true);
-            editor.apply();
+            editor.apply();*/
+            setNotificationMode(true);
         }
 
         return defaultSharedPreferences.getBoolean(NOTIFICATION_MODE_SHARED_PREFERENCE_KEY,true);

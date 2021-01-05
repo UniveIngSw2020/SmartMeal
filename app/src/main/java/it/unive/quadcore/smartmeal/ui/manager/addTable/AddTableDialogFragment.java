@@ -49,11 +49,13 @@ public class AddTableDialogFragment extends DialogFragment {
 
         String title = getActivity().getString(R.string.add_table_alert);
 
+        LayoutInflater inflater = requireActivity().getLayoutInflater();
+
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
         builder.setTitle(title)
-                .setView(R.layout.activity_add_table)
+                .setView(inflater.inflate(R.layout.activity_add_table, null))
                 .setPositiveButton(confirmLabel,new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
