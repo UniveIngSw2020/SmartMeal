@@ -35,7 +35,7 @@ public class ChooseTableFragment extends Fragment {
 
     private Button cancelButton;
 
-    // TODO remove
+    // TODO remove (solo per testing)
     private SortedSet<Table> fakeTableSortedSet;
 
     public ChooseTableFragment() {

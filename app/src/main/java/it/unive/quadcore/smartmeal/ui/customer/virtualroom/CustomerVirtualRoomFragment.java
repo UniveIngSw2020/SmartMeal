@@ -53,7 +53,6 @@ public class CustomerVirtualRoomFragment extends Fragment {
      * @param tableId Parameter 1.
      * @return A new instance of fragment CustomerVirtualRoomFragment.
      */
-    // TODO: Rename and change types and number of parameters
     public static CustomerVirtualRoomFragment newInstance(String tableId) {
         CustomerVirtualRoomFragment fragment = new CustomerVirtualRoomFragment();
         Bundle args = new Bundle();

@@ -92,6 +92,7 @@ public class TableAdapter extends RecyclerView.Adapter<TableAdapter.TableViewHol
 
                                     // TODO pensare alla cosa migliore da fare
                                     if (!customerCommunication.isConnected()) {
+                                        new CustomerNearbyTimeoutAction(activity).run();
                                         return;
                                     }
 

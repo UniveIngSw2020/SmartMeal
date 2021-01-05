@@ -61,7 +61,6 @@ public class CustomerBottomNavigationActivity extends AppCompatActivity {
         startCustomerVirtualRoomFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO probabilmente ha senso creare una classe apposita per controllo permessi
                 if (!PermissionHandler.hasNearbyPermissions(CustomerBottomNavigationActivity.this)) {
                     Snackbar.make(
                             findViewById(android.R.id.content),
