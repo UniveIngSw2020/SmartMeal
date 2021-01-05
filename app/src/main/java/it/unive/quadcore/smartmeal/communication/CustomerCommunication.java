@@ -41,6 +41,7 @@ public class CustomerCommunication extends Communication {
     private boolean connected;
     private boolean isDiscovering;
 
+    private boolean stillOnThePage;
     @Nullable
     private Consumer<Confirmation<? extends WaiterNotificationException>> onNotifyWaiterConfirmationCallback;
 
@@ -73,11 +74,12 @@ public class CustomerCommunication extends Communication {
 
 
     public synchronized void joinRoom(@NonNull Activity activity, @NonNull Runnable onConnectionSuccessCallback,
-                         @NonNull Runnable onConnectionFailureCallback) {
+                                      @NonNull Runnable onConnectionFailureCallback) {
         if (isConnected()) {
             Log.w(TAG, "joinRoom called, but already connected");
             return;
         }
+        stillOnThePage = true;
         Objects.requireNonNull(onConnectionSuccessCallback);
         Objects.requireNonNull(onConnectionFailureCallback);
         Objects.requireNonNull(onCloseRoomCallback);
@@ -211,22 +213,28 @@ public class CustomerCommunication extends Communication {
     protected synchronized void handleCustomerNameConfirmation(@NonNull Serializable content) {
         Objects.requireNonNull(content);
 
-        @SuppressWarnings("unchecked")
-        Confirmation<CustomerNotRecognizedException> confirmation = (Confirmation<CustomerNotRecognizedException>) content;
-        try {
-            confirmation.obtain();
-            connected = true;
-            onConnectionSuccessCallback.run();
+        if(stillOnThePage) {
 
-            // TODO eventuale stopDiscovery()
+            @SuppressWarnings("unchecked")
+            Confirmation<CustomerNotRecognizedException> confirmation = (Confirmation<CustomerNotRecognizedException>) content;
+            try {
+                confirmation.obtain();
+                connected = true;
+                onConnectionSuccessCallback.run();
 
-            Log.i(TAG, "Connection confirmed");
-        } catch (CustomerNotRecognizedException e) {
-            Log.e(TAG, "Connection not confirmed");
-            sendName();
+                // TODO eventuale stopDiscovery()
 
-            // TODO eventualmente limitare i tentativi di connessione
+                Log.i(TAG, "Connection confirmed");
+            } catch (CustomerNotRecognizedException e) {
+                Log.e(TAG, "Connection not confirmed");
+                sendName();
+
+                // TODO eventualmente limitare i tentativi di connessione
+            }
         }
+
+        else
+            disconnect();
     }
 
     private void handleFreeTableListResponse(Serializable content) {
@@ -315,20 +323,32 @@ public class CustomerCommunication extends Communication {
         this.onCloseRoomCallback = onCloseRoomCallback;
     }
 
+    public synchronized void cancelJoinRoom() {
+        if(stillOnThePage) {
+            leaveRoom();
+            stillOnThePage = false;
+        }
+        else
+            Log.w(TAG, "trying to cancel joinRoom while not joining the Room");
+    }
 
     /**
      * Disconnette il cliente dalla stanza del gestore.
      */
     public synchronized void leaveRoom() {
         if (connected) {
-            Nearby.getConnectionsClient(activity).disconnectFromEndpoint(managerEndpointId);
-            connected = false;
-            activity = null;
+            disconnect();
         }
         if (isDiscovering) {
             Nearby.getConnectionsClient(activity).stopDiscovery();
             isDiscovering = false;
         }
+    }
+
+    private synchronized void disconnect() {
+        Nearby.getConnectionsClient(activity).disconnectFromEndpoint(managerEndpointId);
+        connected = false;
+        activity = null;
     }
 
 
