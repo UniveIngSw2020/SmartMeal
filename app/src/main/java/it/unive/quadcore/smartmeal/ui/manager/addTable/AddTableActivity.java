@@ -57,16 +57,16 @@ public class AddTableActivity extends AppCompatActivity {
 
         Set<ManagerTable> freeTables = Local.getInstance().getFreeTableList();
 
+        // Adapter lista tavoli liberi
+        addTableAdapter = new AddTableAdapter(this, freeTables);
+        addTableRecyclerView.setAdapter(addTableAdapter);
+
         if(freeTables.size()==0){ // Non ci sono tavoli liberi
             Snackbar.make(
                     findViewById(android.R.id.content),
                     R.string.error_add_table_snackbar,
-                    BaseTransientBottomBar.LENGTH_LONG
+                    BaseTransientBottomBar.LENGTH_INDEFINITE
             ).show();
-        }
-        else { // Ci sono tavoli liberi da poter selezionare
-            addTableAdapter = new AddTableAdapter(this, Local.getInstance().getFreeTableList());
-            addTableRecyclerView.setAdapter(addTableAdapter);
         }
     }
 }

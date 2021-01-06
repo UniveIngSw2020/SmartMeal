@@ -88,16 +88,12 @@ public class AddTableAdapter extends RecyclerView.Adapter<AddTableAdapter.TableV
 
 
                 String message = activity.getString(R.string.added_table_alert);
-                /*new AddingTableDialogFragment(message)
-                        .show(((FragmentActivity)view.getContext()).getSupportFragmentManager(),"addedTable");*/
-                new InformationDialogFragment(message)
+                new InformationDialogFragment(message)      // Dialog di conferma aggiunta tavolo
                         .show(((FragmentActivity)view.getContext()).getSupportFragmentManager(),"addedTable");
 
             } catch (TableException e) { // Errore nell'aggiungere questo tavolo
                 String message = activity.getString(R.string.error_add_table_alert);
-                /*new AddingTableDialogFragment(message)
-                        .show(((FragmentActivity)view.getContext()).getSupportFragmentManager(),"addedTable");*/
-                new InformationDialogFragment(message)
+                new InformationDialogFragment(message)      // Dialog di notifica errore aggiunta tavolo
                         .show(((FragmentActivity)view.getContext()).getSupportFragmentManager(),"addedTable");
             }
 
@@ -116,5 +112,12 @@ public class AddTableAdapter extends RecyclerView.Adapter<AddTableAdapter.TableV
         tableList.clear();
         tableList.addAll(Local.getInstance().getFreeTableList());
         notifyDataSetChanged();
+        if(tableList.size()==0){ // Non ci sono tavoli liberi
+            Snackbar.make(
+                    activity.findViewById(android.R.id.content),
+                    R.string.error_add_table_snackbar,
+                    BaseTransientBottomBar.LENGTH_INDEFINITE
+            ).show();
+        }
     }
 }
