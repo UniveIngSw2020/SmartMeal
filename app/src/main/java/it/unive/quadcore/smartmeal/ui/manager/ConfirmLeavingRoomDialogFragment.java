@@ -38,7 +38,9 @@ public class ConfirmLeavingRoomDialogFragment extends DialogFragment {
                         wifi.setWifiEnabled(false);
                         // Disabilita Bluetooth all'uscita della stanza virtuale
                         BluetoothManager bt =(BluetoothManager)context.getApplicationContext().getSystemService(Context.BLUETOOTH_SERVICE);
-                        bt.getAdapter().disable();
+                        // Se il dispositivo possiede il bluetooth
+                        if(bt.getAdapter() != null)
+                            bt.getAdapter().disable();
                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivity(intent);
                     }
