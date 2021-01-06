@@ -33,6 +33,7 @@ abstract class Communication {
             ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
             objectOutputStream.writeObject(response);
             Payload filePayload = Payload.fromBytes(outputStream.toByteArray());
+            assert activity != null;
             Nearby.getConnectionsClient(activity).sendPayload(toEndpointId, filePayload);
         } catch (IOException e) {
             Log.wtf(TAG, "Unexpected output IOException: " + e);
