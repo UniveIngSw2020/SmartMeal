@@ -2,8 +2,11 @@ package it.unive.quadcore.smartmeal.ui.manager;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.bluetooth.BluetoothManager;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
@@ -23,12 +26,19 @@ public class ConfirmLeavingRoomDialogFragment extends DialogFragment {
         String message = getString(R.string.confirm_close_room_alert);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        Context context = this.getContext();
         builder.setMessage(message)
                 .setPositiveButton(confirmLabel, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         Local.getInstance().closeRoom();
                         Intent intent = new Intent(getActivity(), ManagerHomeActivity.class);
                         // Non si può tornare indietro
+                        // Disabilita WI-FI all'uscita della stanza virtuale
+                        WifiManager wifi = (WifiManager)context.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+                        wifi.setWifiEnabled(false);
+                        // Disabilita Bluetooth all'uscita della stanza virtuale
+                        BluetoothManager bt =(BluetoothManager)context.getApplicationContext().getSystemService(Context.BLUETOOTH_SERVICE);
+                        bt.getAdapter().disable();
                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivity(intent);
                     }
@@ -43,4 +53,3 @@ public class ConfirmLeavingRoomDialogFragment extends DialogFragment {
         return builder.create();
     }
 }
-

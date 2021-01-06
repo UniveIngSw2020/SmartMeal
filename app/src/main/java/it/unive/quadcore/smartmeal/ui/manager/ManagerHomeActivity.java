@@ -1,11 +1,15 @@
 package it.unive.quadcore.smartmeal.ui.manager;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -19,6 +23,7 @@ import it.unive.quadcore.smartmeal.R;
 import it.unive.quadcore.smartmeal.local.Local;
 import it.unive.quadcore.smartmeal.local.RoomStateException;
 import it.unive.quadcore.smartmeal.ui.SettingsActivity;
+import it.unive.quadcore.smartmeal.ui.customer.CustomerBottomNavigationActivity;
 
 // Activity home page gestore
 public class ManagerHomeActivity extends AppCompatActivity {
@@ -35,13 +40,6 @@ public class ManagerHomeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_manager_home);
 
         Objects.requireNonNull(getSupportActionBar()).setTitle(R.string.title_manager_home);
-
-        this.getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
-        getSupportActionBar().setDisplayShowCustomEnabled(true);
-        getSupportActionBar().setCustomView(R.layout.manager_app_bar);
-        //getSupportActionBar().setElevation(0);
-        View view = getSupportActionBar().getCustomView();
-        settings = view.findViewById(R.id.toolbar_settings);
 
         roomButton = findViewById(R.id.button_home_manager_room);
         menuButton = findViewById(R.id.button_home_manager_menu);
@@ -78,10 +76,28 @@ public class ManagerHomeActivity extends AppCompatActivity {
             startActivity(new Intent(ManagerHomeActivity.this, DescriptionManagerActivity.class));
         });
 
-        // TODO : impostazioni
-        settings.setOnClickListener(v -> {
-            startActivity(new Intent(ManagerHomeActivity.this, SettingsActivity.class));
-        });
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.menu_settings) {
+            startActivity(new Intent(
+                    ManagerHomeActivity.this,
+                    SettingsActivity.class
+            ));
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
 
  }
