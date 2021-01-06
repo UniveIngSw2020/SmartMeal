@@ -28,7 +28,6 @@ import it.unive.quadcore.smartmeal.local.AlreadyOccupiedTableException;
 import it.unive.quadcore.smartmeal.local.NoSuchTableException;
 import it.unive.quadcore.smartmeal.local.TableException;
 import it.unive.quadcore.smartmeal.model.Table;
-import it.unive.quadcore.smartmeal.ui.customer.CustomerNearbyTimeoutAction;
 
 public class TableAdapter extends RecyclerView.Adapter<TableAdapter.TableViewHolder> {
     private static final String TAG = "TableAdapter";
@@ -92,7 +91,7 @@ public class TableAdapter extends RecyclerView.Adapter<TableAdapter.TableViewHol
                                     CustomerCommunication customerCommunication = CustomerCommunication.getInstance();
 
                                     // TODO pensare alla cosa migliore da fare
-                                    if (!customerCommunication.isConnected()) {
+                                    if (customerCommunication.isNotConnected()) {
                                         new CustomerNearbyTimeoutAction(activity).run();
                                         return;
                                     }
