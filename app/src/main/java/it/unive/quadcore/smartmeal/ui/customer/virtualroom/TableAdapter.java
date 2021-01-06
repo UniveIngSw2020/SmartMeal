@@ -2,7 +2,6 @@ package it.unive.quadcore.smartmeal.ui.customer.virtualroom;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,7 +10,6 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.util.Consumer;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
@@ -25,13 +23,11 @@ import java.util.SortedSet;
 
 import it.unive.quadcore.smartmeal.R;
 import it.unive.quadcore.smartmeal.communication.CustomerCommunication;
-import it.unive.quadcore.smartmeal.communication.confirmation.Confirmation;
 import it.unive.quadcore.smartmeal.local.AlreadyAssignedTableException;
 import it.unive.quadcore.smartmeal.local.AlreadyOccupiedTableException;
 import it.unive.quadcore.smartmeal.local.NoSuchTableException;
 import it.unive.quadcore.smartmeal.local.TableException;
 import it.unive.quadcore.smartmeal.model.Table;
-import it.unive.quadcore.smartmeal.ui.customer.CustomerBottomNavigationActivity;
 import it.unive.quadcore.smartmeal.ui.customer.CustomerNearbyTimeoutAction;
 
 public class TableAdapter extends RecyclerView.Adapter<TableAdapter.TableViewHolder> {
@@ -97,7 +93,7 @@ public class TableAdapter extends RecyclerView.Adapter<TableAdapter.TableViewHol
                                     CustomerCommunication customerCommunication = CustomerCommunication.getInstance();
 
                                     // TODO pensare alla cosa migliore da fare
-                                    if (!customerCommunication.isConnected()) {
+                                    if (customerCommunication.isNotConnected()) {
                                         return;
                                     }
 

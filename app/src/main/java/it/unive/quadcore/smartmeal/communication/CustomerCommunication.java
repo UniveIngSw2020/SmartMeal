@@ -22,7 +22,6 @@ import java.util.TimerTask;
 import java.util.TreeSet;
 
 import it.unive.quadcore.smartmeal.communication.confirmation.Confirmation;
-import it.unive.quadcore.smartmeal.communication.confirmation.ConfirmationDenied;
 import it.unive.quadcore.smartmeal.communication.response.Response;
 import it.unive.quadcore.smartmeal.local.TableException;
 import it.unive.quadcore.smartmeal.local.WaiterNotificationException;
@@ -64,6 +63,7 @@ public class CustomerCommunication extends Communication {
     // set to true: joinRoom()
     // set to false: leaveRoom()
     // dipendenze: activity == null   <==>   insideTheRoom == false
+    // dipendenze: insideTheRoom == false   ==>   isDiscovering == false && connectionState == CONNECTED
 
     @Nullable
     private Consumer<Confirmation<? extends WaiterNotificationException>> onNotifyWaiterConfirmationCallback;
@@ -115,7 +115,7 @@ public class CustomerCommunication extends Communication {
 
         nearbyTimer(() -> {
             synchronized (CustomerCommunication.this) {
-                if (!isConnected() && insideTheRoom) {
+                if (isNotConnected() && insideTheRoom) {
                     leaveRoom();
                     onConnectionFailureCallback.run();
                     Log.i(TAG, "joinRoom failed for timeout");
@@ -144,6 +144,7 @@ public class CustomerCommunication extends Communication {
             @Override
             public void onEndpointFound(@NonNull String endpointId, @NonNull DiscoveredEndpointInfo info) {
                 // An endpoint was found. We request a connection to it.
+                assert activity != null; //TODO: penso abbia senso, altrimenti sarebbe stato bloccato prima ma probabilemente va sincronizzato
                 Nearby.getConnectionsClient(activity)
                         .requestConnection(CustomerStorage.getName(), endpointId, connectionLifecycleCallback())
                         .addOnSuccessListener(
@@ -192,7 +193,9 @@ public class CustomerCommunication extends Communication {
             }
         };
 
-        return new ConnectionListener(activity, payloadCallback) {
+        //TODO: probabilmente bisogna controllare che si sia stillOnTheRoom per garantire che activity sia nonNull prima di procedere
+        //(ha senso questo controllo per tutto il metodo
+        return new ConnectionListener(Objects.requireNonNull(activity), payloadCallback) {
 
             @Override
             public void onConnectionInitiated(@NonNull String endpointId, @NonNull ConnectionInfo connectionInfo) {
@@ -227,6 +230,7 @@ public class CustomerCommunication extends Communication {
 
     private void handleNotifyWaiterResponse(@NonNull Serializable content) {
         Objects.requireNonNull(content);
+        assert onNotifyWaiterConfirmationCallback != null;
 
         @SuppressWarnings("unchecked")
         Confirmation<WaiterNotificationException> confirmation = (Confirmation<WaiterNotificationException>) content;
@@ -235,6 +239,7 @@ public class CustomerCommunication extends Communication {
 
     private void handleSelectTableResponse(@NonNull Serializable content) {
         Objects.requireNonNull(content);
+        assert onSelectTableConfirmationCallback != null;
 
         @SuppressWarnings("unchecked")
         Confirmation<? extends TableException> confirmation = (Confirmation<? extends TableException>) content;
@@ -249,6 +254,7 @@ public class CustomerCommunication extends Communication {
         Objects.requireNonNull(content);
 
         if(insideTheRoom) {
+            assert onConnectionSuccessCallback != null;
 
             @SuppressWarnings("unchecked")
             Confirmation<CustomerNotRecognizedException> confirmation = (Confirmation<CustomerNotRecognizedException>) content;
@@ -269,7 +275,10 @@ public class CustomerCommunication extends Communication {
         }
     }
 
-    private void handleFreeTableListResponse(Serializable content) {
+    private void handleFreeTableListResponse(@NonNull Serializable content) {
+        //TODO: probabilmente dovremo sincronizzare più cose perché il requireNonNull è soggetto alla concorrenza
+        Objects.requireNonNull(content);
+        assert freeTableListCallback != null;
         // if (content instanceof SortedSet) TODO pensarci
 
         @SuppressWarnings("unchecked")
@@ -337,7 +346,7 @@ public class CustomerCommunication extends Communication {
     }
 
     private void ensureConnection() {
-        if (!isConnected()) {
+        if (isNotConnected()) {
             throw new IllegalStateException("Not connected with local");
         }
     }
@@ -374,6 +383,8 @@ public class CustomerCommunication extends Communication {
 
     private synchronized void disconnect() {
         if(connectionState != ConnectionState.DISCONNECTED) {
+            assert managerEndpointId != null;
+            assert activity != null;
             Nearby.getConnectionsClient(activity).disconnectFromEndpoint(managerEndpointId);
             connectionState = ConnectionState.DISCONNECTED;
         }
@@ -381,6 +392,7 @@ public class CustomerCommunication extends Communication {
 
     private synchronized void stopDiscovery() {
         if(isDiscovering) {
+            assert activity != null;
             Nearby.getConnectionsClient(activity).stopDiscovery();
             isDiscovering = false;
         }
@@ -392,7 +404,7 @@ public class CustomerCommunication extends Communication {
      *
      * @return true se il cliente è connesso alla stanza del gestore, false altrimenti
      */
-    public synchronized boolean isConnected() {
-        return connectionState == ConnectionState.CONNECTED;
+    public synchronized boolean isNotConnected() {
+        return connectionState != ConnectionState.CONNECTED;
     }
 }
