@@ -5,7 +5,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -25,8 +24,9 @@ import it.unive.quadcore.smartmeal.local.TableException;
 import it.unive.quadcore.smartmeal.model.Customer;
 import it.unive.quadcore.smartmeal.model.ManagerTable;
 
-// Lista tavoli occupati, visibile dalla schermata di gestione tavoli
-public class TableListAdapter extends RecyclerView.Adapter<TableListAdapter.TableViewHolder>{
+// Adapter lista tavoli occupati, visibile dalla schermata di gestione tavoli
+public class AssignedTableListAdapter extends RecyclerView.Adapter<AssignedTableListAdapter.TableViewHolder>{
+    // View Holder di una riga della lista
     public static final class TableViewHolder extends RecyclerView.ViewHolder {
         private TextView tableTextView;
         private TextView customerTextView;
@@ -45,22 +45,27 @@ public class TableListAdapter extends RecyclerView.Adapter<TableListAdapter.Tabl
     }
 
     private final Activity activity;
+    // Lista tavoli occupati
     private final List<ManagerTable> tableList;
 
-    public TableListAdapter(Activity activity, Set<ManagerTable> tableSet) {
+    public AssignedTableListAdapter(Activity activity, Set<ManagerTable> tableSet) {
         this.activity = activity;
         this.tableList = new ArrayList<>(tableSet);
     }
 
     @NonNull
     @Override
-    public TableListAdapter.TableViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(activity).inflate(R.layout.table_row, parent, false);
-        return new TableListAdapter.TableViewHolder(view);
+    public AssignedTableListAdapter.TableViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        // Mostro una riga della lista
+        View view = LayoutInflater.from(activity).inflate(R.layout.table_assigned_row, parent, false);
+        return new AssignedTableListAdapter.TableViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull TableListAdapter.TableViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull AssignedTableListAdapter.TableViewHolder holder, int position) {
+
+        // Mostro una riga della lista
+
         ManagerTable table =  tableList.get(position);
 
         String prefix = activity.getString(R.string.table_prefix);
@@ -71,14 +76,6 @@ public class TableListAdapter extends RecyclerView.Adapter<TableListAdapter.Tabl
             holder.customerTextView.setText(customer.getName());
 
             holder.modifyButton.setOnClickListener(view->{ // Voglio modificare un tavolo
-                /*try {
-                    new ModifyTableDialogFragment(customer,Local.getInstance().getFreeTableList(), this)
-                            .show(((FragmentActivity)view.getContext()).getSupportFragmentManager(),"modifyTable");
-                } catch (RoomStateException e) {
-                    e.printStackTrace();
-                } catch (TableException e) {
-                    e.printStackTrace();
-                }*/
 
                 Set<ManagerTable> freeTables = Local.getInstance().getFreeTableList();
 

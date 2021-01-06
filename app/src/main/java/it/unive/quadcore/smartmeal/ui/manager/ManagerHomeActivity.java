@@ -25,6 +25,7 @@ import it.unive.quadcore.smartmeal.local.RoomStateException;
 import it.unive.quadcore.smartmeal.ui.SettingsActivity;
 import it.unive.quadcore.smartmeal.ui.customer.CustomerBottomNavigationActivity;
 
+// Activity home page gestore
 public class ManagerHomeActivity extends AppCompatActivity {
 
     private Button roomButton;
@@ -44,7 +45,7 @@ public class ManagerHomeActivity extends AppCompatActivity {
         menuButton = findViewById(R.id.button_home_manager_menu);
         descriptionButton = findViewById(R.id.button_home_manager_description);
 
-        roomButton.setOnClickListener(v -> {
+        roomButton.setOnClickListener(v -> { // Si vuole accedere alla stanza virtuale
 
             // Avvio la stanza virtuale
             try {
@@ -54,7 +55,7 @@ public class ManagerHomeActivity extends AppCompatActivity {
 
                 // avvia l'activity stanza virtuale gestore
                 startActivity(new Intent(ManagerHomeActivity.this, ManagerRoomBottomNavigationActivity.class));
-            } catch (RoomStateException e) {
+            } catch (RoomStateException e) { // Errore
                 Snackbar.make(
                         findViewById(android.R.id.content),
                         R.string.error_manager_room_snackbar,

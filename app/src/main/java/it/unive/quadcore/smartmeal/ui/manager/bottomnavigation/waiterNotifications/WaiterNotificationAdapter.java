@@ -23,8 +23,9 @@ import it.unive.quadcore.smartmeal.local.TableException;
 import it.unive.quadcore.smartmeal.local.WaiterNotificationException;
 import it.unive.quadcore.smartmeal.model.WaiterNotification;
 
-// Lista di notifiche, visibile dalla schermata delle notifiche cameriere
+// Adapter lista di notifiche, visibile dalla schermata delle notifiche cameriere
 public class WaiterNotificationAdapter extends RecyclerView.Adapter<WaiterNotificationAdapter.NotificationViewHolder>{
+    // View Holder di una riga della lista
     public static final class NotificationViewHolder extends RecyclerView.ViewHolder {
         private TextView tableTextView;
         private TextView dateHourTextView;
@@ -41,6 +42,7 @@ public class WaiterNotificationAdapter extends RecyclerView.Adapter<WaiterNotifi
     }
 
     private final Activity activity;
+    // Lista notifiche
     private final List<WaiterNotification> waiterNotifications;
 
     public WaiterNotificationAdapter(Activity activity, SortedSet<WaiterNotification> waiterNotifications) {
@@ -51,12 +53,15 @@ public class WaiterNotificationAdapter extends RecyclerView.Adapter<WaiterNotifi
     @NonNull
     @Override
     public WaiterNotificationAdapter.NotificationViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        // Mostro una riga della lista
         View view = LayoutInflater.from(activity).inflate(R.layout.waiter_notification_row, parent, false);
         return new WaiterNotificationAdapter.NotificationViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull WaiterNotificationAdapter.NotificationViewHolder holder, int position) {
+        // Creazione della riga della lista nella posizione "position"
+
         WaiterNotification notification =  waiterNotifications.get(position);
 
         try { // Mostro la notifica cameriere

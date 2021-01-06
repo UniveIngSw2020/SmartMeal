@@ -26,7 +26,7 @@ public class MainActivity_old extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        // setContentView(R.layout.activity_main); FILE LAYOUT ELIMINATO (ERA ACTIVITY VUOTA)
 
         /*
         Local local = Local.getInstance();

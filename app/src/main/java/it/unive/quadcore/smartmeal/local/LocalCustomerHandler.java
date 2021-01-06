@@ -6,7 +6,7 @@ import androidx.annotation.Nullable;
 import it.unive.quadcore.smartmeal.model.Customer;
 import it.unive.quadcore.smartmeal.model.CustomerHandler;
 
-public class LocalCustomerHandler extends CustomerHandler<LocalCustomerHandler.LocalCustomer> {
+class LocalCustomerHandler extends CustomerHandler<LocalCustomerHandler.LocalCustomer> {
     public static class LocalCustomer extends Customer {
         private LocalCustomer(@NonNull String name) {
             super(LocalCustomerHandler.getNewId(), name);
