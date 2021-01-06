@@ -22,8 +22,9 @@ import it.unive.quadcore.smartmeal.R;
 import it.unive.quadcore.smartmeal.local.Local;
 import it.unive.quadcore.smartmeal.local.TableException;
 import it.unive.quadcore.smartmeal.model.ManagerTable;
+import it.unive.quadcore.smartmeal.ui.manager.InformationDialogFragment;
 
-// Lista di tavoli liberi, visibile dalla schermata di aggiunta tavolo
+// Adapter lista di tavoli liberi, visibile dalla schermata di aggiunta tavolo
 public class AddTableAdapter extends RecyclerView.Adapter<AddTableAdapter.TableViewHolder>{
     public static final class TableViewHolder extends RecyclerView.ViewHolder {
         private TextView tableTextView;
@@ -39,6 +40,7 @@ public class AddTableAdapter extends RecyclerView.Adapter<AddTableAdapter.TableV
     }
 
     private final Activity activity;
+    // Lista tavoli liberi
     private final List<ManagerTable> tableList;
 
     public AddTableAdapter(Activity activity, Set<ManagerTable> freeTables) {
@@ -49,12 +51,16 @@ public class AddTableAdapter extends RecyclerView.Adapter<AddTableAdapter.TableV
     @NonNull
     @Override
     public AddTableAdapter.TableViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        // Mostro una riga
         View view = LayoutInflater.from(activity).inflate(R.layout.select_free_table_row, parent, false);
         return new AddTableAdapter.TableViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull AddTableAdapter.TableViewHolder holder, int position) {
+
+        // Mostro una riga, nella posizione "position"
+
         ManagerTable table =  tableList.get(position);
 
         String prefix = activity.getString(R.string.table_prefix);
@@ -76,20 +82,39 @@ public class AddTableAdapter extends RecyclerView.Adapter<AddTableAdapter.TableV
             }
 
             try { // Provo ad aggiungere il tavolo
+                // throw new TableException(""); // Testing
+
                 Local.getInstance().assignTable(customerName,table);
+
+
                 String message = activity.getString(R.string.added_table_alert);
-                new AddedingTableDialogFragment(message)
+                /*new AddingTableDialogFragment(message)
+                        .show(((FragmentActivity)view.getContext()).getSupportFragmentManager(),"addedTable");*/
+                new InformationDialogFragment(message)
                         .show(((FragmentActivity)view.getContext()).getSupportFragmentManager(),"addedTable");
+
             } catch (TableException e) { // Errore nell'aggiungere questo tavolo
                 String message = activity.getString(R.string.error_add_table_alert);
-                new AddedingTableDialogFragment(message)
+                /*new AddingTableDialogFragment(message)
+                        .show(((FragmentActivity)view.getContext()).getSupportFragmentManager(),"addedTable");*/
+                new InformationDialogFragment(message)
                         .show(((FragmentActivity)view.getContext()).getSupportFragmentManager(),"addedTable");
             }
+
+            customerTextView.setText(""); // Azzero text view
+            reload(); // Ricarico lista tavoli dell'adapter
         });
     }
 
     @Override
     public int getItemCount() {
         return tableList.size();
+    }
+
+    // Ricarica la lista tavoli
+    private void reload(){
+        tableList.clear();
+        tableList.addAll(Local.getInstance().getFreeTableList());
+        notifyDataSetChanged();
     }
 }

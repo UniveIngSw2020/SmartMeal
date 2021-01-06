@@ -13,6 +13,7 @@ import it.unive.quadcore.smartmeal.model.LocalDescription;
 import it.unive.quadcore.smartmeal.storage.CustomerStorage;
 import it.unive.quadcore.smartmeal.storage.ManagerStorage;
 
+// Activity che mostra descrizione locale lato gestore
 public class DescriptionManagerActivity extends AppCompatActivity {
 
     private TextView localNameTextView;

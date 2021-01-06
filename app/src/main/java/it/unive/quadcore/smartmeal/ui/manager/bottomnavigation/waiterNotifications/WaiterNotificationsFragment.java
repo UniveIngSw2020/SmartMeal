@@ -15,9 +15,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import it.unive.quadcore.smartmeal.R;
 import it.unive.quadcore.smartmeal.local.Local;
 
-
+// Fragment della stanza virtuale gestore che visualizza lista notifiche
 public class WaiterNotificationsFragment extends Fragment {
+
+    // recycler view lista notifiche
     private RecyclerView waiterNotificationRecyclerView;
+    // Adapter per recycler view lista notifiche
     private WaiterNotificationAdapter waiterNotificationAdapter;
 
     private WaiterNotificationsViewModel waiterNotificationsViewModel;
@@ -31,10 +34,11 @@ public class WaiterNotificationsFragment extends Fragment {
                 new ViewModelProvider(this).get(WaiterNotificationsViewModel.class);
         View root = inflater.inflate(R.layout.fragment_waiter_notifications, container, false);
 
+        // Setta recycler view
         setupWaiterNotificationRecyclerView(root);
 
         reloadButton = root.findViewById(R.id.reload_button_waiter_notifications);
-        reloadButton.setOnClickListener(v -> { // Ricarica lista notifiche
+        reloadButton.setOnClickListener(v -> { // Aggiorna lista notifiche
             Local.getInstance().testingUI_1(); // TODO : togliere, solo per testing
 
             //setupWaiterNotificationRecyclerView(root);
@@ -44,6 +48,7 @@ public class WaiterNotificationsFragment extends Fragment {
         return root;
     }
 
+    // Setto recycler view
     private void setupWaiterNotificationRecyclerView(View root) {
         // TODO aggiungere sezioni a RecyclerView
 

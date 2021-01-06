@@ -13,6 +13,7 @@ import it.unive.quadcore.smartmeal.storage.CustomerStorage;
 import it.unive.quadcore.smartmeal.storage.ManagerStorage;
 import it.unive.quadcore.smartmeal.ui.customer.bottomnavigation.menu.MenuAdapter;
 
+// Activity che mostra menu lato gestore
 public class MenuManagerActivity extends AppCompatActivity {
 
     private RecyclerView menuRecyclerView;
@@ -27,6 +28,7 @@ public class MenuManagerActivity extends AppCompatActivity {
 
         Objects.requireNonNull(getSupportActionBar()).setTitle(R.string.title_manager_menu);
 
+        // Recycler view per la lista di prodotti
         menuRecyclerView = findViewById(R.id.menu_recycler_view_manager);
         RecyclerView.LayoutManager recyclerViewLayoutManager = new LinearLayoutManager(
                 this,
@@ -34,6 +36,8 @@ public class MenuManagerActivity extends AppCompatActivity {
                 false
         );
         menuRecyclerView.setLayoutManager(recyclerViewLayoutManager);
+
+        // Adapter per il recycler view
         menuAdapter = new MenuAdapter(this, ManagerStorage.getLocalDescription().getMenu());
         menuRecyclerView.setAdapter(menuAdapter);
     }

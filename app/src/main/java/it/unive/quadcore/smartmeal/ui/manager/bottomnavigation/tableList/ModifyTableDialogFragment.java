@@ -18,17 +18,21 @@ import it.unive.quadcore.smartmeal.local.Local;
 import it.unive.quadcore.smartmeal.local.TableException;
 import it.unive.quadcore.smartmeal.model.Customer;
 import it.unive.quadcore.smartmeal.model.ManagerTable;
-import it.unive.quadcore.smartmeal.ui.manager.ErrorDialogFragment;
+import it.unive.quadcore.smartmeal.ui.manager.InformationDialogFragment;
 
 
 // Dialog per la modifica di tavoli
 public class ModifyTableDialogFragment extends DialogFragment {
+
+    // Cliente di cui modificare il tavolo
     private final Customer customer;
-    private final TableListAdapter adapter;
+    // Adapter lista tavoli occupati (del fragment della stanza virtuale gestore di visualizzazione tavoli occupati)
+    private final AssignedTableListAdapter adapter;
+    // Lista tavoli liberi
     private final List<ManagerTable> freeTables;
 
 
-   public ModifyTableDialogFragment(Customer customer, Set<ManagerTable> freeTables, TableListAdapter adapter){
+   public ModifyTableDialogFragment(Customer customer, Set<ManagerTable> freeTables, AssignedTableListAdapter adapter){
        super();
        this.customer = customer;
        this.adapter = adapter;
@@ -43,7 +47,7 @@ public class ModifyTableDialogFragment extends DialogFragment {
 
         String title = getActivity().getString(R.string.modify_table_alert);
 
-        // Lista di tavoli liberi. Lista di stringhe
+        // Lista di tavoli liberi da mostrare nel dialog. Lista di stringhe
         List<String> freeTablesStrings = new ArrayList<>();
         String prefix = getActivity().getString(R.string.table_prefix);
         for(ManagerTable table : freeTables){
@@ -53,7 +57,7 @@ public class ModifyTableDialogFragment extends DialogFragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle(String.format("%s %s", title , customer.getName()))
                 // Setto la lista di tavoli liberi
-                .setAdapter(new ArrayAdapter<>(getContext(),R.layout.table_dialog_row , freeTablesStrings),new DialogInterface.OnClickListener() {
+                .setAdapter(new ArrayAdapter<>(getContext(),R.layout.modify_table_dialog_row, freeTablesStrings),new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) { // Callback di selezione di un tavolo
                         try {
 
@@ -65,7 +69,7 @@ public class ModifyTableDialogFragment extends DialogFragment {
                             adapter.reload();
 
                         } catch (TableException e) { // Errore nel modificare il tavolo
-                            new ErrorDialogFragment(getActivity().getString(R.string.modify_table_error_alert))
+                            new InformationDialogFragment(getActivity().getString(R.string.modify_table_error_alert))
                                     .show(((FragmentActivity)getContext()).getSupportFragmentManager(),"errorSelectedTable");
                         }
                     }

@@ -12,11 +12,12 @@ import androidx.fragment.app.DialogFragment;
 import it.unive.quadcore.smartmeal.R;
 
 // Dialog di messaggio dopo l'aggiunta tavolo : o conferma di successo o notifica di insuccesso
-public class AddedingTableDialogFragment extends DialogFragment {
+public class AddingTableDialogFragment extends DialogFragment { // TODO : da eliminare
 
+    // Messaggio del dialog
     private String message ;
 
-    public AddedingTableDialogFragment(String message){
+    public AddingTableDialogFragment(String message){
         this.message = message;
     }
     @Override

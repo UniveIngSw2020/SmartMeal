@@ -10,12 +10,13 @@ import androidx.fragment.app.DialogFragment;
 import it.unive.quadcore.smartmeal.R;
 
 
-// Dialog generici di errore
-public class ErrorDialogFragment extends DialogFragment {
+// Dialog generici di informazione (o informazione di errore o infromazione di successo)
+public class InformationDialogFragment extends DialogFragment {
 
+    // Messaggio del dialog
     private final String message;
 
-    public ErrorDialogFragment(String message){
+    public InformationDialogFragment(String message){
         super();
 
         this.message=message;

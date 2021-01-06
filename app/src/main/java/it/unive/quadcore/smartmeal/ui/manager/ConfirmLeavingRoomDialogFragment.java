@@ -26,11 +26,6 @@ public class ConfirmLeavingRoomDialogFragment extends DialogFragment {
         builder.setMessage(message)
                 .setPositiveButton(confirmLabel, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        /*try {
-                            Local.getInstance().closeRoom();
-                        } catch (RoomStateException e) {
-                            e.printStackTrace();
-                        }*/
                         Local.getInstance().closeRoom();
                         Intent intent = new Intent(getActivity(), ManagerHomeActivity.class);
                         // Non si può tornare indietro

@@ -12,6 +12,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import it.unive.quadcore.smartmeal.R;
 
+// Bottom navigation activity della stanza virtuale gestore
 public class ManagerRoomBottomNavigationActivity extends AppCompatActivity {
 
     @Override

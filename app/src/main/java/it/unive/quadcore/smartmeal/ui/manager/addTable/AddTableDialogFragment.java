@@ -10,7 +10,6 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.DialogFragment;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -21,11 +20,10 @@ import java.util.Set;
 import it.unive.quadcore.smartmeal.R;
 import it.unive.quadcore.smartmeal.local.Local;
 import it.unive.quadcore.smartmeal.model.ManagerTable;
-import it.unive.quadcore.smartmeal.ui.manager.bottomnavigation.tableList.TableListAdapter;
-import it.unive.quadcore.smartmeal.ui.manager.bottomnavigation.tableList.TableListViewModel;
+import it.unive.quadcore.smartmeal.ui.manager.bottomnavigation.tableList.AssignedTableListAdapter;
 
 public class AddTableDialogFragment extends DialogFragment {
-    private final TableListAdapter tableListAdapter;
+    private final AssignedTableListAdapter assignedTableListAdapter;
     private final List<ManagerTable> freeTables;
 
     private AddTableAdapter addTableAdapter;
@@ -34,9 +32,9 @@ public class AddTableDialogFragment extends DialogFragment {
     //private AddTableViewModel addTableViewModel;
 
 
-    public AddTableDialogFragment(Set<ManagerTable> freeTables, TableListAdapter tableListAdapter){
+    public AddTableDialogFragment(Set<ManagerTable> freeTables, AssignedTableListAdapter assignedTableListAdapter){
         super();
-        this.tableListAdapter = tableListAdapter;
+        this.assignedTableListAdapter = assignedTableListAdapter;
         this.freeTables = new ArrayList<>(freeTables);
 
     }
