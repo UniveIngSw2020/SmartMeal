@@ -1,4 +1,4 @@
-package it.unive.quadcore.smartmeal.ui.manager.addTable;
+package it.unive.quadcore.smartmeal.ui.manager.bottomnavigation.tableList.addTable;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -16,8 +16,6 @@ import java.util.Set;
 import it.unive.quadcore.smartmeal.R;
 import it.unive.quadcore.smartmeal.local.Local;
 import it.unive.quadcore.smartmeal.model.ManagerTable;
-import it.unive.quadcore.smartmeal.ui.manager.ConfirmLeavingRoomDialogFragment;
-import it.unive.quadcore.smartmeal.ui.manager.bottomnavigation.tableList.TableListFragment;
 
 // Activity per l'aggiunta tavolo
 public class AddTableActivity extends AppCompatActivity {

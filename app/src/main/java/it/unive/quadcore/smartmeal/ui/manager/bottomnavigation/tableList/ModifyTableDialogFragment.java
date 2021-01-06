@@ -43,8 +43,6 @@ public class ModifyTableDialogFragment extends DialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
-        String confirmLabel = getActivity().getString(R.string.confirm_label_alert);
-
         String title = getActivity().getString(R.string.modify_table_alert);
 
         // Lista di tavoli liberi da mostrare nel dialog. Lista di stringhe

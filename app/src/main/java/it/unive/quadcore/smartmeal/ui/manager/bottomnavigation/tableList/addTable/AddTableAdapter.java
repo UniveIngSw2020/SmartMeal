@@ -1,4 +1,4 @@
-package it.unive.quadcore.smartmeal.ui.manager.addTable;
+package it.unive.quadcore.smartmeal.ui.manager.bottomnavigation.tableList.addTable;
 
 import android.app.Activity;
 import android.view.LayoutInflater;

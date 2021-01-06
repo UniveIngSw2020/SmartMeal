@@ -55,16 +55,13 @@
     <string name="title_manager_description">Descrizione</string>
     <string name="title_manager_menu">Menu</string>
 
-    <string name="title_activity_manager_room_bottom_navigation">MainActivity</string>
 
     <string name="title_manager_room_waiterNotifications_fragment">Notifiche cameriere</string>
     <string name="title_manager_room_tableList_fragment">Gestione tavoli</string>
 
     <string name="table_prefix">Tavolo:</string>
 
-    <string name="empty_waiter_notification_list_alert">Attualmente non ci sono notifiche</string>
     <string name="close_label_alert">Chiudi</string>
-    <string name="empty_table_list_alert">Attualmente non ci sono tavoli occupati</string>
 
     <string name="error_manager_room_snackbar">Impossibile creare una stanza virtuale ora</string>
 
@@ -81,7 +78,6 @@
     <string name="assign_table">Assegna</string>
     <string name="added_table_alert">Tavolo aggiunto correttamente!</string>
 
-    <string name="assign_table_description">Assegna un tavolo libero</string>
     <string name="modify_table_alert">Seleziona il nuovo tavolo per il cliente</string>
     <string name="confirm_label_alert">Conferma</string>
 
@@ -93,7 +89,6 @@
     <string name="error_delete_table_snackbar">Impossibile rimuovere questo tavolo ora : riprovare dopo aver aggiornato</string>
     <string name="error_modify_table_snackbar">Impossibile modificare questo tavolo ora : tutti i tavoli sono attualmente occupati</string>
     <string name="error_add_table_snackbar">Impossibile aggiungere un tavolo ora : tutti i tavoli sono attualmente occupati</string>
-    <string name="add_table_alert">Add a new assigned table</string>
 
     <string name="error_add_table_alert">Errore : è successo qualcosa durante l\' operazione</string>
     <string name="title_add_table">Assegna un tavolo libero</string>

@@ -19,7 +19,7 @@ import com.google.android.material.snackbar.Snackbar;
 
 import it.unive.quadcore.smartmeal.R;
 import it.unive.quadcore.smartmeal.local.Local;
-import it.unive.quadcore.smartmeal.ui.manager.addTable.AddTableActivity;
+import it.unive.quadcore.smartmeal.ui.manager.bottomnavigation.tableList.addTable.AddTableActivity;
 
 // Fragment della stanza virtuale gestore che mostra lista tavoli occupati
 public class TableListFragment extends Fragment {
