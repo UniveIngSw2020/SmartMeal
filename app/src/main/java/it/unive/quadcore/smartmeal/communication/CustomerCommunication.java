@@ -364,9 +364,6 @@ public class CustomerCommunication extends Communication {
         this.onCloseRoomCallback = onCloseRoomCallback;
     }
 
-    public synchronized void cancelJoinRoom() {
-        leaveRoom(); //TODO: replace with leaveRoom()
-    }
 
     /**
      * Disconnette il cliente dalla stanza del gestore.

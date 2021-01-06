@@ -1,6 +1,5 @@
 package it.unive.quadcore.smartmeal.ui.customer.virtualroom;
 
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.core.util.Consumer;
@@ -22,8 +21,6 @@ import it.unive.quadcore.smartmeal.R;
 import it.unive.quadcore.smartmeal.communication.CustomerCommunication;
 import it.unive.quadcore.smartmeal.communication.confirmation.Confirmation;
 import it.unive.quadcore.smartmeal.local.WaiterNotificationException;
-import it.unive.quadcore.smartmeal.ui.customer.CustomerBottomNavigationActivity;
-import it.unive.quadcore.smartmeal.ui.customer.CustomerNearbyTimeoutAction;
 import it.unive.quadcore.smartmeal.ui.customer.bottomnavigation.menu.MenuFragment;
 
 public class CustomerVirtualRoomFragment extends Fragment {
@@ -56,7 +53,6 @@ public class CustomerVirtualRoomFragment extends Fragment {
      * @param tableId Parameter 1.
      * @return A new instance of fragment CustomerVirtualRoomFragment.
      */
-    // TODO: Rename and change types and number of parameters
     public static CustomerVirtualRoomFragment newInstance(String tableId) {
         CustomerVirtualRoomFragment fragment = new CustomerVirtualRoomFragment();
         Bundle args = new Bundle();
@@ -140,8 +136,7 @@ public class CustomerVirtualRoomFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 CustomerCommunication customerCommunication = CustomerCommunication.getInstance();
-                customerCommunication.cancelJoinRoom();
-//                customerCommunication.leaveRoom();
+                customerCommunication.leaveRoom();
             }
         });
 

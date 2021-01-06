@@ -24,8 +24,7 @@ import it.unive.quadcore.smartmeal.communication.CustomerCommunication;
 import it.unive.quadcore.smartmeal.local.TableException;
 import it.unive.quadcore.smartmeal.model.ManagerTable;
 import it.unive.quadcore.smartmeal.model.Table;
-import it.unive.quadcore.smartmeal.ui.customer.CustomerBottomNavigationActivity;
-import it.unive.quadcore.smartmeal.ui.customer.CustomerNearbyTimeoutAction;
+import it.unive.quadcore.smartmeal.ui.customer.bottomnavigation.CustomerBottomNavigationActivity;
 
 public class ChooseTableFragment extends Fragment {
 
@@ -36,7 +35,7 @@ public class ChooseTableFragment extends Fragment {
 
     private Button cancelButton;
 
-    // TODO remove
+    // TODO remove (solo per testing)
     private SortedSet<Table> fakeTableSortedSet;
 
     public ChooseTableFragment() {
@@ -83,7 +82,7 @@ public class ChooseTableFragment extends Fragment {
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                CustomerCommunication.getInstance().cancelJoinRoom();
+                CustomerCommunication.getInstance().leaveRoom();
                 getActivity().finish();
             }
         });
@@ -105,7 +104,7 @@ public class ChooseTableFragment extends Fragment {
 
                 Snackbar.make(
                         root.findViewById(android.R.id.content),
-                        "Manager closed the virtual room",  // TODO strings.xml
+                        R.string.manager_closed_virtual_room,
                         BaseTransientBottomBar.LENGTH_LONG
                 ).show();
             }));

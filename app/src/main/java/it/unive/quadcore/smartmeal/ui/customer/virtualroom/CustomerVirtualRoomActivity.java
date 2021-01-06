@@ -10,16 +10,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
 
-import com.google.android.material.snackbar.BaseTransientBottomBar;
-import com.google.android.material.snackbar.Snackbar;
-
 import it.unive.quadcore.smartmeal.R;
 import it.unive.quadcore.smartmeal.communication.CustomerCommunication;
-import it.unive.quadcore.smartmeal.local.AlreadyAssignedTableException;
-import it.unive.quadcore.smartmeal.local.AlreadyOccupiedTableException;
-import it.unive.quadcore.smartmeal.local.NoSuchTableException;
-import it.unive.quadcore.smartmeal.local.TableException;
-import it.unive.quadcore.smartmeal.ui.customer.CustomerNearbyTimeoutAction;
 
 public class CustomerVirtualRoomActivity extends AppCompatActivity {
 
@@ -47,9 +39,7 @@ public class CustomerVirtualRoomActivity extends AppCompatActivity {
 
         // mostra un Dialog di conferma
         TextView confirmTextView = new TextView(this);
-        // TODO strings.xml and append tableId
-//        String tableConfirmationText = activity.getString(R.string.table_confirmation_text);
-        String leaveConfirmationText = "Sicuro di voler uscire?";
+        String leaveConfirmationText = getString(R.string.leave_virtual_room_dialog_text);
 
         confirmTextView.setText(leaveConfirmationText);
         confirmTextView.setPadding(48, 0, 48, 0);
@@ -61,7 +51,7 @@ public class CustomerVirtualRoomActivity extends AppCompatActivity {
                         R.string.confirmation_button_text,
                         (dialog, which) -> {
                             Log.i(TAG, "Leave virtual room confirmed");
-                            CustomerCommunication.getInstance().cancelJoinRoom();
+                            CustomerCommunication.getInstance().leaveRoom();
                             finish();
                         }
                 )
