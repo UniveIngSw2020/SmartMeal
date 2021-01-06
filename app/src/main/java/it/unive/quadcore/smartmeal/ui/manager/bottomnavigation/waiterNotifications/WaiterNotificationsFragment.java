@@ -21,7 +21,7 @@ public class WaiterNotificationsFragment extends Fragment {
     // recycler view lista notifiche
     private RecyclerView waiterNotificationRecyclerView;
     // Adapter per recycler view lista notifiche
-    private WaiterNotificationAdapter waiterNotificationAdapter;
+    private WaiterNotificationsAdapter waiterNotificationsAdapter;
 
     private WaiterNotificationsViewModel waiterNotificationsViewModel;
 
@@ -42,7 +42,7 @@ public class WaiterNotificationsFragment extends Fragment {
             Local.getInstance().testingUI_1(); // TODO : togliere, solo per testing
 
             //setupWaiterNotificationRecyclerView(root);
-            waiterNotificationAdapter.reload();
+            waiterNotificationsAdapter.reload();
         });
 
         return root;
@@ -61,8 +61,8 @@ public class WaiterNotificationsFragment extends Fragment {
         waiterNotificationRecyclerView.setLayoutManager(recyclerViewLayoutManager);
 
 
-        waiterNotificationAdapter = new WaiterNotificationAdapter(getActivity(), Local.getInstance().getWaiterNotificationList());
-        waiterNotificationRecyclerView.setAdapter(waiterNotificationAdapter);
+        waiterNotificationsAdapter = new WaiterNotificationsAdapter(getActivity(), Local.getInstance().getWaiterNotificationList());
+        waiterNotificationRecyclerView.setAdapter(waiterNotificationsAdapter);
     }
 
 }

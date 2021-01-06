@@ -24,7 +24,7 @@ import it.unive.quadcore.smartmeal.local.WaiterNotificationException;
 import it.unive.quadcore.smartmeal.model.WaiterNotification;
 
 // Adapter lista di notifiche, visibile dalla schermata delle notifiche cameriere
-public class WaiterNotificationAdapter extends RecyclerView.Adapter<WaiterNotificationAdapter.NotificationViewHolder>{
+public class WaiterNotificationsAdapter extends RecyclerView.Adapter<WaiterNotificationsAdapter.NotificationViewHolder>{
     // View Holder di una riga della lista
     public static final class NotificationViewHolder extends RecyclerView.ViewHolder {
         private TextView tableTextView;
@@ -45,21 +45,21 @@ public class WaiterNotificationAdapter extends RecyclerView.Adapter<WaiterNotifi
     // Lista notifiche
     private final List<WaiterNotification> waiterNotifications;
 
-    public WaiterNotificationAdapter(Activity activity, SortedSet<WaiterNotification> waiterNotifications) {
+    public WaiterNotificationsAdapter(Activity activity, SortedSet<WaiterNotification> waiterNotifications) {
         this.activity = activity;
         this.waiterNotifications = new ArrayList<>(waiterNotifications);
     }
 
     @NonNull
     @Override
-    public WaiterNotificationAdapter.NotificationViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public WaiterNotificationsAdapter.NotificationViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         // Mostro una riga della lista
         View view = LayoutInflater.from(activity).inflate(R.layout.waiter_notification_row, parent, false);
-        return new WaiterNotificationAdapter.NotificationViewHolder(view);
+        return new WaiterNotificationsAdapter.NotificationViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull WaiterNotificationAdapter.NotificationViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull WaiterNotificationsAdapter.NotificationViewHolder holder, int position) {
         // Creazione della riga della lista nella posizione "position"
 
         WaiterNotification notification =  waiterNotifications.get(position);
