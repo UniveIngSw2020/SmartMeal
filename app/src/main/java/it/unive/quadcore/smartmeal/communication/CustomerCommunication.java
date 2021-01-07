@@ -8,6 +8,7 @@ import androidx.annotation.Nullable;
 import androidx.core.util.Consumer;
 
 import com.google.android.gms.nearby.Nearby;
+import com.google.android.gms.nearby.connection.ConnectionInfo;
 import com.google.android.gms.nearby.connection.ConnectionLifecycleCallback;
 import com.google.android.gms.nearby.connection.DiscoveredEndpointInfo;
 import com.google.android.gms.nearby.connection.DiscoveryOptions;
@@ -16,6 +17,8 @@ import com.google.android.gms.nearby.connection.PayloadCallback;
 
 import java.io.Serializable;
 import java.util.Objects;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.TreeSet;
 
 import it.unive.quadcore.smartmeal.communication.confirmation.Confirmation;
@@ -26,6 +29,13 @@ import it.unive.quadcore.smartmeal.model.Table;
 import it.unive.quadcore.smartmeal.storage.CustomerStorage;
 
 public class CustomerCommunication extends Communication {
+
+    private enum ConnectionState{
+        DISCONNECTED,   // <==>   managerEndPointID == null
+        CONNECTING,
+        CONNECTED
+    }
+
     @NonNull
     private static final String TAG = "CustomerCommunication";
 
@@ -35,8 +45,25 @@ public class CustomerCommunication extends Communication {
     @Nullable
     private Consumer<Response<TreeSet<Table>, ? extends TableException>> freeTableListCallback;
 
-    private boolean connected;
+    @NonNull
+    private ConnectionState connectionState;
+    // default: DISCONNECTED
+    // set to CONNECTED: handleCustomerNameConfirmation()
+    // set to DISCONNECTED: disconnect()
+    // set to CONNECTING: onConnectionInitiated() in ConnectionListener settato connectionLifecycleCallback()
+    // method wrapper isConnected()
+
     private boolean isDiscovering;
+    // default: false
+    // set to true: onSuccessListener di Nearby settato in joinRoom()
+    // set to false: stopDiscovery()
+
+    // private boolean insideTheRoom;
+    // default: false
+    // set to true: joinRoom()
+    // set to false: leaveRoom()
+    // dipendenze: activity == null   <==>   insideTheRoom == false
+    // dipendenze: insideTheRoom == false   ==>   isDiscovering == false && connectionState == CONNECTED
 
     @Nullable
     private Consumer<Confirmation<? extends WaiterNotificationException>> onNotifyWaiterConfirmationCallback;
@@ -62,21 +89,38 @@ public class CustomerCommunication extends Communication {
     }
 
     private CustomerCommunication() {
-        this.connected = false;
+        this.connectionState = ConnectionState.DISCONNECTED;
         this.isDiscovering = false;
+        this.activity = null;
     }
 
     // eventualmente prendere callback con costruttore
 
 
-    public void joinRoom(@NonNull Activity activity, @NonNull Runnable onConnectionSuccessCallback) {
+    public synchronized void joinRoom(@NonNull Activity activity, @NonNull Runnable onConnectionSuccessCallback,
+                                      @NonNull Runnable onConnectionFailureCallback) {
+        if (isInsideTheRoom()) {
+            Log.w(TAG, "joinRoom called, but already inside the room");
+            return;
+        }
         Objects.requireNonNull(onConnectionSuccessCallback);
+        Objects.requireNonNull(onConnectionFailureCallback);
         Objects.requireNonNull(onCloseRoomCallback);
 
         this.activity = activity;
         this.onConnectionSuccessCallback = onConnectionSuccessCallback;
 
         final EndpointDiscoveryCallback endpointDiscoveryCallback = endpointDiscoveryCallback();
+
+        nearbyTimer(() -> {
+            synchronized (CustomerCommunication.this) {
+                if (isNotConnected() && isInsideTheRoom()) {
+                    leaveRoom();
+                    onConnectionFailureCallback.run();
+                    Log.i(TAG, "joinRoom failed for timeout");
+                }
+            }
+        });
 
         DiscoveryOptions discoveryOptions = new DiscoveryOptions.Builder().setStrategy(STRATEGY).build();
         Nearby.getConnectionsClient(activity)
@@ -87,7 +131,9 @@ public class CustomerCommunication extends Communication {
                 )
                 .addOnSuccessListener((Void unused) -> {
                     Log.i(TAG, "Successfully started discovery");
-                    isDiscovering = true;
+                    synchronized (CustomerCommunication.this) {
+                        isDiscovering = true;
+                    }
                 })
                 .addOnFailureListener((Exception e) -> Log.e(TAG, "Discovery failed"));
     }
@@ -97,117 +143,159 @@ public class CustomerCommunication extends Communication {
             @Override
             public void onEndpointFound(@NonNull String endpointId, @NonNull DiscoveredEndpointInfo info) {
                 // An endpoint was found. We request a connection to it.
-                Nearby.getConnectionsClient(activity)
-                        .requestConnection(CustomerStorage.getName(), endpointId, connectionLifecycleCallback())
-                        .addOnSuccessListener(
-                                (Void unused) -> {
-                                    // We successfully requested a connection. Now both sides
-                                    // must accept before the connection is established.
-                                })
-                        .addOnFailureListener(
-                                (Exception e) -> {
-                                    // Nearby Connections failed to request the connection.
-                                });
+                synchronized (CustomerCommunication.this) {
+                    if (isInsideTheRoom()) {
+                        assert activity != null; // già controllato dall'if
+                        Nearby.getConnectionsClient(activity)
+                                .requestConnection(CustomerStorage.getName(), endpointId, connectionLifecycleCallback())
+                                .addOnSuccessListener(
+                                        (Void unused) -> {
+                                            // We successfully requested a connection. Now both sides
+                                            // must accept before the connection is established.
+                                        })
+                                .addOnFailureListener(
+                                        (Exception e) -> {
+                                            // Nearby Connections failed to request the connection.
+                                        });
+                    }
+                }
             }
 
             @Override
             public void onEndpointLost(@NonNull String endpointId) {
                 // A previously discovered endpoint has gone away.
+                synchronized (CustomerCommunication.this) {
+                    if(isInsideTheRoom()) {
+                        Objects.requireNonNull(onCloseRoomCallback);
+                        leaveRoom();
+                        onCloseRoomCallback.run();
+                    }
+                }
             }
         };
     }
 
-    private ConnectionLifecycleCallback connectionLifecycleCallback() {
+    private synchronized ConnectionLifecycleCallback connectionLifecycleCallback() {
+
+        if(!isInsideTheRoom()) {
+            throw new IllegalStateException("connectionLifeCycleCallback should be called only when inside the room");
+        }
 
         final PayloadCallback payloadCallback = new MessageListener() {
             @Override
             protected void onMessageReceived(@NonNull String endpointId, @NonNull Message message) {
-                Objects.requireNonNull(endpointId);
-                Objects.requireNonNull(message);
+                synchronized (CustomerCommunication.this) {
 
-                // TODO continuare
-                switch (message.getRequestType()) {
-                    case CUSTOMER_NAME:
-                        handleCustomerNameConfirmation(message.getContent());
-                        break;
-                    case FREE_TABLE_LIST:
-                        handleFreeTableListResponse(message.getContent());
-                        break;
-                    case SELECT_TABLE:
-                        handleSelectTableResponse(message.getContent());
-                        break;
-                    case NOTIFY_WAITER:
-                        handleNotifyWaiterResponse(message.getContent());
-                        break;
-                    default:
-                        throw new UnsupportedOperationException("Not implemented yet");
+                    if (isInsideTheRoom()) {
+                        Objects.requireNonNull(endpointId);
+                        Objects.requireNonNull(message);
+
+                        // TODO continuare
+                        switch (message.getRequestType()) {
+                            case CUSTOMER_NAME:
+                                handleCustomerNameConfirmation(message.getContent());
+                                break;
+                            case FREE_TABLE_LIST:
+                                handleFreeTableListResponse(message.getContent());
+                                break;
+                            case SELECT_TABLE:
+                                handleSelectTableResponse(message.getContent());
+                                break;
+                            case NOTIFY_WAITER:
+                                handleNotifyWaiterResponse(message.getContent());
+                                break;
+                            default:
+                                throw new UnsupportedOperationException("Not implemented yet");
+                        }
+                    }
                 }
             }
         };
 
         return new ConnectionListener(activity, payloadCallback) {
+
+            @Override
+            public void onConnectionInitiated(@NonNull String endpointId, @NonNull ConnectionInfo connectionInfo) {
+                synchronized (CustomerCommunication.this) {
+                    super.onConnectionInitiated(endpointId, connectionInfo);
+                    managerEndpointId = endpointId;
+                    connectionState = ConnectionState.CONNECTING;
+                }
+            }
+
             @Override
             protected void onConnectionSuccess(@NonNull String endpointId) {
-                Nearby.getConnectionsClient(activity).stopDiscovery();
-                isDiscovering = false;
-
-                managerEndpointId = endpointId;
-                sendName();
+                synchronized (CustomerCommunication.this) {
+                    stopDiscovery();
+                    sendName();
+                }
             }
 
             @Override
             public void onDisconnected(@NonNull String endpointId) {
-                super.onDisconnected(endpointId);
-                Objects.requireNonNull(onCloseRoomCallback);
+                synchronized (CustomerCommunication.this) {
+                    super.onDisconnected(endpointId);
+                    Objects.requireNonNull(onCloseRoomCallback);
 
-                leaveRoom();
-                connected = false;
-                onCloseRoomCallback.run();
+                    leaveRoom();
+                    onCloseRoomCallback.run();
+                }
             }
         };
     }
 
 
-    private void handleNotifyWaiterResponse(@NonNull Serializable content) {
+    private synchronized void handleNotifyWaiterResponse(@NonNull Serializable content) {
         Objects.requireNonNull(content);
+        assert onNotifyWaiterConfirmationCallback != null;
 
         @SuppressWarnings("unchecked")
         Confirmation<WaiterNotificationException> confirmation = (Confirmation<WaiterNotificationException>) content;
         onNotifyWaiterConfirmationCallback.accept(confirmation);
     }
 
-    private void handleSelectTableResponse(@NonNull Serializable content) {
+    private synchronized void handleSelectTableResponse(@NonNull Serializable content) {
         Objects.requireNonNull(content);
+        assert onSelectTableConfirmationCallback != null;
 
         @SuppressWarnings("unchecked")
         Confirmation<? extends TableException> confirmation = (Confirmation<? extends TableException>) content;
         onSelectTableConfirmationCallback.accept(confirmation);
     }
 
-    private void sendName() {
+    private synchronized void sendName() {
         sendMessage(managerEndpointId, new Message(RequestType.CUSTOMER_NAME, CustomerStorage.getName()));
     }
 
-    protected void handleCustomerNameConfirmation(@NonNull Serializable content) {
+    protected synchronized void handleCustomerNameConfirmation(@NonNull Serializable content) {
         Objects.requireNonNull(content);
 
-        @SuppressWarnings("unchecked")
-        Confirmation<CustomerNotRecognizedException> confirmation = (Confirmation<CustomerNotRecognizedException>) content;
-        try {
-            confirmation.obtain();
-            connected = true;
-            onConnectionSuccessCallback.run();
+        if(isInsideTheRoom()) {
+            assert onConnectionSuccessCallback != null;
 
-            Log.i(TAG, "Connection confirmed");
-        } catch (CustomerNotRecognizedException e) {
-            Log.e(TAG, "Connection not confirmed");
-            sendName();
+            @SuppressWarnings("unchecked")
+            Confirmation<CustomerNotRecognizedException> confirmation = (Confirmation<CustomerNotRecognizedException>) content;
+            try {
+                confirmation.obtain();
+                connectionState = ConnectionState.CONNECTED;
+                onConnectionSuccessCallback.run();
 
-            // TODO eventualmente limitare i tentativi di connessione
+                // TODO eventuale stopDiscovery()
+
+                Log.i(TAG, "Connection confirmed");
+            } catch (CustomerNotRecognizedException e) {
+                Log.e(TAG, "Connection not confirmed");
+                sendName();
+
+                // TODO eventualmente limitare i tentativi di connessione
+            }
         }
     }
 
-    private void handleFreeTableListResponse(Serializable content) {
+    private synchronized void handleFreeTableListResponse(@NonNull Serializable content) {
+        //TODO: probabilmente dovremo sincronizzare più cose perché il requireNonNull è soggetto alla concorrenza
+        Objects.requireNonNull(content);
+        assert freeTableListCallback != null;
         // if (content instanceof SortedSet) TODO pensarci
 
         @SuppressWarnings("unchecked")
@@ -216,36 +304,66 @@ public class CustomerCommunication extends Communication {
     }
 
 
-    public void notifyWaiter(@NonNull Consumer<Confirmation<? extends WaiterNotificationException>> onNotifyWaiterConfirmationCallback) {
+    public synchronized void notifyWaiter(@NonNull Consumer<Confirmation<? extends WaiterNotificationException>> onNotifyWaiterConfirmationCallback, @NonNull Runnable onTimeoutCallback) {
         Objects.requireNonNull(onNotifyWaiterConfirmationCallback);
+        Objects.requireNonNull(onTimeoutCallback);
         ensureConnection();
 
-        this.onNotifyWaiterConfirmationCallback = onNotifyWaiterConfirmationCallback;
+        Timer timer = nearbyTimer(onTimeoutCallback);
+        this.onNotifyWaiterConfirmationCallback = response -> {
+            timer.cancel();
+            onNotifyWaiterConfirmationCallback.accept(response);
+        };
 
         sendMessage(managerEndpointId, new Message(RequestType.NOTIFY_WAITER, null));
     }
 
-    public void selectTable(@NonNull Table table, @NonNull Consumer<Confirmation<? extends TableException>> onSelectTableConfirmationCallback) {
+    public synchronized void selectTable(@NonNull Table table, @NonNull Consumer<Confirmation<? extends TableException>> onSelectTableConfirmationCallback, @NonNull Runnable onTimeoutCallback) {
         Objects.requireNonNull(table);
         Objects.requireNonNull(onSelectTableConfirmationCallback);
+        Objects.requireNonNull(onTimeoutCallback);
         ensureConnection();
 
-        this.onSelectTableConfirmationCallback = onSelectTableConfirmationCallback;
+        Timer timer = nearbyTimer(onTimeoutCallback);
+        this.onSelectTableConfirmationCallback = response -> {
+            timer.cancel();
+            onSelectTableConfirmationCallback.accept(response);
+        };
 
         sendMessage(managerEndpointId, new Message(RequestType.SELECT_TABLE, table));
     }
 
-    public void requestFreeTableList(@NonNull Consumer<Response<TreeSet<Table>, ? extends TableException>> freeTableListCallback) {
+    public synchronized void requestFreeTableList(@NonNull Consumer<Response<TreeSet<Table>, ? extends TableException>> freeTableListCallback,
+                                     @NonNull Runnable onTimeoutCallback) {
         Objects.requireNonNull(freeTableListCallback);
+        Objects.requireNonNull(onTimeoutCallback);
         ensureConnection();
 
-        this.freeTableListCallback = freeTableListCallback;
+        Timer timer = nearbyTimer(onTimeoutCallback);
+        this.freeTableListCallback = response -> {
+            timer.cancel();
+            freeTableListCallback.accept(response);
+        };
 
         sendMessage(managerEndpointId, new Message(RequestType.FREE_TABLE_LIST, null)); //TODO content
     }
 
-    private void ensureConnection() {
-        if (!isConnected()) {
+    private Timer nearbyTimer(Runnable onTimeoutCallback) {
+        final long NEARBY_TIMEOUT = 20 * 1000;      // 20 secondi
+
+        Timer timer = new Timer();
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                onTimeoutCallback.run();
+            }
+        }, NEARBY_TIMEOUT);
+
+        return timer;
+    }
+
+    private synchronized void ensureConnection() {
+        if (isNotConnected()) {
             throw new IllegalStateException("Not connected with local");
         }
     }
@@ -258,7 +376,7 @@ public class CustomerCommunication extends Communication {
      * @param onCloseRoomCallback callback che implementa la logica da attuare quando il
      *                            gestore chiude la stanza
      */
-    public void onCloseRoom(@NonNull Runnable onCloseRoomCallback) {
+    public synchronized void onCloseRoom(@NonNull Runnable onCloseRoomCallback) {
         Objects.requireNonNull(onCloseRoomCallback);
         this.onCloseRoomCallback = onCloseRoomCallback;
     }
@@ -267,25 +385,47 @@ public class CustomerCommunication extends Communication {
     /**
      * Disconnette il cliente dalla stanza del gestore.
      */
-    public void leaveRoom() {
-        if (connected) {
-            Nearby.getConnectionsClient(activity).disconnectFromEndpoint(managerEndpointId);
-            connected = false;
+    public synchronized void leaveRoom() {
+        if(!isInsideTheRoom()) {
+            Log.w(TAG, "trying to leave the Room while not in the Room");
         }
-        if (isDiscovering) {
-            Nearby.getConnectionsClient(activity).stopDiscovery();
-            isDiscovering = false;
-        }
+        stopDiscovery();
+        disconnect();
         activity = null;
     }
 
+    private synchronized void disconnect() {
+        if(connectionState() != ConnectionState.DISCONNECTED) {
+            assert managerEndpointId != null;
+            assert activity != null;
+            Nearby.getConnectionsClient(activity).disconnectFromEndpoint(managerEndpointId);
+            connectionState = ConnectionState.DISCONNECTED;
+            managerEndpointId = null;
+        }
+    }
+
+    private synchronized void stopDiscovery() {
+        if(isDiscovering) {
+            assert activity != null;
+            Nearby.getConnectionsClient(activity).stopDiscovery();
+            isDiscovering = false;
+        }
+    }
+
+    private synchronized boolean isInsideTheRoom() {
+        return activity != null;
+    }
+
+    private synchronized ConnectionState connectionState() {
+        return connectionState;
+    }
 
     /**
      * Verifica se il cliente è connesso alla stanza del gestore.
      *
      * @return true se il cliente è connesso alla stanza del gestore, false altrimenti
      */
-    public boolean isConnected() {
-        return connected;
+    public synchronized boolean isNotConnected() {
+        return connectionState() != ConnectionState.CONNECTED;
     }
 }

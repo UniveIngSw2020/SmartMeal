@@ -1,4 +1,4 @@
-package it.unive.quadcore.smartmeal.ui.customer;
+package it.unive.quadcore.smartmeal.ui.customer.bottomnavigation;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -20,12 +20,15 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import it.unive.quadcore.smartmeal.R;
-import it.unive.quadcore.smartmeal.ui.SelectAppModeActivity;
 import it.unive.quadcore.smartmeal.ui.SettingsActivity;
 import it.unive.quadcore.smartmeal.ui.customer.virtualroom.CustomerVirtualRoomActivity;
 import it.unive.quadcore.smartmeal.util.PermissionHandler;
 
 public class CustomerBottomNavigationActivity extends AppCompatActivity {
+
+    private static final String TAG = "CustomerBottomNav";
+
+    public static final String NEARBY_TIMEOUT_ARG = "NEARBY_TIMEOUT";
 
     private FloatingActionButton startCustomerVirtualRoomFab;
 
@@ -33,6 +36,17 @@ public class CustomerBottomNavigationActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_customer_bottom_navigation);
+
+        // Mostra snackbar in caso di timeout nearby
+        Bundle bundle = getIntent().getExtras();
+        if (bundle != null && bundle.getBoolean(NEARBY_TIMEOUT_ARG)) {
+            Snackbar.make(
+                    findViewById(android.R.id.content),
+                    R.string.timeout_error,
+                    BaseTransientBottomBar.LENGTH_LONG
+            ).show();
+        }
+
         BottomNavigationView navView = findViewById(R.id.customer_nav_view);
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
@@ -47,11 +61,10 @@ public class CustomerBottomNavigationActivity extends AppCompatActivity {
         startCustomerVirtualRoomFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO probabilmente ha senso creare una classe apposita per controllo permessi
                 if (!PermissionHandler.hasNearbyPermissions(CustomerBottomNavigationActivity.this)) {
                     Snackbar.make(
                             findViewById(android.R.id.content),
-                            R.string.field_required_snackbar, // TODO cambiare stringa
+                            R.string.grant_permission_snackbar_text,
                             BaseTransientBottomBar.LENGTH_LONG
                     ).show();
                     return;

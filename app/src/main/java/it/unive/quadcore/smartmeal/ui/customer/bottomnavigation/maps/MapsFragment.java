@@ -25,14 +25,10 @@ import it.unive.quadcore.smartmeal.model.LocalDescription;
 import it.unive.quadcore.smartmeal.storage.CustomerStorage;
 
 public class MapsFragment extends Fragment implements OnMapReadyCallback {
-    // TODO autogenerato
-
-    private MapsViewModel notificationsViewModel;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        notificationsViewModel =
-                new ViewModelProvider(this).get(MapsViewModel.class);
+
         View root = inflater.inflate(R.layout.fragment_maps, container, false);
 
         SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager()
@@ -44,7 +40,6 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        // TODO cambiare posizione e descrizione marker
         final float DEFAULT_MAP_ZOOM_LEVEL = 15;
 
         LocalDescription localDescription = CustomerStorage.getLocalDescription();

@@ -84,7 +84,7 @@ public class CustomerSettingsFragment extends Fragment {
                 notificationsSwitch.setChecked(false);
                 Snackbar.make(
                         getActivity().findViewById(android.R.id.content),
-                        R.string.field_required_snackbar,       // TODO strings.xml
+                        R.string.field_required_snackbar,
                         BaseTransientBottomBar.LENGTH_LONG
                 ).show();
                 return;
@@ -106,7 +106,7 @@ public class CustomerSettingsFragment extends Fragment {
                 sensorsSwitch.setChecked(false);
                 Snackbar.make(
                         getActivity().findViewById(android.R.id.content),
-                        R.string.field_required_snackbar,       // TODO strings.xml
+                        R.string.field_required_snackbar,
                         BaseTransientBottomBar.LENGTH_LONG
                 ).show();
                 return;

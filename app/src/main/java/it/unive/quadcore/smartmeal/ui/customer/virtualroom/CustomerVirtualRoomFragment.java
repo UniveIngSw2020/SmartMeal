@@ -53,7 +53,6 @@ public class CustomerVirtualRoomFragment extends Fragment {
      * @param tableId Parameter 1.
      * @return A new instance of fragment CustomerVirtualRoomFragment.
      */
-    // TODO: Rename and change types and number of parameters
     public static CustomerVirtualRoomFragment newInstance(String tableId) {
         CustomerVirtualRoomFragment fragment = new CustomerVirtualRoomFragment();
         Bundle args = new Bundle();
@@ -106,30 +105,30 @@ public class CustomerVirtualRoomFragment extends Fragment {
 
                 // TODO eventualmente se dopo tot secondi non è arrivata la conferma, inviare nuovamente
 //                Thread thread;
-                customerCommunication.notifyWaiter(new Consumer<Confirmation<? extends WaiterNotificationException>>() {
-                    @Override
-                    public void accept(Confirmation<? extends WaiterNotificationException> confirmation) {
-//                        thread.interrupt();
-                        int snackbarMessageId;
+                customerCommunication.notifyWaiter(
+                        (Consumer<Confirmation<? extends WaiterNotificationException>>) confirmation -> {
+        //                        thread.interrupt();
+                            int snackbarMessageId;
 
-                        try {
-                            confirmation.obtain();
-                            snackbarMessageId = R.string.waiter_notification_confirmed;
-                        } catch (WaiterNotificationException e) {
-                            Log.i(TAG, "Waiter notification rejected: " + e.getMessage());
-                            snackbarMessageId = R.string.waiter_notification_rejected;
-                        }
+                            try {
+                                confirmation.obtain();
+                                snackbarMessageId = R.string.waiter_notification_confirmed;
+                            } catch (WaiterNotificationException e) {
+                                Log.i(TAG, "Waiter notification rejected: " + e.getMessage());
+                                snackbarMessageId = R.string.waiter_notification_rejected;
+                            }
 
-                        final int snackbarMessageIdFinal = snackbarMessageId;
-                        getActivity().runOnUiThread(() -> {
-                            Snackbar.make(
-                                    v.findViewById(android.R.id.content),
-                                    snackbarMessageIdFinal,
-                                    BaseTransientBottomBar.LENGTH_LONG
-                            ).show();
-                        });
-                    }
-                });
+                            final int snackbarMessageIdFinal = snackbarMessageId;
+                            getActivity().runOnUiThread(() -> {
+                                Snackbar.make(
+                                        v.findViewById(android.R.id.content),
+                                        snackbarMessageIdFinal,
+                                        BaseTransientBottomBar.LENGTH_LONG
+                                ).show();
+                            });
+                        },
+                        new CustomerNearbyTimeoutAction(getActivity())
+                );
             }
         });
 

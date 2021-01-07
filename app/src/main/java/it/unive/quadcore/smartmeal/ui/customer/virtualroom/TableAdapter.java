@@ -10,7 +10,6 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.util.Consumer;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
@@ -20,11 +19,11 @@ import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.SortedSet;
 
 import it.unive.quadcore.smartmeal.R;
 import it.unive.quadcore.smartmeal.communication.CustomerCommunication;
-import it.unive.quadcore.smartmeal.communication.confirmation.Confirmation;
 import it.unive.quadcore.smartmeal.local.AlreadyAssignedTableException;
 import it.unive.quadcore.smartmeal.local.AlreadyOccupiedTableException;
 import it.unive.quadcore.smartmeal.local.NoSuchTableException;
@@ -32,22 +31,29 @@ import it.unive.quadcore.smartmeal.local.TableException;
 import it.unive.quadcore.smartmeal.model.Table;
 
 public class TableAdapter extends RecyclerView.Adapter<TableAdapter.TableViewHolder> {
+    @NonNull
     private static final String TAG = "TableAdapter";
 
     public static final class TableViewHolder extends RecyclerView.ViewHolder {
-        private TextView tableTextView;
+        @NonNull
+        private final TextView tableTextView;
 
         public TableViewHolder(@NonNull View itemView) {
-            super(itemView);
+            super(Objects.requireNonNull(itemView));
 
             this.tableTextView = itemView.findViewById(R.id.table_text_view);
         }
     }
 
+    @NonNull
     private final Activity activity;
+    @NonNull
     private final List<Table> tableList;
 
-    public TableAdapter(Activity activity, SortedSet<Table> tableSortedSet) {
+    public TableAdapter(@NonNull Activity activity, @NonNull SortedSet<Table> tableSortedSet) {
+        Objects.requireNonNull(activity);
+        Objects.requireNonNull(tableSortedSet);
+
         this.activity = activity;
         this.tableList = new ArrayList<>(tableSortedSet);
     }
@@ -67,40 +73,37 @@ public class TableAdapter extends RecyclerView.Adapter<TableAdapter.TableViewHol
         holder.tableTextView.setText(String.format("%s %s", tableString, table.getId()));
 
         // TODO migliorare formato codice, ci sono troppi blocchi innestati
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.i(TAG, "Table item clicked: " + table.getId());
+        holder.itemView.setOnClickListener(v -> {
+            Log.i(TAG, "Table item clicked: " + table.getId());
 
-                // mostra un Dialog di conferma
-                TextView confirmTextView = new TextView(activity);
-                // TODO strings.xml and append tableId
-                String tableConfirmationText = activity.getString(R.string.table_confirmation_text);
-                confirmTextView.setText(String.format("%s %s", tableConfirmationText, table.getId()));
-                confirmTextView.setPadding(48, 0, 48, 0);
+            // mostra un Dialog di conferma
+            TextView confirmTextView = new TextView(activity);
+            String tableConfirmationText = activity.getString(R.string.table_confirmation_text);
+            confirmTextView.setText(String.format("%s %s", tableConfirmationText, table.getId()));
+            confirmTextView.setPadding(48, 0, 48, 0);
 
-                new AlertDialog.Builder(activity)
-                        .setTitle(R.string.select_table)
-                        .setView(confirmTextView)
-                        .setPositiveButton(
-                                R.string.confirmation_button_text,
-                                (dialog, which) -> {
-                                    Log.i(TAG, "Table selection confirmed: " + table.getId());
+            new AlertDialog.Builder(activity)
+                    .setTitle(R.string.select_table)
+                    .setView(confirmTextView)
+                    .setPositiveButton(
+                            R.string.confirmation_button_text,
+                            (dialog, which) -> {
+                                Log.i(TAG, "Table selection confirmed: " + table.getId());
 
 
-                                    startCustomerVirtualRoomFragment(table);    // TODO da rimuovere (solo per testing)
+                                startCustomerVirtualRoomFragment(table);    // TODO da rimuovere (solo per testing)
 
 
-                                    CustomerCommunication customerCommunication = CustomerCommunication.getInstance();
+                                CustomerCommunication customerCommunication = CustomerCommunication.getInstance();
 
-                                    // TODO pensare alla cosa migliore da fare
-                                    if (!customerCommunication.isConnected()) {
-                                        return;
-                                    }
+                                // TODO pensare alla cosa migliore da fare
+                                if (customerCommunication.isNotConnected()) {
+                                    new CustomerNearbyTimeoutAction(activity).run();
+                                    return;
+                                }
 
-                                    customerCommunication.selectTable(table, new Consumer<Confirmation<? extends TableException>>() {
-                                        @Override
-                                        public void accept(Confirmation<? extends TableException> confirmation) {
+                                customerCommunication.selectTable(table,
+                                        confirmation -> {
                                             try {
                                                 confirmation.obtain();
                                                 // mostra la pagina della virtual room
@@ -142,16 +145,16 @@ public class TableAdapter extends RecyclerView.Adapter<TableAdapter.TableViewHol
                                                     ).show();
                                                 }
                                             }
-                                        }
-                                    });
-                                }
-                        )
-                        .setNegativeButton(
-                                R.string.cancellation_button_text,
-                                (dialog, which) -> dialog.cancel()
-                        )
-                        .show();
-            }
+                                        },
+                                        new CustomerNearbyTimeoutAction(activity)
+                                );
+                            }
+                    )
+                    .setNegativeButton(
+                            R.string.cancellation_button_text,
+                            (dialog, which) -> dialog.cancel()
+                    )
+                    .show();
         });
     }
 
