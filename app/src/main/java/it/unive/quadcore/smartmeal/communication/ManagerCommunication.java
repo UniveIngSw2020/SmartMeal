@@ -268,4 +268,8 @@ public class ManagerCommunication extends Communication {
     public boolean isRoomStarted() {
         return roomStarted;
     }
+
+    public void notifyTableHasChanged(Customer customer, Table newTable) {
+        // TODO : implementare
+    }
 }
