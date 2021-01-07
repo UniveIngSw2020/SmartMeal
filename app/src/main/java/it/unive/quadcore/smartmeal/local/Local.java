@@ -149,7 +149,7 @@ public class Local {
 
         tableHandler.changeCustomerTable(customer, newTable);
 
-        if(!LocalCustomerHandler.getInstance().containsCustomer(customer.getId()))
+        if(!LocalCustomerHandler.getInstance().containsCustomer(customer))
             managerCommunication.notifyTableHasChanged(customer,newTable);
     }
 
