@@ -46,7 +46,7 @@ public class TableListFragment extends Fragment {
 
         reloadButton = root.findViewById(R.id.reload_button_table_list);
         reloadButton.setOnClickListener(v -> { // Ricarico la lista tavoli occupati
-            Local.getInstance().testingUI_2(); // TODO : togliere, solo per testing
+            // Local.getInstance().testingUI_2(); // Testing
 
             //setupTableListRecyclerView(root);
             assignedTableListAdapter.reload();
@@ -54,7 +54,6 @@ public class TableListFragment extends Fragment {
 
         floatingButton = root.findViewById(R.id.floating_button_add_table);
         floatingButton.setOnClickListener(v -> { // Voglio aggiungere un tavolo occupato
-            // TODO : sistemare
 
             if(Local.getInstance().getFreeTableList().size()==0){ // Lista tavoli liberi è vuota : non si può aggiungere un tavolo
                 Snackbar.make(

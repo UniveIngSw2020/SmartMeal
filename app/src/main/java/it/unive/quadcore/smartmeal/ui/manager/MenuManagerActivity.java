@@ -9,7 +9,6 @@ import android.os.Bundle;
 import java.util.Objects;
 
 import it.unive.quadcore.smartmeal.R;
-import it.unive.quadcore.smartmeal.storage.CustomerStorage;
 import it.unive.quadcore.smartmeal.storage.ManagerStorage;
 import it.unive.quadcore.smartmeal.ui.customer.bottomnavigation.menu.MenuAdapter;
 

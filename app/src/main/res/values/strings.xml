@@ -49,6 +49,7 @@
     <!-- alert dialogs -->
     <string name="close_label_alert">Close</string>
     <string name="confirm_label_alert">Confirm</string>
+    <string name="cancel_label_alert">Cancel</string>
 
     <!-- insert password activity -->
     <string name="insert_password_hint">Insert password</string>

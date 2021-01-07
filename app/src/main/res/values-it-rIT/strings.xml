@@ -63,6 +63,8 @@
 
     <string name="close_label_alert">Chiudi</string>
 
+    <string name="cancel_label_alert">Annulla</string>
+
     <string name="error_manager_room_snackbar">Impossibile creare una stanza virtuale ora</string>
 
     <string name="modify_table_button_label">Modifica</string>

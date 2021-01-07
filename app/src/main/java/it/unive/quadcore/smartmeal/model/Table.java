@@ -8,9 +8,6 @@ import java.util.Objects;
 public abstract class Table implements Comparable<Table>, Serializable { // Togliere l'abstract ?
     // possibile costruttore package-private chiamato da un'altra classe
 
-    // eventuale array esterno di tavoli (classe che si occupa di istanziare i tavoli
-    // disponibili nel locale)
-
     @NonNull
     private final String id ;
 

@@ -6,7 +6,6 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.SortedSet;
 
@@ -14,7 +13,6 @@ import it.unive.quadcore.smartmeal.communication.ManagerCommunication;
 //import it.unive.quadcore.smartmeal.communication.ManagerCommunicationSTUB;
 import it.unive.quadcore.smartmeal.communication.confirmation.Confirmation;
 import it.unive.quadcore.smartmeal.communication.confirmation.ConfirmationDenied;
-import it.unive.quadcore.smartmeal.communication.response.ErrorResponse;
 import it.unive.quadcore.smartmeal.communication.response.SuccessResponse;
 import it.unive.quadcore.smartmeal.model.Customer;
 import it.unive.quadcore.smartmeal.model.ManagerTable;
@@ -209,7 +207,8 @@ public class Local {
     }
 /*
 
-    // Solo per testing
+    // TESTING
+
     public void testingTableHandler(){
         ((ManagerCommunicationSTUB)managerCommunication).beginTableHandler();
     }
@@ -219,7 +218,7 @@ public class Local {
     }
 
 
- */
+
 
     public void testingUI() {
         Customer customer = LocalCustomerHandler.getInstance().addCustomer("Enrico");
@@ -282,4 +281,7 @@ public class Local {
             e.printStackTrace();
         }
     }
+
+
+ */
 }

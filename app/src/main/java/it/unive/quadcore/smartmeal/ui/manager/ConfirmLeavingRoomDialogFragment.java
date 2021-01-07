@@ -21,14 +21,14 @@ public class ConfirmLeavingRoomDialogFragment extends DialogFragment {
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
 
-        String confirmLabel = getString(R.string.confirm_label_alert);
+        String cancelLabel = getString(R.string.cancel_label_alert);
         String closeLabel = getString(R.string.close_label_alert);
         String message = getString(R.string.confirm_close_room_alert);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         Context context = this.getContext();
         builder.setMessage(message)
-                .setPositiveButton(confirmLabel, new DialogInterface.OnClickListener() {
+                .setPositiveButton(cancelLabel, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         Local.getInstance().closeRoom();
                         Intent intent = new Intent(getActivity(), ManagerHomeActivity.class);

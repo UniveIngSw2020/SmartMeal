@@ -39,7 +39,7 @@ public class WaiterNotificationsFragment extends Fragment {
 
         reloadButton = root.findViewById(R.id.reload_button_waiter_notifications);
         reloadButton.setOnClickListener(v -> { // Aggiorna lista notifiche
-            Local.getInstance().testingUI_1(); // TODO : togliere, solo per testing
+            // Local.getInstance().testingUI_1(); // Testing
 
             //setupWaiterNotificationRecyclerView(root);
             waiterNotificationsAdapter.reload();
