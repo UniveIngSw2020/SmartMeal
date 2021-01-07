@@ -4,6 +4,9 @@ public abstract class Sensor {
     private Runnable onShakeDetectedCallback;
     private Runnable onEntranceCallback;
 
-    public abstract void onShakeDetected(Runnable onShakeDetectedCallback);
-    public abstract void onEntrance(Runnable onEntranceCallback);
+    public abstract void startShakeDetection(Runnable onShakeDetectedCallback);
+    public abstract void endShakeDetection();
+
+    public abstract void startEntranceDetection(Runnable onEntranceCallback);
+    public abstract void endEntranceDetection();
 }
