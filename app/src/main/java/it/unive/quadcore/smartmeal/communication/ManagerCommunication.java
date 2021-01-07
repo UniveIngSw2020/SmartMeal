@@ -34,6 +34,7 @@ import static it.unive.quadcore.smartmeal.communication.RemoteCustomerHandler.Re
 import static it.unive.quadcore.smartmeal.communication.RequestType.CUSTOMER_NAME;
 import static it.unive.quadcore.smartmeal.communication.RequestType.FREE_TABLE_LIST;
 import static it.unive.quadcore.smartmeal.communication.RequestType.NOTIFY_WAITER;
+import static it.unive.quadcore.smartmeal.communication.RequestType.SELECT_TABLE;
 
 
 public class ManagerCommunication extends Communication {
@@ -147,7 +148,7 @@ public class ManagerCommunication extends Communication {
         Objects.requireNonNull(onSelectTableCallback);
         Table selectedTable = (Table) content;
         Confirmation<? extends TableException> confirmation = onSelectTableCallback.apply(customerHandler.getCustomer(endpointId), selectedTable);
-        sendMessage(endpointId, new Message(NOTIFY_WAITER, confirmation));
+        sendMessage(endpointId, new Message(SELECT_TABLE, confirmation));
     }
 
     private void handleCustomerNotRecognized(@NonNull String endpointId) {

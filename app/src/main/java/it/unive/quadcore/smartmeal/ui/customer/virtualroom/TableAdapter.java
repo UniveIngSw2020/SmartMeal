@@ -91,7 +91,7 @@ public class TableAdapter extends RecyclerView.Adapter<TableAdapter.TableViewHol
                                 Log.i(TAG, "Table selection confirmed: " + table.getId());
 
 
-                                startCustomerVirtualRoomFragment(table);    // TODO da rimuovere (solo per testing)
+                               // startCustomerVirtualRoomFragment(table);    // TODO da rimuovere (solo per testing)
 
 
                                 CustomerCommunication customerCommunication = CustomerCommunication.getInstance();

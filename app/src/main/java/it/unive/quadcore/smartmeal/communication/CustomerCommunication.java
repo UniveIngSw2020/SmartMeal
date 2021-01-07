@@ -349,7 +349,7 @@ public class CustomerCommunication extends Communication {
     }
 
     private Timer nearbyTimer(Runnable onTimeoutCallback) {
-        final long NEARBY_TIMEOUT = 20 * 1000;      // 20 secondi
+        final long NEARBY_TIMEOUT = 60 * 1000;      // 60 secondi
 
         Timer timer = new Timer();
         timer.schedule(new TimerTask() {
