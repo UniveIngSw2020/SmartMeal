@@ -91,7 +91,15 @@ public class CustomerCommunication extends Communication {
     private CustomerCommunication() {
         this.connectionState = ConnectionState.DISCONNECTED;
         this.isDiscovering = false;
-        this.activity = null;
+    }
+
+    @Override
+    protected synchronized void sendMessage(String toEndpointId, Message response) {
+        if (!isInsideTheRoom()) {
+            Log.w(TAG, "trying to send a message while not in the room");
+            return;
+        }
+        super.sendMessage(toEndpointId, response);
     }
 
     // eventualmente prendere callback con costruttore
@@ -264,6 +272,10 @@ public class CustomerCommunication extends Communication {
     }
 
     private synchronized void sendName() {
+        if(!isInsideTheRoom()){
+            Log.i(TAG, "trying to send name while not in the room");
+            return;
+        }
         sendMessage(managerEndpointId, new Message(RequestType.CUSTOMER_NAME, CustomerStorage.getName()));
     }
 
@@ -305,6 +317,11 @@ public class CustomerCommunication extends Communication {
 
 
     public synchronized void notifyWaiter(@NonNull Consumer<Confirmation<? extends WaiterNotificationException>> onNotifyWaiterConfirmationCallback, @NonNull Runnable onTimeoutCallback) {
+        if (!isInsideTheRoom()) {
+            Log.w(TAG, "trying to notify the waiter while not in the room");
+            return;
+        }
+
         Objects.requireNonNull(onNotifyWaiterConfirmationCallback);
         Objects.requireNonNull(onTimeoutCallback);
         ensureConnection();
@@ -319,6 +336,11 @@ public class CustomerCommunication extends Communication {
     }
 
     public synchronized void selectTable(@NonNull Table table, @NonNull Consumer<Confirmation<? extends TableException>> onSelectTableConfirmationCallback, @NonNull Runnable onTimeoutCallback) {
+        if (!isInsideTheRoom()) {
+            Log.w(TAG, "trying to select table while not in the room");
+            return;
+        }
+
         Objects.requireNonNull(table);
         Objects.requireNonNull(onSelectTableConfirmationCallback);
         Objects.requireNonNull(onTimeoutCallback);
@@ -335,6 +357,11 @@ public class CustomerCommunication extends Communication {
 
     public synchronized void requestFreeTableList(@NonNull Consumer<Response<TreeSet<Table>, ? extends TableException>> freeTableListCallback,
                                      @NonNull Runnable onTimeoutCallback) {
+        if(!isInsideTheRoom()){
+            Log.i(TAG, "trying to request free table list while not in the room");
+            return;
+        }
+
         Objects.requireNonNull(freeTableListCallback);
         Objects.requireNonNull(onTimeoutCallback);
         ensureConnection();

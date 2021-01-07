@@ -52,7 +52,6 @@ public class ManagerCommunication extends Communication {
     private BiFunction<Customer, Table, Confirmation<? extends TableException>> onSelectTableCallback;
     @Nullable
     private Consumer<Customer> onCustomerLeftRoomCallback;
-    private boolean roomStarted;
 
     @Nullable
     private static ManagerCommunication instance;
@@ -66,7 +65,6 @@ public class ManagerCommunication extends Communication {
     }
 
     private ManagerCommunication() {
-        roomStarted = false;
         customerHandler = RemoteCustomerHandler.getInstance();
     }
 
@@ -188,7 +186,6 @@ public class ManagerCommunication extends Communication {
             throw new IllegalStateException("Room has been already started");
         }
 
-        roomStarted = true;
 
         Objects.requireNonNull(onCustomerLeftRoomCallback);
 
@@ -261,12 +258,13 @@ public class ManagerCommunication extends Communication {
 
         //TODO: customerHandler.removeAllCustomers();
 
-        roomStarted = false;
         activity = null;
     }
 
+    //TODO: pensare se sincronizzare change of activity
+
     public boolean isRoomStarted() {
-        return roomStarted;
+        return activity!=null;
     }
 
     public void notifyTableHasChanged(Customer customer, Table newTable) {
