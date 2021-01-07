@@ -35,11 +35,6 @@ public abstract class CustomerHandler<C extends Customer> {
         customerMap.remove(customerId);
     }
 
-    public synchronized C getCustomer(@NonNull C customer) {
-        Objects.requireNonNull(customer);
-        return getCustomer(customer.getId());
-    }
-
     public synchronized C getCustomer(String customerId) {
         if (!containsCustomer(customerId)) {
             throw new IllegalStateException("A customer with the given id doesn't exist");
@@ -51,13 +46,15 @@ public abstract class CustomerHandler<C extends Customer> {
         return customerMap.containsKey(customerId);
     }
 
-    public synchronized boolean containsCustomer(@Nullable C customer) {
+    protected synchronized boolean containsCustomerHelper(@Nullable C customer) {
         if(customer==null)
             return false;
         return customerMap.containsKey(customer.getId());
     }
 
-    public synchronized void removeAllCustomers(){
+    public abstract boolean containsCustomer(@Nullable Customer customer);
+
+    public synchronized void removeAllCustomers() {
         customerMap.clear();
     }
 }
