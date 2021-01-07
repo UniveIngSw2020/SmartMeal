@@ -32,7 +32,7 @@ public class ConfirmLeavingRoomDialogFragment extends DialogFragment {
                     public void onClick(DialogInterface dialog, int id) {
                         Local.getInstance().closeRoom();
                         Intent intent = new Intent(getActivity(), ManagerHomeActivity.class);
-                        // Non si può tornare indietro
+
                         // Disabilita WI-FI all'uscita della stanza virtuale
                         WifiManager wifi = (WifiManager)context.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
                         wifi.setWifiEnabled(false);
@@ -41,7 +41,8 @@ public class ConfirmLeavingRoomDialogFragment extends DialogFragment {
                         // Se il dispositivo possiede il bluetooth
                         if(bt.getAdapter() != null)
                             bt.getAdapter().disable();
-                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP); // Non si può tornare indietro
                         startActivity(intent);
                     }
                 })
