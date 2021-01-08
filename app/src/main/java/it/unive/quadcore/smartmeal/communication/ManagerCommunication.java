@@ -15,6 +15,7 @@ import com.google.android.gms.nearby.connection.ConnectionLifecycleCallback;
 import com.google.android.gms.nearby.connection.PayloadCallback;
 
 import java.io.Serializable;
+import java.util.Timer;
 import java.util.TreeSet;
 import java.util.Objects;
 
@@ -267,7 +268,36 @@ public class ManagerCommunication extends Communication {
         return activity!=null;
     }
 
-    public void notifyTableHasChanged(Customer customer, Table newTable) {
-        // TODO : implementare
+    public void notifyTableChanged(@NonNull Customer customer, @NonNull Table newTable) {
+        Objects.requireNonNull(customer);
+        Objects.requireNonNull(newTable);
+
+        if (!isRoomStarted()) {
+            Log.w(TAG, "trying to notify a customer without starting the room");
+            return;
+        }
+
+        if(!customerHandler.containsCustomer(customer)){
+            Log.w(TAG, "trying to notify a not connected customer"); //TODO: forse eccezione
+            return;
+        }
+
+        sendMessage(customer.getId(), new Message(RequestType.TABLE_CHANGED, newTable));
+    }
+
+    public void notifyTableRemoved(@NonNull Customer customer) {
+        Objects.requireNonNull(customer);
+
+        if (!isRoomStarted()) {
+            Log.w(TAG, "trying to notify a customer without starting the room");
+            return;
+        }
+
+        if(!customerHandler.containsCustomer(customer)){
+            Log.w(TAG, "trying to notify a not connected customer"); //TODO: forse eccezione
+            return;
+        }
+
+        sendMessage(customer.getId(), new Message(RequestType.TABLE_REMOVED, null));
     }
 }

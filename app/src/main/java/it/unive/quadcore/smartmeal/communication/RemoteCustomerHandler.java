@@ -31,8 +31,6 @@ class RemoteCustomerHandler extends CustomerHandler<RemoteCustomerHandler.Remote
 
     @Override
     public synchronized boolean containsCustomer(@Nullable Customer customer) {
-        if(!(customer instanceof RemoteCustomer))
-            return false;
-        return super.containsCustomerHelper((RemoteCustomer) customer);
+        return customer instanceof RemoteCustomer && super.containsCustomerHelper((RemoteCustomer) customer);
     }
 }

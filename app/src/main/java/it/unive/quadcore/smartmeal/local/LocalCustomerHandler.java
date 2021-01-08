@@ -43,9 +43,7 @@ class LocalCustomerHandler extends CustomerHandler<LocalCustomerHandler.LocalCus
 
     @Override
     public synchronized boolean containsCustomer(@Nullable Customer customer) {
-        if(!(customer instanceof LocalCustomer))
-            return false;
-        return super.containsCustomerHelper((LocalCustomer) customer);
+        return customer instanceof LocalCustomer && super.containsCustomerHelper((LocalCustomer) customer);
     }
 }
 
