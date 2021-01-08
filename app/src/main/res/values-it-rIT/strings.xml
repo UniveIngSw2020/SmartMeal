@@ -46,7 +46,7 @@
 
 
     <string name="manager_closed_virtual_room">Il gestore ha chiuso la stanza virtuale</string>
-    <string name="timeout_error">Comunicazione non riuscita</string>
+    <string name="timeout_error_snackbar">Comunicazione non riuscita</string>
     <string name="leave_virtual_room_dialog_text">Sei sicuro di voler lasciare la stanza virtuale?</string>
     <string name="grant_permission_snackbar_text">Concedi i permessi dalle impostazioni</string>
 
@@ -101,4 +101,8 @@
 
     <string name="error_add_table_alert">Errore : è successo qualcosa durante l\' operazione</string>
     <string name="title_add_table">Assegna un tavolo libero</string>
+
+    <string name="table_removed_snackbar">Il gestore ha rimosso il tuo tavolo</string>
+    <string name="table_changed_snackbar">Il gestore ha cambiato il tuo tavolo</string>
+    <string name="unexpected_error_snackbar">Errore inatteso</string>
 </resources>

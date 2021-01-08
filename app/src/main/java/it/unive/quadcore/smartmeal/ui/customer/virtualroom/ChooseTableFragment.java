@@ -119,7 +119,7 @@ public class ChooseTableFragment extends Fragment {
             customerCommunication.joinRoom(
                     getActivity(),
                     () -> requestFreeTableList(root),
-                    new CustomerNearbyTimeoutAction(getActivity())
+                    new CustomerLeaveRoomAction(getActivity(), getString(R.string.timeout_error_snackbar))
             );
         }
     }
@@ -138,7 +138,7 @@ public class ChooseTableFragment extends Fragment {
                         e.printStackTrace();
                     }
                 },
-                new CustomerNearbyTimeoutAction(getActivity())
+                new CustomerLeaveRoomAction(getActivity(), getString(R.string.timeout_error_snackbar))
         );
     }
 

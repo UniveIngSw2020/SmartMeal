@@ -28,7 +28,7 @@ public class CustomerBottomNavigationActivity extends AppCompatActivity {
 
     private static final String TAG = "CustomerBottomNav";
 
-    public static final String NEARBY_TIMEOUT_ARG = "NEARBY_TIMEOUT";
+    public static final String SHOW_SNACKBAR = "SHOW_SNACKBAR";
 
     private FloatingActionButton startCustomerVirtualRoomFab;
 
@@ -39,10 +39,10 @@ public class CustomerBottomNavigationActivity extends AppCompatActivity {
 
         // Mostra snackbar in caso di timeout nearby
         Bundle bundle = getIntent().getExtras();
-        if (bundle != null && bundle.getBoolean(NEARBY_TIMEOUT_ARG)) {
+        if (bundle != null && bundle.getString(SHOW_SNACKBAR) != null) {
             Snackbar.make(
                     findViewById(android.R.id.content),
-                    R.string.timeout_error,
+                    bundle.getString(SHOW_SNACKBAR),
                     BaseTransientBottomBar.LENGTH_LONG
             ).show();
         }

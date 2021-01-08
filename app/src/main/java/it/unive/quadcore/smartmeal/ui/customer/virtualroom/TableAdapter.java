@@ -98,7 +98,8 @@ public class TableAdapter extends RecyclerView.Adapter<TableAdapter.TableViewHol
 
                                 // TODO pensare alla cosa migliore da fare
                                 if (customerCommunication.isNotConnected()) {
-                                    new CustomerNearbyTimeoutAction(activity).run();
+                                    Log.w(TAG, "Trying to select table, while not connected");
+                                    new CustomerLeaveRoomAction(activity, activity.getString(R.string.unexpected_error_snackbar)).run();
                                     return;
                                 }
 
@@ -146,7 +147,7 @@ public class TableAdapter extends RecyclerView.Adapter<TableAdapter.TableViewHol
                                                 }
                                             }
                                         },
-                                        new CustomerNearbyTimeoutAction(activity)
+                                        new CustomerLeaveRoomAction(activity, activity.getString(R.string.timeout_error_snackbar))
                                 );
                             }
                     )

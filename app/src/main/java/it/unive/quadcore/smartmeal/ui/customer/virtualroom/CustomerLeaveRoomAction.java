@@ -6,38 +6,38 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 
-import com.google.android.material.snackbar.BaseTransientBottomBar;
-import com.google.android.material.snackbar.Snackbar;
-
 import java.util.Objects;
 
-import it.unive.quadcore.smartmeal.R;
 import it.unive.quadcore.smartmeal.ui.customer.bottomnavigation.CustomerBottomNavigationActivity;
 
 /**
  * Classe che implementa la callback da eseguire quando una richiesta
  * Nearby va in timeout.
  */
-public class CustomerNearbyTimeoutAction implements Runnable {
+public class CustomerLeaveRoomAction implements Runnable {
     @NonNull
     private final Activity activity;
 
-    public CustomerNearbyTimeoutAction(@NonNull Activity activity) {
+    @NonNull
+    private final String snackbarMessage;
+
+    public CustomerLeaveRoomAction(@NonNull Activity activity, @NonNull String snackbarMessage) {
         Objects.requireNonNull(activity);
         this.activity = activity;
+        this.snackbarMessage = snackbarMessage;
     }
 
     @Override
     public void run() {
-        Snackbar.make(
-                activity.findViewById(android.R.id.content),
-                R.string.timeout_error,
-                BaseTransientBottomBar.LENGTH_LONG
-        ).show();
+//        Snackbar.make(
+//                activity.findViewById(android.R.id.content),
+//                R.string.timeout_error,
+//                BaseTransientBottomBar.LENGTH_LONG
+//        ).show();
 
         Intent intent = new Intent(activity, CustomerBottomNavigationActivity.class);
         Bundle bundle = new Bundle();
-        bundle.putBoolean(CustomerBottomNavigationActivity.NEARBY_TIMEOUT_ARG, true);
+        bundle.putString(CustomerBottomNavigationActivity.SHOW_SNACKBAR, snackbarMessage);
         intent.putExtras(bundle);
         activity.startActivity(intent);
     }

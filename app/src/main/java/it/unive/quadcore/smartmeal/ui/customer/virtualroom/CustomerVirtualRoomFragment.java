@@ -127,7 +127,7 @@ public class CustomerVirtualRoomFragment extends Fragment {
                                 ).show();
                             });
                         },
-                        new CustomerNearbyTimeoutAction(getActivity())
+                        new CustomerLeaveRoomAction(getActivity(), getString(R.string.timeout_error_snackbar))
                 );
             }
         });
