@@ -27,6 +27,10 @@ abstract class Communication {
     protected Activity activity;                  // TODO assegnare valore
 
 
+    protected Communication() {
+        activity = null;
+    }
+
     protected void sendMessage(String toEndpointId, Message response) {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         try {

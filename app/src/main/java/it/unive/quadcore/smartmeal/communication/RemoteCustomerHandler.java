@@ -3,10 +3,6 @@ package it.unive.quadcore.smartmeal.communication;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
-
 import it.unive.quadcore.smartmeal.model.Customer;
 import it.unive.quadcore.smartmeal.model.CustomerHandler;
 
@@ -31,5 +27,12 @@ class RemoteCustomerHandler extends CustomerHandler<RemoteCustomerHandler.Remote
 
     synchronized void addCustomer(@NonNull String customerId, @NonNull String customerName) {
         addCustomer(new RemoteCustomer(customerId, customerName));
+    }
+
+    @Override
+    public synchronized boolean containsCustomer(@Nullable Customer customer) {
+        if(!(customer instanceof RemoteCustomer))
+            return false;
+        return super.containsCustomerHelper((RemoteCustomer) customer);
     }
 }

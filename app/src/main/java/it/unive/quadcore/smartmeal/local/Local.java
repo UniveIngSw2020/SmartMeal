@@ -148,6 +148,9 @@ public class Local {
             throw new RoomStateException(false);
 
         tableHandler.changeCustomerTable(customer, newTable);
+
+        if(!LocalCustomerHandler.getInstance().containsCustomer(customer))
+            managerCommunication.notifyTableHasChanged(customer,newTable);
     }
 
     // Assegna un tavolo ad un cliente

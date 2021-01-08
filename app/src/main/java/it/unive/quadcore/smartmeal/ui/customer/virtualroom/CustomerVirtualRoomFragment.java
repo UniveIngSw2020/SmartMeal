@@ -121,7 +121,7 @@ public class CustomerVirtualRoomFragment extends Fragment {
                             final int snackbarMessageIdFinal = snackbarMessageId;
                             getActivity().runOnUiThread(() -> {
                                 Snackbar.make(
-                                        v.findViewById(android.R.id.content),
+                                        getActivity().findViewById(android.R.id.content),
                                         snackbarMessageIdFinal,
                                         BaseTransientBottomBar.LENGTH_LONG
                                 ).show();

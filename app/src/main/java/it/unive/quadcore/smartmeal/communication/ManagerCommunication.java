@@ -34,6 +34,7 @@ import static it.unive.quadcore.smartmeal.communication.RemoteCustomerHandler.Re
 import static it.unive.quadcore.smartmeal.communication.RequestType.CUSTOMER_NAME;
 import static it.unive.quadcore.smartmeal.communication.RequestType.FREE_TABLE_LIST;
 import static it.unive.quadcore.smartmeal.communication.RequestType.NOTIFY_WAITER;
+import static it.unive.quadcore.smartmeal.communication.RequestType.SELECT_TABLE;
 
 
 public class ManagerCommunication extends Communication {
@@ -51,7 +52,6 @@ public class ManagerCommunication extends Communication {
     private BiFunction<Customer, Table, Confirmation<? extends TableException>> onSelectTableCallback;
     @Nullable
     private Consumer<Customer> onCustomerLeftRoomCallback;
-    private boolean roomStarted;
 
     @Nullable
     private static ManagerCommunication instance;
@@ -65,7 +65,6 @@ public class ManagerCommunication extends Communication {
     }
 
     private ManagerCommunication() {
-        roomStarted = false;
         customerHandler = RemoteCustomerHandler.getInstance();
     }
 
@@ -147,7 +146,7 @@ public class ManagerCommunication extends Communication {
         Objects.requireNonNull(onSelectTableCallback);
         Table selectedTable = (Table) content;
         Confirmation<? extends TableException> confirmation = onSelectTableCallback.apply(customerHandler.getCustomer(endpointId), selectedTable);
-        sendMessage(endpointId, new Message(NOTIFY_WAITER, confirmation));
+        sendMessage(endpointId, new Message(SELECT_TABLE, confirmation));
     }
 
     private void handleCustomerNotRecognized(@NonNull String endpointId) {
@@ -187,7 +186,6 @@ public class ManagerCommunication extends Communication {
             throw new IllegalStateException("Room has been already started");
         }
 
-        roomStarted = true;
 
         Objects.requireNonNull(onCustomerLeftRoomCallback);
 
@@ -260,11 +258,16 @@ public class ManagerCommunication extends Communication {
 
         //TODO: customerHandler.removeAllCustomers();
 
-        roomStarted = false;
         activity = null;
     }
 
+    //TODO: pensare se sincronizzare change of activity
+
     public boolean isRoomStarted() {
-        return roomStarted;
+        return activity!=null;
+    }
+
+    public void notifyTableHasChanged(Customer customer, Table newTable) {
+        // TODO : implementare
     }
 }

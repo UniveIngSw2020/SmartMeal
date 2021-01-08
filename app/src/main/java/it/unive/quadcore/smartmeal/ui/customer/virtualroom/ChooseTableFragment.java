@@ -76,7 +76,7 @@ public class ChooseTableFragment extends Fragment {
         fakeTableSortedSet.add(new ManagerTable("a"));
         fakeTableSortedSet.add(new ManagerTable("b"));
         fakeTableSortedSet.add(new ManagerTable("c"));
-        setupTableRecyclerView(root, fakeTableSortedSet);
+        // setupTableRecyclerView(root, fakeTableSortedSet);
 
         cancelButton = root.findViewById(R.id.cancellation_button);
         cancelButton.setOnClickListener(new View.OnClickListener() {
