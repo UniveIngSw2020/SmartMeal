@@ -22,7 +22,6 @@ import java.util.TreeSet;
 import it.unive.quadcore.smartmeal.R;
 import it.unive.quadcore.smartmeal.communication.CustomerCommunication;
 import it.unive.quadcore.smartmeal.local.TableException;
-import it.unive.quadcore.smartmeal.model.ManagerTable;
 import it.unive.quadcore.smartmeal.model.Table;
 import it.unive.quadcore.smartmeal.ui.customer.bottomnavigation.CustomerBottomNavigationActivity;
 
@@ -72,10 +71,10 @@ public class ChooseTableFragment extends Fragment {
         joinRoom(root);
 
         // TODO remove (solo per testing)
-        fakeTableSortedSet = new TreeSet<>();
-        fakeTableSortedSet.add(new ManagerTable("a"));
-        fakeTableSortedSet.add(new ManagerTable("b"));
-        fakeTableSortedSet.add(new ManagerTable("c"));
+//        fakeTableSortedSet = new TreeSet<>();
+//        fakeTableSortedSet.add(new ManagerTable("a"));
+//        fakeTableSortedSet.add(new ManagerTable("b"));
+//        fakeTableSortedSet.add(new ManagerTable("c"));
         // setupTableRecyclerView(root, fakeTableSortedSet);
 
         cancelButton = root.findViewById(R.id.cancellation_button);
@@ -91,6 +90,15 @@ public class ChooseTableFragment extends Fragment {
 
     private void joinRoom(View root) {
         CustomerCommunication customerCommunication = CustomerCommunication.getInstance();
+
+        customerCommunication.onTableChanged(table -> {
+            new CustomerLeaveRoomAction(getActivity(), getString(R.string.table_changed_snackbar));
+            customerCommunication.leaveRoom();
+        });
+        customerCommunication.onTableRemoved(() -> {
+            new CustomerLeaveRoomAction(getActivity(), getString(R.string.table_removed_snackbar));
+            customerCommunication.leaveRoom();
+        });
 
         // se il cliente non è connesso al gestore con nearby
         if (customerCommunication.isNotConnected()) {

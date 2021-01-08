@@ -140,6 +140,8 @@ public class CustomerVirtualRoomFragment extends Fragment {
             }
         });
 
+        CustomerCommunication.getInstance().onTableChanged(table -> tableNumberTextView.setText(table.getId()));
+
         return root;
     }
 }

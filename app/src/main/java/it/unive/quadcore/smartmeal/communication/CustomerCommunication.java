@@ -80,6 +80,9 @@ public class CustomerCommunication extends Communication {
     @Nullable
     private Runnable onTableRemovedCallback;
 
+    /**
+     * Se isInsideTheRoom(), chiama sempre il metodo leaveRoom()
+     */
     @Nullable
     private Runnable onCloseRoomCallback;
 
@@ -182,7 +185,6 @@ public class CustomerCommunication extends Communication {
                 synchronized (CustomerCommunication.this) {
                     if(isInsideTheRoom()) {
                         Objects.requireNonNull(onCloseRoomCallback);
-                        leaveRoom();
                         onCloseRoomCallback.run();
                     }
                 }
@@ -256,8 +258,6 @@ public class CustomerCommunication extends Communication {
                 synchronized (CustomerCommunication.this) {
                     super.onDisconnected(endpointId);
                     Objects.requireNonNull(onCloseRoomCallback);
-
-                    leaveRoom();
                     onCloseRoomCallback.run();
                 }
             }
@@ -369,6 +369,9 @@ public class CustomerCommunication extends Communication {
         Objects.requireNonNull(table);
         Objects.requireNonNull(onSelectTableConfirmationCallback);
         Objects.requireNonNull(onTimeoutCallback);
+        Objects.requireNonNull(onTableChangedCallback);
+        Objects.requireNonNull(onTableRemovedCallback);
+
         ensureConnection();
 
         Timer timer = nearbyTimer(onTimeoutCallback);
@@ -440,7 +443,15 @@ public class CustomerCommunication extends Communication {
      */
     public synchronized void onCloseRoom(@NonNull Runnable onCloseRoomCallback) {
         Objects.requireNonNull(onCloseRoomCallback);
-        this.onCloseRoomCallback = onCloseRoomCallback;
+
+        this.onCloseRoomCallback = () -> {
+            synchronized (this) {
+                if (isInsideTheRoom()) {
+                    leaveRoom();
+                }
+                onCloseRoomCallback.run();
+            }
+        };
     }
 
 
