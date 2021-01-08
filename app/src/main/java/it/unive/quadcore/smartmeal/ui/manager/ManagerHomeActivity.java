@@ -19,6 +19,7 @@ import java.util.Objects;
 import it.unive.quadcore.smartmeal.R;
 import it.unive.quadcore.smartmeal.local.Local;
 import it.unive.quadcore.smartmeal.local.RoomStateException;
+import it.unive.quadcore.smartmeal.sensor.Sensor;
 import it.unive.quadcore.smartmeal.ui.SettingsActivity;
 
 // Activity home page gestore
@@ -27,7 +28,7 @@ public class ManagerHomeActivity extends AppCompatActivity {
     private Button roomButton;
     private Button menuButton;
     private Button descriptionButton;
-    private ImageView settings;
+    private Sensor s;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +41,15 @@ public class ManagerHomeActivity extends AppCompatActivity {
         roomButton = findViewById(R.id.button_home_manager_room);
         menuButton = findViewById(R.id.button_home_manager_menu);
         descriptionButton = findViewById(R.id.button_home_manager_description);
+
+        s= new Sensor();
+        s.startEntranceDetection(()-> {
+                    /*Snackbar.make(
+                            findViewById(android.R.id.content),
+                            R.string.geofence_entrance,
+                            BaseTransientBottomBar.LENGTH_LONG).show();*/
+            System.out.println("Sei entrato nell'area del locale");
+        },this);
 
         roomButton.setOnClickListener(v -> { // Si vuole accedere alla stanza virtuale
 

@@ -107,6 +107,8 @@
     <string name="added_table_alert">Table added correctly!</string>
     <string name="error_add_table_alert">Error : something happened during the operation</string>
 
+    <string name="geofence_entrance">You are entered in a local area</string>
+
     <string name="error_add_table_snackbar">It is impossible to add a table right now  : all the tables are alredy assigned</string>
 
 </resources>

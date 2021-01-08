@@ -16,13 +16,16 @@ import com.google.android.gms.location.GeofencingRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.snackbar.BaseTransientBottomBar;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import it.unive.quadcore.smartmeal.R;
 import it.unive.quadcore.smartmeal.storage.CustomerStorage;
 
-public abstract class Sensor {
+public class Sensor {
 
     private GeofencingClient geofencingClient;
     private List<Geofence> geofenceList;
@@ -32,18 +35,18 @@ public abstract class Sensor {
 
     private PendingIntent geofencePendingIntent;
 
+    public Sensor(){}
 
-
+    /*
     public abstract void startShakeDetection(Runnable onShakeDetectedCallback);
 
     public abstract void endShakeDetection();
-
-
+    */
 
 
     private GeofencingRequest getGeofencingRequest() {
         GeofencingRequest.Builder builder = new GeofencingRequest.Builder();
-        builder.setInitialTrigger(Geofence.GEOFENCE_TRANSITION_ENTER);
+        builder.setInitialTrigger(GeofencingRequest.INITIAL_TRIGGER_ENTER);
         builder.addGeofences(geofenceList);
         return builder.build();
     }
@@ -71,7 +74,7 @@ public abstract class Sensor {
 
         Location location = CustomerStorage.getLocalDescription().getLocation();
 
-        float radius = 5;
+        float radius = 50;
 
         geofenceList.add(new Geofence.Builder()
                 // Id geofence
@@ -82,8 +85,8 @@ public abstract class Sensor {
                         location.getLongitude(),
                         radius
                 )
-                .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER |
-                        Geofence.GEOFENCE_TRANSITION_EXIT)
+                .setExpirationDuration(Geofence.NEVER_EXPIRE)
+                .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER)
                 .build());
 
         if (ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -102,24 +105,28 @@ public abstract class Sensor {
                     public void onSuccess(Void aVoid) {
                         // Geofences added
                         // ...
+                        System.out.println("Geofence aggiunta alla lista");
                     }
                 })
                 .addOnFailureListener(activity, new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         // Failed to add geofences // TODO : eccezione
-                        // ...
+                        System.out.println("Non è stato possibile aggiungere una geofencing");
                     }
                 });
 
     }
+    //metodo probabilmente non necessario
     public void endEntranceDetection(Activity activity){
         geofencingClient.removeGeofences(getGeofencePendingIntent(activity))
                 .addOnSuccessListener(activity, new OnSuccessListener<Void>() {
                     @Override
+
                     public void onSuccess(Void aVoid) {
                         // Geofences removed
                         // ...
+                        System.out.println("Sei uscito dall'area del locale");
                     }
                 })
                 .addOnFailureListener(activity, new OnFailureListener() {

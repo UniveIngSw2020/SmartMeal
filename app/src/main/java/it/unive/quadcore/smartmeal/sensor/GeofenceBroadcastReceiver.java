@@ -17,8 +17,11 @@ public class GeofenceBroadcastReceiver extends BroadcastReceiver {
 
         if (geofencingEvent.hasError()) { // Errore evento geofence
             // TODO : implementare
+            System.out.println("Si è verificato un errore nell'evento geofence");
             return;
         }
+
+        System.out.println("Evento ricevuto dal geofence");
 
         // Geofence transition type
         int geofenceTransition = geofencingEvent.getGeofenceTransition();

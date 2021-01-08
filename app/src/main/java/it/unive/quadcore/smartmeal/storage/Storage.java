@@ -37,8 +37,8 @@ public class Storage {
 
     private static final String LOCAL_NAME = "The boat restourant";
     private static final String LOCAL_PRESENTATION = "A delicious and friendly pub in a boat-like location" ;
-    private static final double LOCAL_LATITUDE = 45.56121046165753;
-    private static final double LOCAL_LONGITUDE = 12.237328642473326;
+    private static final double LOCAL_LATITUDE = 45.491416138859805;
+    private static final double LOCAL_LONGITUDE = 11.759447246976364;
     /**
      * Rende non instanziabile questa classe.
      */
