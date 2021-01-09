@@ -4,25 +4,20 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 
-import androidx.core.util.Consumer;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.google.android.material.snackbar.BaseTransientBottomBar;
-import com.google.android.material.snackbar.Snackbar;
-
 import it.unive.quadcore.smartmeal.R;
 import it.unive.quadcore.smartmeal.communication.CustomerCommunication;
-import it.unive.quadcore.smartmeal.communication.confirmation.Confirmation;
-import it.unive.quadcore.smartmeal.local.WaiterNotificationException;
+import it.unive.quadcore.smartmeal.sensor.Sensor;
+import it.unive.quadcore.smartmeal.storage.CustomerStorage;
 import it.unive.quadcore.smartmeal.ui.customer.bottomnavigation.menu.MenuFragment;
 import it.unive.quadcore.smartmeal.ui.customer.virtualroom.callback.CustomerLeaveRoomAction;
 import it.unive.quadcore.smartmeal.ui.customer.virtualroom.callback.NotifyWaiterCallback;
@@ -130,6 +125,10 @@ public class CustomerVirtualRoomFragment extends Fragment {
         });
 
         CustomerCommunication.getInstance().onTableChanged(table -> tableNumberTextView.setText(table.getId()));
+
+        if (CustomerStorage.getSensorMode() && PermissionHandler.hasSensorsPermissions(getContext())) {
+            Sensor.getInstance().startShakeDetection(new NotifyWaiterCallback(getActivity()));
+        }
 
         return root;
     }

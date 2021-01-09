@@ -19,9 +19,11 @@ import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
 
 import it.unive.quadcore.smartmeal.R;
+import it.unive.quadcore.smartmeal.sensor.Sensor;
 import it.unive.quadcore.smartmeal.storage.ApplicationMode;
 import it.unive.quadcore.smartmeal.storage.CustomerStorage;
 import it.unive.quadcore.smartmeal.ui.SelectAppModeActivity;
+import it.unive.quadcore.smartmeal.ui.customer.virtualroom.callback.SendWelcomeNotificationCallback;
 import it.unive.quadcore.smartmeal.util.PermissionHandler;
 
 public class CustomerSettingsFragment extends Fragment {
@@ -76,22 +78,27 @@ public class CustomerSettingsFragment extends Fragment {
 //                CustomerStorage.setNotificationMode(isChecked);
 //            }
 
-            // TODO abilitare notifica tramite android (GPS + notifica)
-            // TODO capire discorso permessi
 
+            Sensor sensor = Sensor.getInstance();
 
             if (isChecked && !PermissionHandler.hasNotificationsPermissions(getContext())) {
+                // utente ha attivato notifiche ma non ha i permessi per farlo
+
                 notificationsSwitch.setChecked(false);
+                sensor.endEntranceDetection();
+
                 Snackbar.make(
                         getActivity().findViewById(android.R.id.content),
                         R.string.field_required_snackbar,
                         BaseTransientBottomBar.LENGTH_LONG
                 ).show();
-                return;
+            } else if (isChecked) {         // utente ha attivato notifiche e ha i permessi per farlo
+                sensor.startEntranceDetection(new SendWelcomeNotificationCallback());
+                CustomerStorage.setNotificationMode(true);
+            } else {                        // utente ha disattivato notifiche
+                sensor.endEntranceDetection();
+                CustomerStorage.setNotificationMode(false);
             }
-
-            CustomerStorage.setNotificationMode(isChecked);
-
 
             Log.i(TAG, "Customer changed notifications settings: " + isChecked);
         });
@@ -99,8 +106,6 @@ public class CustomerSettingsFragment extends Fragment {
         boolean sensorsEnabled = CustomerStorage.getSensorMode();
         sensorsSwitch.setChecked(sensorsEnabled);
         sensorsSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            // TODO abilitare sensore movimento
-            // TODO capire discorso permessi
 
             if (isChecked && !PermissionHandler.hasSensorsPermissions(getContext())) {
                 sensorsSwitch.setChecked(false);

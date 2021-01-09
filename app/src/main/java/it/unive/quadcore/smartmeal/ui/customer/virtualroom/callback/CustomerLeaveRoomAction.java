@@ -1,4 +1,4 @@
-package it.unive.quadcore.smartmeal.ui.customer.virtualroom;
+package it.unive.quadcore.smartmeal.ui.customer.virtualroom.callback;
 
 import android.app.Activity;
 import android.content.Intent;

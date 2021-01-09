@@ -24,7 +24,9 @@ import it.unive.quadcore.smartmeal.R;
 import it.unive.quadcore.smartmeal.communication.CustomerCommunication;
 import it.unive.quadcore.smartmeal.local.TableException;
 import it.unive.quadcore.smartmeal.model.Table;
+import it.unive.quadcore.smartmeal.sensor.Sensor;
 import it.unive.quadcore.smartmeal.ui.customer.bottomnavigation.CustomerBottomNavigationActivity;
+import it.unive.quadcore.smartmeal.ui.customer.virtualroom.callback.CustomerLeaveRoomAction;
 
 public class ChooseTableFragment extends Fragment {
 
@@ -108,11 +110,15 @@ public class ChooseTableFragment extends Fragment {
 
             // imposta la callback da eseguire nel caso il gestore chiuda la stanza
             customerCommunication.onCloseRoom(() -> getActivity().runOnUiThread(() -> {
+                Sensor.getInstance().endShakeDetection();
+
+                // TODO da testare (potrebbe non essere la cosa giusta da fare)
                 startActivity(new Intent(
                         getActivity(),
                         CustomerBottomNavigationActivity.class
                 ));
 
+                // TODO forse getActvity() è piu safe di root
                 Snackbar.make(
                         root.findViewById(android.R.id.content),
                         R.string.manager_closed_virtual_room,

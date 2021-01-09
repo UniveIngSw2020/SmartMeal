@@ -29,6 +29,7 @@ import it.unive.quadcore.smartmeal.local.AlreadyOccupiedTableException;
 import it.unive.quadcore.smartmeal.local.NoSuchTableException;
 import it.unive.quadcore.smartmeal.local.TableException;
 import it.unive.quadcore.smartmeal.model.Table;
+import it.unive.quadcore.smartmeal.ui.customer.virtualroom.callback.CustomerLeaveRoomAction;
 
 public class TableAdapter extends RecyclerView.Adapter<TableAdapter.TableViewHolder> {
     @NonNull
