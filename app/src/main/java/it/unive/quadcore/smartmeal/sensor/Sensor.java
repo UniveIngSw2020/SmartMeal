@@ -32,7 +32,6 @@ public class Sensor {
 
     private Runnable onShakeDetectedCallback;
     static Runnable onEntranceCallback;
-
     private PendingIntent geofencePendingIntent;
 
     public Sensor(){}
@@ -46,7 +45,7 @@ public class Sensor {
 
     private GeofencingRequest getGeofencingRequest() {
         GeofencingRequest.Builder builder = new GeofencingRequest.Builder();
-        builder.setInitialTrigger(GeofencingRequest.INITIAL_TRIGGER_ENTER);
+        builder.setInitialTrigger(Geofence.GEOFENCE_TRANSITION_ENTER);
         builder.addGeofences(geofenceList);
         return builder.build();
     }
@@ -57,6 +56,7 @@ public class Sensor {
             return geofencePendingIntent;
         }
         Intent intent = new Intent(activity, GeofenceBroadcastReceiver.class);
+        intent.setAction("ACTION_GEOFENCE_TRANSITION");
         // We use FLAG_UPDATE_CURRENT so that we get the same pending intent back when
         // calling addGeofences() and removeGeofences().
         geofencePendingIntent = PendingIntent.getBroadcast(activity, 0, intent, PendingIntent.
@@ -74,20 +74,21 @@ public class Sensor {
 
         Location location = CustomerStorage.getLocalDescription().getLocation();
 
-        float radius = 50;
-
         geofenceList.add(new Geofence.Builder()
                 // Id geofence
                 .setRequestId("geofence")
-
                 .setCircularRegion(
                         location.getLatitude(),
                         location.getLongitude(),
-                        radius
+                        20
                 )
                 .setExpirationDuration(Geofence.NEVER_EXPIRE)
-                .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER)
+                .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER |
+                        Geofence.GEOFENCE_TRANSITION_EXIT)
                 .build());
+
+        System.out.println("Geofence aggiunto alla lista");
+        System.out.println(geofenceList.get(0));
 
         if (ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
@@ -105,7 +106,7 @@ public class Sensor {
                     public void onSuccess(Void aVoid) {
                         // Geofences added
                         // ...
-                        System.out.println("Geofence aggiunta alla lista");
+                        System.out.println("Geofence client aggiunto alla lista");
                     }
                 })
                 .addOnFailureListener(activity, new OnFailureListener() {
@@ -118,7 +119,7 @@ public class Sensor {
 
     }
     //metodo probabilmente non necessario
-    public void endEntranceDetection(Activity activity){
+    public void endEntranceDetection(Runnable onExitCallback, Activity activity){
         geofencingClient.removeGeofences(getGeofencePendingIntent(activity))
                 .addOnSuccessListener(activity, new OnSuccessListener<Void>() {
                     @Override
@@ -126,7 +127,6 @@ public class Sensor {
                     public void onSuccess(Void aVoid) {
                         // Geofences removed
                         // ...
-                        System.out.println("Sei uscito dall'area del locale");
                     }
                 })
                 .addOnFailureListener(activity, new OnFailureListener() {
