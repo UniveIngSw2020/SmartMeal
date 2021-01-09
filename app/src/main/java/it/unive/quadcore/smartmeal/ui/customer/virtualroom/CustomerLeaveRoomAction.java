@@ -29,17 +29,11 @@ public class CustomerLeaveRoomAction implements Runnable {
 
     @Override
     public void run() {
-//        Snackbar.make(
-//                activity.findViewById(android.R.id.content),
-//                R.string.timeout_error,
-//                BaseTransientBottomBar.LENGTH_LONG
-//        ).show();
-
-        Intent intent = new Intent(activity, CustomerBottomNavigationActivity.class);
+        Intent returnIntent = new Intent();
         Bundle bundle = new Bundle();
         bundle.putString(CustomerBottomNavigationActivity.SHOW_SNACKBAR, snackbarMessage);
-        intent.putExtras(bundle);
-        activity.startActivity(intent);
+        returnIntent.putExtras(bundle);
+        activity.setResult(Activity.RESULT_OK, returnIntent);
         activity.finish();
     }
 }

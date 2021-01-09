@@ -1,5 +1,6 @@
 package it.unive.quadcore.smartmeal.ui.customer.virtualroom;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -82,6 +83,8 @@ public class ChooseTableFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 CustomerCommunication.getInstance().leaveRoom();
+                Intent returnIntent = new Intent();
+                getActivity().setResult(Activity.RESULT_CANCELED, returnIntent);
                 getActivity().finish();
             }
         });

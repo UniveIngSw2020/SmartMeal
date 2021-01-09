@@ -1,5 +1,7 @@
 package it.unive.quadcore.smartmeal.ui.customer.virtualroom;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.core.util.Consumer;
@@ -137,6 +139,10 @@ public class CustomerVirtualRoomFragment extends Fragment {
             public void onClick(View v) {
                 CustomerCommunication customerCommunication = CustomerCommunication.getInstance();
                 customerCommunication.leaveRoom();
+
+                Intent returnIntent = new Intent();
+                getActivity().setResult(Activity.RESULT_CANCELED, returnIntent);
+                getActivity().finish();
             }
         });
 
