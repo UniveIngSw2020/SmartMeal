@@ -24,6 +24,10 @@ import it.unive.quadcore.smartmeal.communication.CustomerCommunication;
 import it.unive.quadcore.smartmeal.communication.confirmation.Confirmation;
 import it.unive.quadcore.smartmeal.local.WaiterNotificationException;
 import it.unive.quadcore.smartmeal.ui.customer.bottomnavigation.menu.MenuFragment;
+import it.unive.quadcore.smartmeal.ui.customer.virtualroom.callback.CustomerLeaveRoomAction;
+import it.unive.quadcore.smartmeal.ui.customer.virtualroom.callback.NotifyWaiterCallback;
+import it.unive.quadcore.smartmeal.ui.customer.virtualroom.callback.NotifyWaiterConfirmationCallback;
+import it.unive.quadcore.smartmeal.util.PermissionHandler;
 
 public class CustomerVirtualRoomFragment extends Fragment {
 
@@ -106,29 +110,8 @@ public class CustomerVirtualRoomFragment extends Fragment {
 
 
                 // TODO eventualmente se dopo tot secondi non è arrivata la conferma, inviare nuovamente
-//                Thread thread;
                 customerCommunication.notifyWaiter(
-                        (Consumer<Confirmation<? extends WaiterNotificationException>>) confirmation -> {
-        //                        thread.interrupt();
-                            int snackbarMessageId;
-
-                            try {
-                                confirmation.obtain();
-                                snackbarMessageId = R.string.waiter_notification_confirmed;
-                            } catch (WaiterNotificationException e) {
-                                Log.i(TAG, "Waiter notification rejected: " + e.getMessage());
-                                snackbarMessageId = R.string.waiter_notification_rejected;
-                            }
-
-                            final int snackbarMessageIdFinal = snackbarMessageId;
-                            getActivity().runOnUiThread(() -> {
-                                Snackbar.make(
-                                        getActivity().findViewById(android.R.id.content),
-                                        snackbarMessageIdFinal,
-                                        BaseTransientBottomBar.LENGTH_LONG
-                                ).show();
-                            });
-                        },
+                        new NotifyWaiterConfirmationCallback(getActivity()),
                         new CustomerLeaveRoomAction(getActivity(), getString(R.string.timeout_error_snackbar))
                 );
             }
