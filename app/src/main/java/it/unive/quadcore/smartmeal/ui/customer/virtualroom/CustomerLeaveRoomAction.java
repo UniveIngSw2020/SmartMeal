@@ -40,5 +40,6 @@ public class CustomerLeaveRoomAction implements Runnable {
         bundle.putString(CustomerBottomNavigationActivity.SHOW_SNACKBAR, snackbarMessage);
         intent.putExtras(bundle);
         activity.startActivity(intent);
+        activity.finish();
     }
 }
