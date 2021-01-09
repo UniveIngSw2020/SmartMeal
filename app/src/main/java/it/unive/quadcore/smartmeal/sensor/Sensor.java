@@ -29,6 +29,7 @@ import it.unive.quadcore.smartmeal.storage.CustomerStorage;
 public class Sensor {
     private final static String TAG = "Sensor";
 
+    private GeofencingClient geofencingClient;
     private List<Geofence> geofenceList;
 
     private Runnable onShakeDetectedCallback;
@@ -46,7 +47,7 @@ public class Sensor {
 
     private GeofencingRequest getGeofencingRequest() {
         GeofencingRequest.Builder builder = new GeofencingRequest.Builder();
-        builder.setInitialTrigger(Geofence.GEOFENCE_TRANSITION_ENTER);
+        builder.setInitialTrigger(GeofencingRequest.INITIAL_TRIGGER_ENTER);
         builder.addGeofences(geofenceList);
         return builder.build();
     }
@@ -57,7 +58,6 @@ public class Sensor {
             return geofencePendingIntent;
         }
         Intent intent = new Intent(activity, GeofenceBroadcastReceiver.class);
-        intent.setAction("ACTION_GEOFENCE_TRANSITION");
         // We use FLAG_UPDATE_CURRENT so that we get the same pending intent back when
         // calling addGeofences() and removeGeofences().
         geofencePendingIntent = PendingIntent.getBroadcast(activity, 0, intent, PendingIntent.
@@ -69,7 +69,7 @@ public class Sensor {
 
         Sensor.onEntranceCallback = onEntranceCallback;
 
-        GeofencingClient geofencingClient = LocationServices.getGeofencingClient(activity);
+        geofencingClient = LocationServices.getGeofencingClient(activity);
 
         geofenceList = new ArrayList<>();
 
