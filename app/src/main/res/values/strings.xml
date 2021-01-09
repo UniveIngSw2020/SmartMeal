@@ -22,8 +22,8 @@
     <string name="leave_room">Leave</string>
     <string name="call_waiter">Call Waiter</string>
     <string name="menu">Menu</string>
-    <string name="connected_message">You\'re connected</string>
-    <string name="selected_table_message">You\'re seating at table</string>
+    <string name="connected_message">You are connected</string>
+    <string name="selected_table_message">You are seating at table</string>
 
     <string name="table">Table</string>
 
@@ -46,6 +46,7 @@
 
     <string name="manager_closed_virtual_room">Manager closed the virtual room</string>
     <string name="timeout_error_snackbar">Communication failed</string>
+    <string name="leave_virtual_dialog_title">You are leaving the room</string>
     <string name="leave_virtual_room_dialog_text">Are you sure you want to leave the virtual room?</string>
     <string name="grant_permission_snackbar_text">Grant permissions from settings</string>
 

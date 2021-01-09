@@ -47,7 +47,7 @@ public class CustomerVirtualRoomActivity extends AppCompatActivity {
         confirmTextView.setPadding(48, 0, 48, 0);
 
         new AlertDialog.Builder(this)
-                .setTitle(R.string.select_table)
+                .setTitle(R.string.leave_virtual_dialog_title)
                 .setView(confirmTextView)
                 .setPositiveButton(
                         R.string.confirmation_button_text,

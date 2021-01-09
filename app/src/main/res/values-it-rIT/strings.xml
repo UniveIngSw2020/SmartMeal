@@ -47,6 +47,7 @@
 
     <string name="manager_closed_virtual_room">Il gestore ha chiuso la stanza virtuale</string>
     <string name="timeout_error_snackbar">Comunicazione non riuscita</string>
+    <string name="leave_virtual_dialog_title">Stai lasciando la stanza</string>
     <string name="leave_virtual_room_dialog_text">Sei sicuro di voler lasciare la stanza virtuale?</string>
     <string name="grant_permission_snackbar_text">Concedi i permessi dalle impostazioni</string>
 
