@@ -77,19 +77,17 @@ public class Sensor {
 
         geofenceList.add(new Geofence.Builder()
                 // Id geofence
-                .setRequestId("geofence")
+                .setRequestId("mygeofence")
+                //
                 .setCircularRegion(
                         location.getLatitude(),
                         location.getLongitude(),
-                        20
+                        20//geofence radius precision
                 )
                 .setExpirationDuration(Geofence.NEVER_EXPIRE)
                 .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER |
                         Geofence.GEOFENCE_TRANSITION_EXIT)
                 .build());
-
-        System.out.println("Geofence aggiunto alla lista");
-        System.out.println(geofenceList.get(0));
 
         if (ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return;
@@ -100,7 +98,7 @@ public class Sensor {
                     public void onSuccess(Void aVoid) {
                         // Geofences added
                         // ...
-                        System.out.println("Geofence client aggiunto alla lista");
+                        Log.e(TAG,"Geofence client aggiunto alla lista");
                     }
                 })
                 .addOnFailureListener(activity, new OnFailureListener() {
