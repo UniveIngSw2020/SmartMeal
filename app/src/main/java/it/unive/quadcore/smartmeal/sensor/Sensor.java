@@ -6,6 +6,7 @@ import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
@@ -26,8 +27,8 @@ import it.unive.quadcore.smartmeal.R;
 import it.unive.quadcore.smartmeal.storage.CustomerStorage;
 
 public class Sensor {
+    private final static String TAG = "Sensor";
 
-    private GeofencingClient geofencingClient;
     private List<Geofence> geofenceList;
 
     private Runnable onShakeDetectedCallback;
@@ -68,7 +69,7 @@ public class Sensor {
 
         Sensor.onEntranceCallback = onEntranceCallback;
 
-        geofencingClient = LocationServices.getGeofencingClient(activity);
+        GeofencingClient geofencingClient = LocationServices.getGeofencingClient(activity);
 
         geofenceList = new ArrayList<>();
 
@@ -91,13 +92,6 @@ public class Sensor {
         System.out.println(geofenceList.get(0));
 
         if (ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
             return;
         }
         geofencingClient.addGeofences(getGeofencingRequest(), getGeofencePendingIntent(activity))
@@ -112,29 +106,9 @@ public class Sensor {
                 .addOnFailureListener(activity, new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        // Failed to add geofences // TODO : eccezione
-                        System.out.println("Non è stato possibile aggiungere una geofencing");
+                        Log.e(TAG,"Non è stato possibile aggiungere una geofencing");
                     }
                 });
 
-    }
-    //metodo probabilmente non necessario
-    public void endEntranceDetection(Runnable onExitCallback, Activity activity){
-        geofencingClient.removeGeofences(getGeofencePendingIntent(activity))
-                .addOnSuccessListener(activity, new OnSuccessListener<Void>() {
-                    @Override
-
-                    public void onSuccess(Void aVoid) {
-                        // Geofences removed
-                        // ...
-                    }
-                })
-                .addOnFailureListener(activity, new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        // Failed to remove geofences
-                        // ...
-                    }
-                });
     }
 }

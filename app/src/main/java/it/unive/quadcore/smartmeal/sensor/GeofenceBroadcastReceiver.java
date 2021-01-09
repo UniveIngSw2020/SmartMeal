@@ -28,7 +28,7 @@ public class GeofenceBroadcastReceiver extends BroadcastReceiver {
 
         // Testo geofence transition type:  vedo se è quella che mi interessa. A me interessa solo entrata.
         if (geofenceTransition == Geofence.GEOFENCE_TRANSITION_ENTER) {
-            // CHIAMARE ONENTRANCECALLBACK
+            // Esecuzione della callback onEntranceCallback
             Sensor.onEntranceCallback.run();
         }
     }
