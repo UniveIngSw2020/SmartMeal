@@ -83,18 +83,18 @@
     <string name="confirm_close_room_alert">You really want to close the room?</string>
 
     <!-- waiter notifications fragment-->
-    <string name="error_delete_notification_snackbar">Is impossibile to remove this notification right now : try again after the reloading</string>
+    <string name="error_delete_notification_snackbar">Is impossibile to remove this notification right now: try again after the reloading</string>
 
     <string name="delete_table_button_label">Delete</string>
 
     <!-- table list fragment-->
-    <string name="error_modify_table_snackbar">It is impossible to modify the tables right now : all the tables are alredy assigned</string>
-    <string name="error_delete_table_snackbar">It is impossible to delete this table right now : try again after the reloading</string>
+    <string name="error_modify_table_snackbar">It is impossible to modify the tables right now: all the tables are alredy assigned</string>
+    <string name="error_delete_table_snackbar">It is impossible to delete this table right now: try again after the reloading</string>
 
     <string name="modify_table_button_label">Modify</string>
 
     <string name="modify_table_alert">Select the new table for the customer</string>
-    <string name="modify_table_error_alert">Error : the table has not changed</string>
+    <string name="modify_table_error_alert">Error: the table has not changed</string>
 
     <!-- add table activity-->
     <string name="title_add_table">Assign a free table</string>
@@ -106,10 +106,16 @@
 
     <string name="assign_table">Assign</string>
     <string name="added_table_alert">Table added correctly!</string>
-    <string name="error_add_table_alert">Error : something happened during the operation</string>
+    <string name="error_add_table_alert">Error: something happened during the operation</string>
 
-    <string name="error_add_table_snackbar">It is impossible to add a table right now  : all the tables are alredy assigned</string>
+    <string name="error_add_table_snackbar">It is impossible to add a table right now: all the tables are alredy assigned</string>
     <string name="table_removed_snackbar">Manager removed your table</string>
     <string name="table_changed_snackbar">Manager changed your table</string>
     <string name="unexpected_error_snackbar">Unexpected error occurred</string>
+
+    <!-- Welcome notification -->
+    <string name="welcome_notification_channel_name">Welcome notification</string>
+    <string name="welcome_notification_channel_description">Channel for the welcome notifications.</string>
+    <string name="welcome_notification_title_prefix">Welcome to</string>
+    <string name="welcome_notification_description">Click here to join the virtual room</string>
 </resources>

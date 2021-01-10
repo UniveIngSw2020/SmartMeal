@@ -248,7 +248,7 @@ public class CustomerCommunication extends Communication {
             @Override
             protected void onConnectionSuccess(@NonNull String endpointId) {
                 synchronized (CustomerCommunication.this) {
-                    stopDiscovery();
+                    stopDiscovery();        // TODO provare a spostare in onConnectionInitiated per performance
                     sendName();
                 }
             }

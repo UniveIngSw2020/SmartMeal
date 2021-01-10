@@ -3,19 +3,21 @@ package it.unive.quadcore.smartmeal.ui;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
 
 import it.unive.quadcore.smartmeal.R;
-import it.unive.quadcore.smartmeal.local.Local;
-import it.unive.quadcore.smartmeal.local.RoomStateException;
 import it.unive.quadcore.smartmeal.storage.ApplicationMode;
 import it.unive.quadcore.smartmeal.storage.CustomerStorage;
 import it.unive.quadcore.smartmeal.storage.Storage;
 import it.unive.quadcore.smartmeal.ui.customer.bottomnavigation.CustomerBottomNavigationActivity;
 import it.unive.quadcore.smartmeal.ui.customer.InsertPersonalDataActivity;
+import it.unive.quadcore.smartmeal.ui.customer.virtualroom.callback.SendWelcomeNotificationCallback;
 import it.unive.quadcore.smartmeal.ui.manager.InsertPasswordActivity;
 import it.unive.quadcore.smartmeal.ui.manager.ManagerHomeActivity;
 
@@ -79,6 +81,8 @@ public class SelectAppModeActivity extends AppCompatActivity {
 
         // TODO testare, in teoria le altre versioni hanno permessi in automatico
         PermissionHandler.requestAllPermissions(this);
+
+        createWelcomeNotificationChannel();
     }
 
     @Override
@@ -109,6 +113,22 @@ public class SelectAppModeActivity extends AppCompatActivity {
 
         if (PermissionHandler.hasSensorsPermissions(this)) {
             CustomerStorage.setNotificationMode(true);
+        }
+    }
+
+    private void createWelcomeNotificationChannel() {
+        // Create the NotificationChannel, but only on API 26+ because
+        // the NotificationChannel class is new and not in the support library
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            CharSequence name = getString(R.string.welcome_notification_channel_name);
+            String description = getString(R.string.welcome_notification_channel_description);
+            int importance = NotificationManager.IMPORTANCE_HIGH;
+            NotificationChannel channel = new NotificationChannel(SendWelcomeNotificationCallback.CHANNEL_ID, name, importance);
+            channel.setDescription(description);
+            // Register the channel with the system; you can't change the importance
+            // or other notification behaviors after this
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
         }
     }
 
