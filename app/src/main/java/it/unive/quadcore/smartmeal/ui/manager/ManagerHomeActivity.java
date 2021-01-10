@@ -1,17 +1,21 @@
 package it.unive.quadcore.smartmeal.ui.manager;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 
@@ -55,13 +59,13 @@ public class ManagerHomeActivity extends AppCompatActivity {
         descriptionButton = findViewById(R.id.button_home_manager_description);
 
         s = new Sensor();
-        s.startEntranceDetection(() -> {
-                    Snackbar.make(
-                            findViewById(android.R.id.content),
-                            R.string.geofence_entrance,
-                            BaseTransientBottomBar.LENGTH_LONG).show();
-            System.out.println("Sei entrato nell'area del locale");
-        }, this);
+        s.startEntranceDetection(()->{
+            Snackbar.make(
+                    findViewById(android.R.id.content),
+                    R.string.geofence_entrance,
+                    BaseTransientBottomBar.LENGTH_LONG
+            ).show();
+        },this);
 
         FusedLocationProviderClient fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
 
@@ -142,5 +146,12 @@ public class ManagerHomeActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-
- }
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    @Override
+    protected void onStop() {
+        super.onStop();
+        s.startEntranceDetection(()->{
+            startForegroundService( new Intent( this, NotificationService. class ));
+        },this);
+    }
+}
