@@ -1,27 +1,28 @@
 package it.unive.quadcore.smartmeal.ui.customer.virtualroom;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 
-import androidx.core.util.Consumer;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.google.android.material.snackbar.BaseTransientBottomBar;
-import com.google.android.material.snackbar.Snackbar;
-
 import it.unive.quadcore.smartmeal.R;
 import it.unive.quadcore.smartmeal.communication.CustomerCommunication;
-import it.unive.quadcore.smartmeal.communication.confirmation.Confirmation;
-import it.unive.quadcore.smartmeal.local.WaiterNotificationException;
+import it.unive.quadcore.smartmeal.sensor.Sensor;
+import it.unive.quadcore.smartmeal.storage.CustomerStorage;
 import it.unive.quadcore.smartmeal.ui.customer.bottomnavigation.menu.MenuFragment;
+import it.unive.quadcore.smartmeal.ui.customer.virtualroom.callback.CustomerLeaveRoomAction;
+import it.unive.quadcore.smartmeal.ui.customer.virtualroom.callback.NotifyWaiterCallback;
+import it.unive.quadcore.smartmeal.ui.customer.virtualroom.callback.NotifyWaiterConfirmationCallback;
+import it.unive.quadcore.smartmeal.util.PermissionHandler;
 
 public class CustomerVirtualRoomFragment extends Fragment {
 
@@ -104,30 +105,9 @@ public class CustomerVirtualRoomFragment extends Fragment {
 
 
                 // TODO eventualmente se dopo tot secondi non è arrivata la conferma, inviare nuovamente
-//                Thread thread;
                 customerCommunication.notifyWaiter(
-                        (Consumer<Confirmation<? extends WaiterNotificationException>>) confirmation -> {
-        //                        thread.interrupt();
-                            int snackbarMessageId;
-
-                            try {
-                                confirmation.obtain();
-                                snackbarMessageId = R.string.waiter_notification_confirmed;
-                            } catch (WaiterNotificationException e) {
-                                Log.i(TAG, "Waiter notification rejected: " + e.getMessage());
-                                snackbarMessageId = R.string.waiter_notification_rejected;
-                            }
-
-                            final int snackbarMessageIdFinal = snackbarMessageId;
-                            getActivity().runOnUiThread(() -> {
-                                Snackbar.make(
-                                        getActivity().findViewById(android.R.id.content),
-                                        snackbarMessageIdFinal,
-                                        BaseTransientBottomBar.LENGTH_LONG
-                                ).show();
-                            });
-                        },
-                        new CustomerNearbyTimeoutAction(getActivity())
+                        new NotifyWaiterConfirmationCallback(getActivity()),
+                        new CustomerLeaveRoomAction(getActivity(), getString(R.string.timeout_error_snackbar))
                 );
             }
         });
@@ -137,8 +117,18 @@ public class CustomerVirtualRoomFragment extends Fragment {
             public void onClick(View v) {
                 CustomerCommunication customerCommunication = CustomerCommunication.getInstance();
                 customerCommunication.leaveRoom();
+
+                Intent returnIntent = new Intent();
+                getActivity().setResult(Activity.RESULT_CANCELED, returnIntent);
+                getActivity().finish();
             }
         });
+
+        CustomerCommunication.getInstance().onTableChanged(table -> tableNumberTextView.setText(table.getId()));
+
+        if (CustomerStorage.getSensorMode() && PermissionHandler.hasSensorsPermissions(getContext())) {
+            Sensor.getInstance().startShakeDetection(new NotifyWaiterCallback(getActivity()));
+        }
 
         return root;
     }

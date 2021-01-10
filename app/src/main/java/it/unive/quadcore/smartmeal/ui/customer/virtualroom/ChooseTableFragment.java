@@ -1,5 +1,6 @@
 package it.unive.quadcore.smartmeal.ui.customer.virtualroom;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -22,9 +23,10 @@ import java.util.TreeSet;
 import it.unive.quadcore.smartmeal.R;
 import it.unive.quadcore.smartmeal.communication.CustomerCommunication;
 import it.unive.quadcore.smartmeal.local.TableException;
-import it.unive.quadcore.smartmeal.model.ManagerTable;
 import it.unive.quadcore.smartmeal.model.Table;
+import it.unive.quadcore.smartmeal.sensor.Sensor;
 import it.unive.quadcore.smartmeal.ui.customer.bottomnavigation.CustomerBottomNavigationActivity;
+import it.unive.quadcore.smartmeal.ui.customer.virtualroom.callback.CustomerLeaveRoomAction;
 
 public class ChooseTableFragment extends Fragment {
 
@@ -72,10 +74,10 @@ public class ChooseTableFragment extends Fragment {
         joinRoom(root);
 
         // TODO remove (solo per testing)
-        fakeTableSortedSet = new TreeSet<>();
-        fakeTableSortedSet.add(new ManagerTable("a"));
-        fakeTableSortedSet.add(new ManagerTable("b"));
-        fakeTableSortedSet.add(new ManagerTable("c"));
+//        fakeTableSortedSet = new TreeSet<>();
+//        fakeTableSortedSet.add(new ManagerTable("a"));
+//        fakeTableSortedSet.add(new ManagerTable("b"));
+//        fakeTableSortedSet.add(new ManagerTable("c"));
         // setupTableRecyclerView(root, fakeTableSortedSet);
 
         cancelButton = root.findViewById(R.id.cancellation_button);
@@ -83,6 +85,8 @@ public class ChooseTableFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 CustomerCommunication.getInstance().leaveRoom();
+                Intent returnIntent = new Intent();
+                getActivity().setResult(Activity.RESULT_CANCELED, returnIntent);
                 getActivity().finish();
             }
         });
@@ -92,16 +96,29 @@ public class ChooseTableFragment extends Fragment {
     private void joinRoom(View root) {
         CustomerCommunication customerCommunication = CustomerCommunication.getInstance();
 
+        customerCommunication.onTableChanged(table -> {
+            new CustomerLeaveRoomAction(getActivity(), getString(R.string.table_changed_snackbar));
+            customerCommunication.leaveRoom();
+        });
+        customerCommunication.onTableRemoved(() -> {
+            new CustomerLeaveRoomAction(getActivity(), getString(R.string.table_removed_snackbar));
+            customerCommunication.leaveRoom();
+        });
+
         // se il cliente non è connesso al gestore con nearby
         if (customerCommunication.isNotConnected()) {
 
             // imposta la callback da eseguire nel caso il gestore chiuda la stanza
             customerCommunication.onCloseRoom(() -> getActivity().runOnUiThread(() -> {
+                Sensor.getInstance().endShakeDetection();
+
+                // TODO da testare (potrebbe non essere la cosa giusta da fare)
                 startActivity(new Intent(
                         getActivity(),
                         CustomerBottomNavigationActivity.class
                 ));
 
+                // TODO forse getActvity() è piu safe di root
                 Snackbar.make(
                         root.findViewById(android.R.id.content),
                         R.string.manager_closed_virtual_room,
@@ -119,7 +136,7 @@ public class ChooseTableFragment extends Fragment {
             customerCommunication.joinRoom(
                     getActivity(),
                     () -> requestFreeTableList(root),
-                    new CustomerNearbyTimeoutAction(getActivity())
+                    new CustomerLeaveRoomAction(getActivity(), getString(R.string.timeout_error_snackbar))
             );
         }
     }
@@ -138,7 +155,7 @@ public class ChooseTableFragment extends Fragment {
                         e.printStackTrace();
                     }
                 },
-                new CustomerNearbyTimeoutAction(getActivity())
+                new CustomerLeaveRoomAction(getActivity(), getString(R.string.timeout_error_snackbar))
         );
     }
 

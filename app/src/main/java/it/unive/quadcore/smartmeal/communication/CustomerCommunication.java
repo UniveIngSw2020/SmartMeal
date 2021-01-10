@@ -66,16 +66,26 @@ public class CustomerCommunication extends Communication {
     // dipendenze: insideTheRoom == false   ==>   isDiscovering == false && connectionState == CONNECTED
 
     @Nullable
+    private Runnable onConnectionSuccessCallback;
+
+    @Nullable
     private Consumer<Confirmation<? extends WaiterNotificationException>> onNotifyWaiterConfirmationCallback;
 
     @Nullable
     private Consumer<Confirmation<? extends TableException>> onSelectTableConfirmationCallback;
 
     @Nullable
-    private Runnable onConnectionSuccessCallback;
+    private Consumer<Table> onTableChangedCallback;
 
     @Nullable
+    private Runnable onTableRemovedCallback;
+
+    /**
+     * Se isInsideTheRoom(), chiama sempre il metodo leaveRoom()
+     */
+    @Nullable
     private Runnable onCloseRoomCallback;
+
 
     @Nullable
     private static CustomerCommunication instance;
@@ -175,7 +185,6 @@ public class CustomerCommunication extends Communication {
                 synchronized (CustomerCommunication.this) {
                     if(isInsideTheRoom()) {
                         Objects.requireNonNull(onCloseRoomCallback);
-                        leaveRoom();
                         onCloseRoomCallback.run();
                     }
                 }
@@ -212,6 +221,11 @@ public class CustomerCommunication extends Communication {
                             case NOTIFY_WAITER:
                                 handleNotifyWaiterResponse(message.getContent());
                                 break;
+                            case TABLE_CHANGED:
+                                handleChangedTableMessage(message.getContent());
+                                break;
+                            case TABLE_REMOVED:
+                                handleRemovedTableMessage();
                             default:
                                 throw new UnsupportedOperationException("Not implemented yet");
                         }
@@ -244,12 +258,23 @@ public class CustomerCommunication extends Communication {
                 synchronized (CustomerCommunication.this) {
                     super.onDisconnected(endpointId);
                     Objects.requireNonNull(onCloseRoomCallback);
-
-                    leaveRoom();
                     onCloseRoomCallback.run();
                 }
             }
         };
+    }
+
+    private void handleRemovedTableMessage() {
+        assert onTableRemovedCallback != null;
+        onTableRemovedCallback.run();
+    }
+
+    private synchronized void handleChangedTableMessage(@NonNull Serializable content) {
+        Objects.requireNonNull(content);
+        assert onTableChangedCallback != null;
+
+        Table table = (Table) content;
+        onTableChangedCallback.accept(table);
     }
 
 
@@ -344,6 +369,9 @@ public class CustomerCommunication extends Communication {
         Objects.requireNonNull(table);
         Objects.requireNonNull(onSelectTableConfirmationCallback);
         Objects.requireNonNull(onTimeoutCallback);
+        Objects.requireNonNull(onTableChangedCallback);
+        Objects.requireNonNull(onTableRemovedCallback);
+
         ensureConnection();
 
         Timer timer = nearbyTimer(onTimeoutCallback);
@@ -373,6 +401,16 @@ public class CustomerCommunication extends Communication {
         };
 
         sendMessage(managerEndpointId, new Message(RequestType.FREE_TABLE_LIST, null)); //TODO content
+    }
+
+    public synchronized void onTableChanged(@NonNull Consumer<Table> onTableChangedCallback) {
+        Objects.requireNonNull(onTableChangedCallback);
+        this.onTableChangedCallback = onTableChangedCallback;
+    }
+
+    public synchronized void onTableRemoved(@NonNull Runnable onTableRemovedCallback) {
+        Objects.requireNonNull(onTableRemovedCallback);
+        this.onTableRemovedCallback = onTableRemovedCallback;
     }
 
     private Timer nearbyTimer(Runnable onTimeoutCallback) {
@@ -405,7 +443,15 @@ public class CustomerCommunication extends Communication {
      */
     public synchronized void onCloseRoom(@NonNull Runnable onCloseRoomCallback) {
         Objects.requireNonNull(onCloseRoomCallback);
-        this.onCloseRoomCallback = onCloseRoomCallback;
+
+        this.onCloseRoomCallback = () -> {
+            synchronized (this) {
+                if (isInsideTheRoom()) {
+                    leaveRoom();
+                }
+                onCloseRoomCallback.run();
+            }
+        };
     }
 
 

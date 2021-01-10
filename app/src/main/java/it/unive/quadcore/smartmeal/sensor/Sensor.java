@@ -36,7 +36,18 @@ public class Sensor {
     static Runnable onEntranceCallback;
     private PendingIntent geofencePendingIntent;
 
-    public Sensor(){}
+    @Nullable
+    private static Sensor instance;
+
+    public synchronized static Sensor getInstance() {
+        if (instance == null) {
+            instance = new Sensor();
+        }
+
+        return instance;
+    }
+
+    private Sensor() { }
 
     /*
     public abstract void startShakeDetection(Runnable onShakeDetectedCallback);

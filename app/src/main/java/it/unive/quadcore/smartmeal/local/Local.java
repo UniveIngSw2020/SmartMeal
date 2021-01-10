@@ -150,7 +150,7 @@ public class Local {
         tableHandler.changeCustomerTable(customer, newTable);
 
         if(!LocalCustomerHandler.getInstance().containsCustomer(customer))
-            managerCommunication.notifyTableHasChanged(customer,newTable);
+            managerCommunication.notifyTableChanged(customer,newTable);
     }
 
     // Assegna un tavolo ad un cliente

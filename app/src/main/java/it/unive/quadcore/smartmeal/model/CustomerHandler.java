@@ -47,9 +47,7 @@ public abstract class CustomerHandler<C extends Customer> {
     }
 
     protected synchronized boolean containsCustomerHelper(@Nullable C customer) {
-        if(customer==null)
-            return false;
-        return customerMap.containsKey(customer.getId());
+        return customer!=null && customerMap.containsKey(customer.getId());
     }
 
     public abstract boolean containsCustomer(@Nullable Customer customer);

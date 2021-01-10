@@ -5,7 +5,9 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
@@ -45,13 +47,16 @@ public class CustomerVirtualRoomActivity extends AppCompatActivity {
         confirmTextView.setPadding(48, 0, 48, 0);
 
         new AlertDialog.Builder(this)
-                .setTitle(R.string.select_table)
+                .setTitle(R.string.leave_virtual_dialog_title)
                 .setView(confirmTextView)
                 .setPositiveButton(
                         R.string.confirmation_button_text,
                         (dialog, which) -> {
                             Log.i(TAG, "Leave virtual room confirmed");
                             CustomerCommunication.getInstance().leaveRoom();
+
+                            Intent returnIntent = new Intent();
+                            setResult(Activity.RESULT_CANCELED, returnIntent);
                             finish();
                         }
                 )

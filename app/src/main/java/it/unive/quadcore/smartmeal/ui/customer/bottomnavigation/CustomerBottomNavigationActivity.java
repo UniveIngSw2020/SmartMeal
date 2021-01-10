@@ -1,5 +1,6 @@
 package it.unive.quadcore.smartmeal.ui.customer.bottomnavigation;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -12,6 +13,10 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
@@ -28,7 +33,25 @@ public class CustomerBottomNavigationActivity extends AppCompatActivity {
 
     private static final String TAG = "CustomerBottomNav";
 
-    public static final String NEARBY_TIMEOUT_ARG = "NEARBY_TIMEOUT";
+    public static final String SHOW_SNACKBAR = "SHOW_SNACKBAR";
+
+    private final ActivityResultLauncher<Intent> virtualRoomActivityResultLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                if (result.getResultCode() == Activity.RESULT_OK) {
+                    // Mostra snackbar in caso di timeout nearby
+                    Intent intent = result.getData();
+                    Bundle bundle = intent != null ? intent.getExtras() : null;
+                    if (bundle != null && bundle.getString(SHOW_SNACKBAR) != null) {
+                        Snackbar.make(
+                                findViewById(android.R.id.content),
+                                bundle.getString(SHOW_SNACKBAR),
+                                BaseTransientBottomBar.LENGTH_LONG
+                        ).show();
+                    }
+                }
+            }
+    );
 
     private FloatingActionButton startCustomerVirtualRoomFab;
 
@@ -36,16 +59,6 @@ public class CustomerBottomNavigationActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_customer_bottom_navigation);
-
-        // Mostra snackbar in caso di timeout nearby
-        Bundle bundle = getIntent().getExtras();
-        if (bundle != null && bundle.getBoolean(NEARBY_TIMEOUT_ARG)) {
-            Snackbar.make(
-                    findViewById(android.R.id.content),
-                    R.string.timeout_error,
-                    BaseTransientBottomBar.LENGTH_LONG
-            ).show();
-        }
 
         BottomNavigationView navView = findViewById(R.id.customer_nav_view);
         // Passing each menu ID as a set of Ids because each
@@ -70,7 +83,7 @@ public class CustomerBottomNavigationActivity extends AppCompatActivity {
                     return;
                 }
 
-                startActivity(new Intent(
+                virtualRoomActivityResultLauncher.launch(new Intent(
                         CustomerBottomNavigationActivity.this,
                         CustomerVirtualRoomActivity.class
                 ));

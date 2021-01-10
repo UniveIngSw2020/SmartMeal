@@ -22,8 +22,8 @@
     <string name="leave_room">Leave</string>
     <string name="call_waiter">Call Waiter</string>
     <string name="menu">Menu</string>
-    <string name="connected_message">You\'re connected</string>
-    <string name="selected_table_message">You\'re seating at table</string>
+    <string name="connected_message">You are connected</string>
+    <string name="selected_table_message">You are seating at table</string>
 
     <string name="table">Table</string>
 
@@ -45,11 +45,12 @@
     <string name="select_table">Select table</string>
 
     <string name="manager_closed_virtual_room">Manager closed the virtual room</string>
-    <string name="timeout_error">Communication failed</string>
+    <string name="timeout_error_snackbar">Communication failed</string>
+    <string name="leave_virtual_dialog_title">You are leaving the room</string>
     <string name="leave_virtual_room_dialog_text">Are you sure you want to leave the virtual room?</string>
     <string name="grant_permission_snackbar_text">Grant permissions from settings</string>
 
-    
+
 
     <!-- alert dialogs -->
     <string name="close_label_alert">Close</string>
@@ -110,5 +111,7 @@
     <string name="geofence_entrance">You are entered in a local area</string>
 
     <string name="error_add_table_snackbar">It is impossible to add a table right now  : all the tables are alredy assigned</string>
-
+    <string name="table_removed_snackbar">Manager removed your table</string>
+    <string name="table_changed_snackbar">Manager changed your table</string>
+    <string name="unexpected_error_snackbar">Unexpected error occurred</string>
 </resources>
