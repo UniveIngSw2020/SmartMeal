@@ -67,7 +67,7 @@ public class ManagerHomeActivity extends AppCompatActivity {
             ).show();
         },this);
 
-        FusedLocationProviderClient fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+         FusedLocationProviderClient fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
@@ -151,7 +151,7 @@ public class ManagerHomeActivity extends AppCompatActivity {
     protected void onStop() {
         super.onStop();
         s.startEntranceDetection(()->{
-            startForegroundService( new Intent( this, NotificationService. class ));
+            startForegroundService( new Intent( this, NotificationService.class ));
         },this);
     }
 }

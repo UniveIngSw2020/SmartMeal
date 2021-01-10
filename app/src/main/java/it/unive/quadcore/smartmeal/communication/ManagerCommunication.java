@@ -270,4 +270,7 @@ public class ManagerCommunication extends Communication {
     public void notifyTableHasChanged(Customer customer, Table newTable) {
         // TODO : implementare
     }
+
+    public void notifyCustomerRemoved(Customer customer) {
+    }
 }
