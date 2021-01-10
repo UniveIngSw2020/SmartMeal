@@ -31,13 +31,13 @@ public class Local {
     private static Local instance = null;
 
     // Oggetti gestori tavoli e notifiche cameriere
-    @NonNull
+    // @Nullable
     private TableHandler tableHandler;
-    @NonNull
+    // @Nullable
     private WaiterNotificationHandler waiterNotificationHandler;
 
     // Oggetto per la comunicazione
-    @NonNull
+    // @Nullable
     private ManagerCommunication managerCommunication ;
 
     // Stato della stanza: roomState=true -> stanza aperta ; roomState=false -> stanza chiusa
@@ -175,7 +175,7 @@ public class Local {
         tableHandler.freeTable(table);
 
         if(!LocalCustomerHandler.getInstance().containsCustomer(customer))
-            managerCommunication.notifyCustomerRemoved(customer);
+            managerCommunication.notifyTableRemoved(customer);
     }
 
     // Ritorna il tavolo associato ad un cliente
@@ -201,16 +201,16 @@ public class Local {
         if(!roomState) // La stanza non è aperta
             throw new RoomStateException(false);
 
- /*       // Metto a null
+        // Metto a null
         tableHandler = null;
         waiterNotificationHandler = null;
-*/
+
         // Chiudo stanza
         managerCommunication.closeRoom();
-/*
+
         // Metto a null (non sarebbe necessario)
         managerCommunication = null;
-*/
+
         roomState = false;
     }
 /*

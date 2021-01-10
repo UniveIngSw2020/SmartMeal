@@ -9,6 +9,7 @@ import android.location.Location;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 
 import com.google.android.gms.location.Geofence;
@@ -49,11 +50,13 @@ public class Sensor {
 
     private Sensor() { }
 
-    /*
-    public abstract void startShakeDetection(Runnable onShakeDetectedCallback);
+    public void startShakeDetection(Runnable onShakeDetectedCallback){
+        // TODO
+    }
 
-    public abstract void endShakeDetection();
-    */
+    public void endShakeDetection(){
+        // TODO
+    }
 
 
     private GeofencingRequest getGeofencingRequest() {
@@ -86,6 +89,8 @@ public class Sensor {
 
         Location location = CustomerStorage.getLocalDescription().getLocation();
 
+        float radius = 20;
+
         geofenceList.add(new Geofence.Builder()
                 // Id geofence
                 .setRequestId("mygeofence")
@@ -93,7 +98,7 @@ public class Sensor {
                 .setCircularRegion(
                         location.getLatitude(),
                         location.getLongitude(),
-                        20//geofence radius precision
+                        radius//geofence radius precision
                 )
                 .setExpirationDuration(Geofence.NEVER_EXPIRE)
                 .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER)
@@ -106,17 +111,33 @@ public class Sensor {
                 .addOnSuccessListener(activity, new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        // Geofences added
-                        // ...
-                        Log.e(TAG,"Geofence client aggiunto alla lista");
+                        Log.e(TAG,"Geofence client added to the list");
                     }
                 })
                 .addOnFailureListener(activity, new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Log.e(TAG,"Non è stato possibile aggiungere una geofencing");
+                        Log.e(TAG,"It isn't possible add a geofence");
                     }
                 });
 
+    }
+
+    public void endEntranceDetection(Activity activity){
+        geofencingClient.removeGeofences(getGeofencePendingIntent(activity))
+                .addOnSuccessListener(activity, new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        // Geofences removed
+                        // ...
+                    }
+                })
+                .addOnFailureListener(activity, new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        // Failed to remove geofences
+                        // ...
+                    }
+                });
     }
 }

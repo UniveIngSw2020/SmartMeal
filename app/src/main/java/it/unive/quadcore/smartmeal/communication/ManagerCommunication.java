@@ -301,6 +301,4 @@ public class ManagerCommunication extends Communication {
         sendMessage(customer.getId(), new Message(RequestType.TABLE_REMOVED, null));
     }
 
-    public void notifyCustomerRemoved(Customer customer) {
-    }
 }

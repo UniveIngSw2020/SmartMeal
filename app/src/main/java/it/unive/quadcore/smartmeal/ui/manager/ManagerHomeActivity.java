@@ -4,6 +4,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 
 import android.Manifest;
 import android.app.Activity;
@@ -18,6 +20,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -58,16 +61,29 @@ public class ManagerHomeActivity extends AppCompatActivity {
         menuButton = findViewById(R.id.button_home_manager_menu);
         descriptionButton = findViewById(R.id.button_home_manager_description);
 
-        s = new Sensor();
+
+        // TODO : rimuovere. Solo testing
+
+        s = Sensor.getInstance();
         s.startEntranceDetection(()->{
             Snackbar.make(
                     findViewById(android.R.id.content),
                     R.string.geofence_entrance,
                     BaseTransientBottomBar.LENGTH_LONG
             ).show();
+
+           // Mostra una notifica
+            NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
+                    .setContentTitle("Notifica")
+                    .setContentText("Testo notifica")
+                    .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+            NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
+            // notificationId is a unique int for each notification that you must define
+            notificationManager.notify(1234, builder.build());
+
         },this);
 
-         FusedLocationProviderClient fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+        /*  FusedLocationProviderClient fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
@@ -84,13 +100,17 @@ public class ManagerHomeActivity extends AppCompatActivity {
                 PRIORITY_HIGH_ACCURACY,
                 new CancellationTokenSource().getToken()
         );
+        // Task<Location> location = fusedLocationProviderClient.getLastLocation();
+
         location.addOnCompleteListener(new OnCompleteListener<Location>() {
             @Override
             public void onComplete(@NonNull Task<Location> task) {
                 System.out.println("Device's location is: " + location.getResult().getLatitude() + "," + location.getResult().getLongitude());
             }
-        });
+        }); */
 
+
+        // Fine testing
 
         roomButton.setOnClickListener(v -> { // Si vuole accedere alla stanza virtuale
 
@@ -146,6 +166,7 @@ public class ManagerHomeActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    // TODO : rimuovere, solo testing
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onStop() {

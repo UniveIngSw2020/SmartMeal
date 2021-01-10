@@ -85,7 +85,7 @@ public class CustomerSettingsFragment extends Fragment {
                 // utente ha attivato notifiche ma non ha i permessi per farlo
 
                 notificationsSwitch.setChecked(false);
-                sensor.endEntranceDetection();
+                sensor.endEntranceDetection(getActivity());
 
                 Snackbar.make(
                         getActivity().findViewById(android.R.id.content),
@@ -93,10 +93,10 @@ public class CustomerSettingsFragment extends Fragment {
                         BaseTransientBottomBar.LENGTH_LONG
                 ).show();
             } else if (isChecked) {         // utente ha attivato notifiche e ha i permessi per farlo
-                sensor.startEntranceDetection(new SendWelcomeNotificationCallback());
+                sensor.startEntranceDetection(new SendWelcomeNotificationCallback(),getActivity());
                 CustomerStorage.setNotificationMode(true);
             } else {                        // utente ha disattivato notifiche
-                sensor.endEntranceDetection();
+                sensor.endEntranceDetection(getActivity());
                 CustomerStorage.setNotificationMode(false);
             }
 
