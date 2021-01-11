@@ -74,6 +74,7 @@ public class ManagerHomeActivity extends AppCompatActivity {
 
            // Mostra una notifica
             NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
+                    .setSmallIcon(R.drawable.common_google_signin_btn_text_dark)
                     .setContentTitle("Notifica")
                     .setContentText("Testo notifica")
                     .setPriority(NotificationCompat.PRIORITY_DEFAULT);
