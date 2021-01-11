@@ -3,31 +3,18 @@ package it.unive.quadcore.smartmeal.ui.manager;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
-import android.Manifest;
-import android.app.Activity;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
 
 
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.tasks.CancellationTokenSource;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.SuccessContinuation;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -36,10 +23,8 @@ import java.util.Objects;
 import it.unive.quadcore.smartmeal.R;
 import it.unive.quadcore.smartmeal.local.Local;
 import it.unive.quadcore.smartmeal.local.RoomStateException;
-import it.unive.quadcore.smartmeal.sensor.Sensor;
+import it.unive.quadcore.smartmeal.sensor.SensorDetector;
 import it.unive.quadcore.smartmeal.ui.SettingsActivity;
-
-import static com.google.android.gms.location.LocationRequest.PRIORITY_HIGH_ACCURACY;
 
 // Activity home page gestore
 public class ManagerHomeActivity extends AppCompatActivity {
@@ -47,7 +32,7 @@ public class ManagerHomeActivity extends AppCompatActivity {
     private Button roomButton;
     private Button menuButton;
     private Button descriptionButton;
-    private Sensor s;
+    private SensorDetector sensorDetector;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,8 +49,8 @@ public class ManagerHomeActivity extends AppCompatActivity {
 
         // TODO : rimuovere. Solo testing
 
-        s = Sensor.getInstance();
-        s.startEntranceDetection(()->{
+        sensorDetector = SensorDetector.getInstance();
+        sensorDetector.startEntranceDetection(()->{
             Snackbar.make(
                     findViewById(android.R.id.content),
                     R.string.geofence_entrance,
@@ -75,7 +60,7 @@ public class ManagerHomeActivity extends AppCompatActivity {
            // Mostra una notifica
             NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
                     .setSmallIcon(R.drawable.common_google_signin_btn_text_dark)
-                    .setContentTitle("Notifica")
+                    .setContentTitle("Notifica geofencing")
                     .setContentText("Testo notifica")
                     .setPriority(NotificationCompat.PRIORITY_DEFAULT);
             NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
@@ -111,7 +96,31 @@ public class ManagerHomeActivity extends AppCompatActivity {
         }); */
 
 
-        // Fine testing
+        // Fine testing geofencing
+
+
+        // Inizio testing shake
+
+        sensorDetector.startShakeDetection(()->{
+            Snackbar.make(
+                    findViewById(android.R.id.content),
+                    "snackbar shake",
+                    BaseTransientBottomBar.LENGTH_LONG
+            ).show();
+
+            // Mostra una notifica
+            NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
+                    .setSmallIcon(R.drawable.common_google_signin_btn_text_dark)
+                    .setContentTitle("Notifica shake")
+                    .setContentText("Testo notifica")
+                    .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+            NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
+            // notificationId is a unique int for each notification that you must define
+            notificationManager.notify(1234, builder.build());
+        },this);
+
+
+        // Fine testing shake
 
         roomButton.setOnClickListener(v -> { // Si vuole accedere alla stanza virtuale
 
@@ -135,13 +144,31 @@ public class ManagerHomeActivity extends AppCompatActivity {
         menuButton.setOnClickListener(v -> {
             // avvia l'activity che mostra menu
 
-            startActivity(new Intent(ManagerHomeActivity.this, MenuManagerActivity.class));
+            // startActivity(new Intent(ManagerHomeActivity.this, MenuManagerActivity.class)); // TODO : rimettere a posto
+            sensorDetector.endShakeDetection();
         });
 
         descriptionButton.setOnClickListener(v -> {
             // avvia l'activity che mostra descrizione
 
-            startActivity(new Intent(ManagerHomeActivity.this, DescriptionManagerActivity.class));
+            // startActivity(new Intent(ManagerHomeActivity.this, DescriptionManagerActivity.class)); // TODO : rimettere a posto
+            sensorDetector.startShakeDetection(()->{
+                Snackbar.make(
+                        findViewById(android.R.id.content),
+                        "snackbar shake",
+                        BaseTransientBottomBar.LENGTH_LONG
+                ).show();
+
+                // Mostra una notifica
+                NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
+                        .setSmallIcon(R.drawable.common_google_signin_btn_text_dark)
+                        .setContentTitle("Notifica shake")
+                        .setContentText("Testo notifica")
+                        .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+                NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
+                // notificationId is a unique int for each notification that you must define
+                notificationManager.notify(1234, builder.build());
+            },this);
         });
 
     }
@@ -172,7 +199,7 @@ public class ManagerHomeActivity extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
-        s.startEntranceDetection(()->{
+        sensorDetector.startEntranceDetection(()->{
             startForegroundService( new Intent( this, NotificationService.class ));
         },this);
     }

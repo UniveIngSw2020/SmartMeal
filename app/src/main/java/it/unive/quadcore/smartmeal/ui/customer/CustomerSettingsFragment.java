@@ -1,6 +1,5 @@
 package it.unive.quadcore.smartmeal.ui.customer;
 
-import android.Manifest;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -19,7 +18,7 @@ import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
 
 import it.unive.quadcore.smartmeal.R;
-import it.unive.quadcore.smartmeal.sensor.Sensor;
+import it.unive.quadcore.smartmeal.sensor.SensorDetector;
 import it.unive.quadcore.smartmeal.storage.ApplicationMode;
 import it.unive.quadcore.smartmeal.storage.CustomerStorage;
 import it.unive.quadcore.smartmeal.ui.SelectAppModeActivity;
@@ -79,13 +78,13 @@ public class CustomerSettingsFragment extends Fragment {
 //            }
 
 
-            Sensor sensor = Sensor.getInstance();
+            SensorDetector sensorDetector = SensorDetector.getInstance();
 
             if (isChecked && !PermissionHandler.hasNotificationsPermissions(getContext())) {
                 // utente ha attivato notifiche ma non ha i permessi per farlo
 
                 notificationsSwitch.setChecked(false);
-                sensor.endEntranceDetection(getActivity());
+                sensorDetector.endEntranceDetection();
 
                 Snackbar.make(
                         getActivity().findViewById(android.R.id.content),
@@ -93,10 +92,10 @@ public class CustomerSettingsFragment extends Fragment {
                         BaseTransientBottomBar.LENGTH_LONG
                 ).show();
             } else if (isChecked) {         // utente ha attivato notifiche e ha i permessi per farlo
-                sensor.startEntranceDetection(new SendWelcomeNotificationCallback(),getActivity());
+                sensorDetector.startEntranceDetection(new SendWelcomeNotificationCallback(),getActivity());
                 CustomerStorage.setNotificationMode(true);
             } else {                        // utente ha disattivato notifiche
-                sensor.endEntranceDetection(getActivity());
+                sensorDetector.endEntranceDetection();
                 CustomerStorage.setNotificationMode(false);
             }
 

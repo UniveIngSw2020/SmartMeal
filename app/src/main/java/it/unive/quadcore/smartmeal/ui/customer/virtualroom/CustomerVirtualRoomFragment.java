@@ -16,7 +16,7 @@ import android.widget.TextView;
 
 import it.unive.quadcore.smartmeal.R;
 import it.unive.quadcore.smartmeal.communication.CustomerCommunication;
-import it.unive.quadcore.smartmeal.sensor.Sensor;
+import it.unive.quadcore.smartmeal.sensor.SensorDetector;
 import it.unive.quadcore.smartmeal.storage.CustomerStorage;
 import it.unive.quadcore.smartmeal.ui.customer.bottomnavigation.menu.MenuFragment;
 import it.unive.quadcore.smartmeal.ui.customer.virtualroom.callback.CustomerLeaveRoomAction;
@@ -127,7 +127,7 @@ public class CustomerVirtualRoomFragment extends Fragment {
         CustomerCommunication.getInstance().onTableChanged(table -> tableNumberTextView.setText(table.getId()));
 
         if (CustomerStorage.getSensorMode() && PermissionHandler.hasSensorsPermissions(getContext())) {
-            Sensor.getInstance().startShakeDetection(new NotifyWaiterCallback(getActivity()));
+            SensorDetector.getInstance().startShakeDetection(new NotifyWaiterCallback(getActivity()),getActivity());
         }
 
         return root;
