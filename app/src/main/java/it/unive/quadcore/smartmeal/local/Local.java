@@ -95,7 +95,7 @@ public class Local {
             try{
                 tableHandler.freeTable(tableHandler.getTable(customer));
             }catch( TableException e){ // Eccezione
-                Log.e(TAG,"Customer that left the room didn't have a table");
+                Log.i(TAG,"Customer that left the room didn't have a table");
             }
         });
 

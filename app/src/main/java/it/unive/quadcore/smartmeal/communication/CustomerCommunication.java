@@ -241,6 +241,11 @@ public class CustomerCommunication extends Communication {
                 synchronized (CustomerCommunication.this) {
                     if (!isInsideTheRoom()) {
                         Log.w(TAG, "Initiating the connection while not in the room");
+                        return;
+                    }
+                    if(connectionState() != ConnectionState.DISCONNECTED) {
+                        Log.wtf(TAG, "Initiating the connection while not disconnected");
+                        return;
                     }
                     super.onConnectionInitiated(endpointId, connectionInfo);
                     managerEndpointId = endpointId;
@@ -251,6 +256,10 @@ public class CustomerCommunication extends Communication {
             @Override
             protected void onConnectionSuccess(@NonNull String endpointId) {
                 synchronized (CustomerCommunication.this) {
+                    if(connectionState() != ConnectionState.CONNECTING) {
+                        Log.i(TAG, "Connection success but not connecting");
+                        return;
+                    }
                     stopDiscovery();        // TODO provare a spostare in onConnectionInitiated per performance
                     sendName();
                 }
@@ -312,6 +321,11 @@ public class CustomerCommunication extends Communication {
 
         if(isInsideTheRoom()) {
             assert onConnectionSuccessCallback != null;
+
+            if(connectionState() != ConnectionState.CONNECTING) {
+                Log.wtf(TAG, "connection confirmation arrived while not connecting");
+                return;
+            }
 
             @SuppressWarnings("unchecked")
             Confirmation<CustomerNotRecognizedException> confirmation = (Confirmation<CustomerNotRecognizedException>) content;
