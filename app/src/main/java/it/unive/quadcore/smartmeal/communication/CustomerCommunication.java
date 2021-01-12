@@ -239,6 +239,9 @@ public class CustomerCommunication extends Communication {
             @Override
             public void onConnectionInitiated(@NonNull String endpointId, @NonNull ConnectionInfo connectionInfo) {
                 synchronized (CustomerCommunication.this) {
+                    if (!isInsideTheRoom()) {
+                        Log.w(TAG, "Initiating the connection while not in the room");
+                    }
                     super.onConnectionInitiated(endpointId, connectionInfo);
                     managerEndpointId = endpointId;
                     connectionState = ConnectionState.CONNECTING;
@@ -461,6 +464,7 @@ public class CustomerCommunication extends Communication {
     public synchronized void leaveRoom() {
         if(!isInsideTheRoom()) {
             Log.w(TAG, "trying to leave the Room while not in the Room");
+            // TODO eventuale return
         }
         stopDiscovery();
         disconnect();
