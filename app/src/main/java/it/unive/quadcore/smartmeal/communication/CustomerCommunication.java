@@ -104,12 +104,12 @@ public class CustomerCommunication extends Communication {
     }
 
     @Override
-    protected synchronized void sendMessage(String toEndpointId, Message response) {
+    protected synchronized void sendMessage(String toEndpointId, Message message) {
         if (!isInsideTheRoom()) {
             Log.w(TAG, "trying to send a message while not in the room");
             return;
         }
-        super.sendMessage(toEndpointId, response);
+        super.sendMessage(toEndpointId, message);
     }
 
     // eventualmente prendere callback con costruttore

@@ -15,31 +15,58 @@ import java.io.IOException;
 import java.io.ObjectOutputStream;
 
 abstract class Communication {
+
+    /**
+     * Tag per logging
+     */
     @NonNull
     private static final String TAG = "Communication";
 
+    /**
+     * Strategia usata per la comunicazione Nearby (uno a molti)
+     */
     @NonNull
     protected static final Strategy STRATEGY = Strategy.P2P_STAR;
+
+    /**
+     * Id utilizzato da Nearby per identificare il servizio (l'applicazione)
+     */
     @NonNull
     protected static final String SERVICE_ID = "it.unive.quadcore.smartmeal";
 
+    /**
+     * Activity utilizzata da nearby per compiere le sue funzioni
+     */
     @Nullable
-    protected Activity activity;                  // TODO assegnare valore
+    protected Activity activity;
 
 
+    /**
+     * Costruttore per Communication (istanziabile solo da una sottoclasse)
+     */
     protected Communication() {
         activity = null;
     }
 
-    protected void sendMessage(String toEndpointId, Message response) {
+    /**
+     * Invia un messaggio al dispositivo identificato da `toEndpointId`
+     *
+     * @param toEndpointId id che identifica il destinatario
+     * @param message messaggio da inviare
+     */
+    protected void sendMessage(String toEndpointId, Message message) {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         try {
+            // trasforma il messaggio in un array di byte e quindi in un Payload
             ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
-            objectOutputStream.writeObject(response);
+            objectOutputStream.writeObject(message);
             Payload filePayload = Payload.fromBytes(outputStream.toByteArray());
+
+            // invia il messaggio usando Nearby
             assert activity != null;
             Nearby.getConnectionsClient(activity).sendPayload(toEndpointId, filePayload);
         } catch (IOException e) {
+            // non dovrebbe mai accadere usando ByteArrayOutputStream
             Log.wtf(TAG, "Unexpected output IOException: " + e);
             throw new AssertionError("Unexpected output IOException");
         }
