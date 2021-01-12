@@ -69,33 +69,6 @@ public class ManagerHomeActivity extends AppCompatActivity {
 
         },this);
 
-        /*  FusedLocationProviderClient fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
-
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            return;
-        }
-
-        Task<Location> location = fusedLocationProviderClient.getCurrentLocation(
-                PRIORITY_HIGH_ACCURACY,
-                new CancellationTokenSource().getToken()
-        );
-        // Task<Location> location = fusedLocationProviderClient.getLastLocation();
-
-        location.addOnCompleteListener(new OnCompleteListener<Location>() {
-            @Override
-            public void onComplete(@NonNull Task<Location> task) {
-                System.out.println("Device's location is: " + location.getResult().getLatitude() + "," + location.getResult().getLongitude());
-            }
-        }); */
-
-
         // Fine testing geofencing
 
 

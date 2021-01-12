@@ -18,6 +18,8 @@ public class NotificationService extends Service {
 
     String TAG = "NotificationService" ;
 
+    public NotificationService(){}
+
     @Override
     public IBinder onBind (Intent arg0) {
         return null;
@@ -38,7 +40,7 @@ public class NotificationService extends Service {
         Log. e ( TAG , "onDestroy" ) ;
         super .onDestroy() ;
     }
-    //we are going to use a handler to be able to run in our TimerTask
+    // Uso di un Handler per
     final Handler handler = new Handler() ;
 
     public void initializeTask () {

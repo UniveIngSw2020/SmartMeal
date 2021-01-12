@@ -168,6 +168,8 @@ public class SensorDetector {
 
     // METODI RILEVAZIONE ENTRATA
 
+    // Crea il GeofencingRequest, specifica il metodo di trigger degli eventi
+    // e aggiunge il Geofence alla GeofenceRequest
     @NonNull
     private GeofencingRequest getGeofencingRequest() {
         GeofencingRequest.Builder builder = new GeofencingRequest.Builder();
@@ -176,22 +178,24 @@ public class SensorDetector {
         return builder.build();
     }
 
+    // Ritorna una PendingIntent riferito alla Geofence
+    // specificando l'azione da eseguire sull'Intent.
     @NonNull
     private PendingIntent getGeofencePendingIntent(@NonNull Activity activity) {
-        // Reuse the PendingIntent if we already have it.
+        // Riusiamo la stessa PendingIntent se già l'abbiamo creata
         if (geofencePendingIntent != null) {
             return geofencePendingIntent;
         }
         Intent intent = new Intent(activity, GeofenceBroadcastReceiver.class);
-        // We use FLAG_UPDATE_CURRENT so that we get the same pending intent back when
-        // calling addGeofences() and removeGeofences().
+        // Usiamo FLAG_UPDATE_CURRENT così addGeofences() e removeGeofences()
+        // useranno lo stesso PendingIntent.
         geofencePendingIntent = PendingIntent.getBroadcast(activity, 0, intent, PendingIntent.
                 FLAG_UPDATE_CURRENT);
         return geofencePendingIntent;
     }
 
     public void startEntranceDetection(@NonNull Runnable onEntranceCallback,@NonNull Activity activity) {
-        if(isShakeDetecting)
+        if(isEntranceDetecting)
             throw new IllegalStateException("The entrance has alredy been detecting");
 
         SensorDetector.onEntranceCallback = onEntranceCallback;
@@ -218,9 +222,13 @@ public class SensorDetector {
                 .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER)
                 .build());
 
+        Log.e(TAG,"Geofence added to the list");
+
+
         if (ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return;
         }
+
         geofencingClient.addGeofences(getGeofencingRequest(), getGeofencePendingIntent(geofenceActivity))
                 .addOnSuccessListener(geofenceActivity, new OnSuccessListener<Void>() {
                     @Override
@@ -239,8 +247,8 @@ public class SensorDetector {
     }
 
     public void endEntranceDetection(){
-        if(isEntranceDetecting)
-            throw new IllegalStateException("The shake hasn't been detecting yet");
+        if(!isEntranceDetecting)
+            throw new IllegalStateException("The shake hasn't already been detecting yet");
 
         geofencingClient.removeGeofences(getGeofencePendingIntent(geofenceActivity))
                 .addOnSuccessListener(geofenceActivity, new OnSuccessListener<Void>() {
