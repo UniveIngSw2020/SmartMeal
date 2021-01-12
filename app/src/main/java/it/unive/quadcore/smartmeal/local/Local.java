@@ -31,13 +31,13 @@ public class Local {
     private static Local instance = null;
 
     // Oggetti gestori tavoli e notifiche cameriere
-    // @Nullable
+    @Nullable
     private TableHandler tableHandler;
-    // @Nullable
+    @Nullable
     private WaiterNotificationHandler waiterNotificationHandler;
 
     // Oggetto per la comunicazione
-    // @Nullable
+    @Nullable
     private ManagerCommunication managerCommunication ;
 
     // Stato della stanza: roomState=true -> stanza aperta ; roomState=false -> stanza chiusa

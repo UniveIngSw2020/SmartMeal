@@ -194,13 +194,4 @@ public class ManagerHomeActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    // TODO : rimuovere, solo testing
-    @RequiresApi(api = Build.VERSION_CODES.O)
-    @Override
-    protected void onStop() {
-        super.onStop();
-        sensorDetector.startEntranceDetection(()->{
-            startForegroundService( new Intent( this, NotificationService.class ));
-        },this);
-    }
 }

@@ -177,7 +177,7 @@ public class SensorDetector {
     }
 
     @NonNull
-    private PendingIntent getGeofencePendingIntent(Activity activity) {
+    private PendingIntent getGeofencePendingIntent(@NonNull Activity activity) {
         // Reuse the PendingIntent if we already have it.
         if (geofencePendingIntent != null) {
             return geofencePendingIntent;
@@ -209,7 +209,6 @@ public class SensorDetector {
         geofenceList.add(new Geofence.Builder()
                 // Id geofence
                 .setRequestId("mygeofence")
-                //
                 .setCircularRegion(
                         location.getLatitude(),
                         location.getLongitude(),
@@ -240,7 +239,7 @@ public class SensorDetector {
     }
 
     public void endEntranceDetection(){
-        if(isShakeDetecting)
+        if(isEntranceDetecting)
             throw new IllegalStateException("The shake hasn't been detecting yet");
 
         geofencingClient.removeGeofences(getGeofencePendingIntent(geofenceActivity))
