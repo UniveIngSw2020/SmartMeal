@@ -1,6 +1,7 @@
 package it.unive.quadcore.smartmeal.ui.customer.virtualroom;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -10,6 +11,7 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -121,15 +123,18 @@ public class CustomerVirtualRoomFragment extends Fragment {
         exitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                CustomerCommunication customerCommunication = CustomerCommunication.getInstance();
-                customerCommunication.leaveRoom();
+                CustomerCommunication.getInstance().leaveRoom();
 
-                Activity activity = getActivity();
-                if (activity != null) {
-                    Intent returnIntent = new Intent();
-                    activity.setResult(Activity.RESULT_CANCELED, returnIntent);
-                    activity.finish();
-                }
+                // TODO testare che il metodo sotto funzioni prima di eliminare
+//                Activity activity = getActivity();
+//                if (activity != null) {
+//                    Intent returnIntent = new Intent();
+//                    activity.setResult(Activity.RESULT_CANCELED, returnIntent);
+//                    activity.finish();
+//                }
+
+                showLeaveRoomConfirmationDialog();
+
             }
         });
 
@@ -140,5 +145,39 @@ public class CustomerVirtualRoomFragment extends Fragment {
         }
 
         return root;
+    }
+
+    private void showLeaveRoomConfirmationDialog() {
+        Activity activity = getActivity();
+        if (activity == null) {
+            return;
+        }
+
+        // mostra un Dialog di conferma
+        TextView confirmTextView = new TextView(getContext());
+        String leaveConfirmationText = getString(R.string.leave_virtual_room_dialog_text);
+
+        confirmTextView.setText(leaveConfirmationText);
+        confirmTextView.setPadding(48, 0, 48, 0);
+
+        new AlertDialog.Builder(getContext())
+                .setTitle(R.string.leave_virtual_dialog_title)
+                .setView(confirmTextView)
+                .setPositiveButton(
+                        R.string.confirmation_button_text,
+                        (dialog, which) -> {
+                            Log.i(TAG, "Leave virtual room confirmed");
+                            CustomerCommunication.getInstance().leaveRoom();
+
+                            Intent returnIntent = new Intent();
+                            activity.setResult(Activity.RESULT_CANCELED, returnIntent);
+                            activity.finish();
+                        }
+                )
+                .setNegativeButton(
+                        R.string.cancellation_button_text,
+                        (dialog, which) -> dialog.cancel()
+                )
+                .show();
     }
 }

@@ -46,6 +46,17 @@ public class CustomerVirtualRoomActivity extends AppCompatActivity {
         confirmTextView.setText(leaveConfirmationText);
         confirmTextView.setPadding(48, 0, 48, 0);
 
+        showLeaveRoomConfirmationDialog();
+    }
+
+    private void showLeaveRoomConfirmationDialog() {
+        // mostra un Dialog di conferma
+        TextView confirmTextView = new TextView(this);
+        String leaveConfirmationText = getString(R.string.leave_virtual_room_dialog_text);
+
+        confirmTextView.setText(leaveConfirmationText);
+        confirmTextView.setPadding(48, 0, 48, 0);
+
         new AlertDialog.Builder(this)
                 .setTitle(R.string.leave_virtual_dialog_title)
                 .setView(confirmTextView)
