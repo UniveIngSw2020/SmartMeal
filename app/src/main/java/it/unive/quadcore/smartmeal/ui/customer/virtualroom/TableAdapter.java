@@ -117,7 +117,7 @@ public class TableAdapter extends RecyclerView.Adapter<TableAdapter.TableViewHol
                                                     // avvisare cliente, aggiornare lista tavoli e far scegliere un altro tavolo
                                                     Log.i(TAG, "AlreadyOccupiedTableException happened: " + e.getMessage());
                                                     Snackbar.make(
-                                                            v.findViewById(android.R.id.content),
+                                                            activity.findViewById(android.R.id.content),
                                                             R.string.already_occupied_table_snackbar,
                                                             BaseTransientBottomBar.LENGTH_LONG
                                                     ).show();
@@ -126,7 +126,7 @@ public class TableAdapter extends RecyclerView.Adapter<TableAdapter.TableViewHol
                                                     // avvisare il cliente con un errore generico e farlo ritentare
                                                     Log.i(TAG, "NoSuchTableException happened: " + e.getMessage());
                                                     Snackbar.make(
-                                                            v.findViewById(android.R.id.content),
+                                                            activity.findViewById(android.R.id.content),
                                                             R.string.unexpected_table_error_snackbar,
                                                             BaseTransientBottomBar.LENGTH_LONG
                                                     ).show();
@@ -141,7 +141,7 @@ public class TableAdapter extends RecyclerView.Adapter<TableAdapter.TableViewHol
                                                     // errore inaspettato
                                                     Log.i(TAG, "TableException happened: " + e.getMessage());
                                                     Snackbar.make(
-                                                            v.findViewById(android.R.id.content),
+                                                            activity.findViewById(android.R.id.content),
                                                             R.string.unexpected_table_error_snackbar,
                                                             BaseTransientBottomBar.LENGTH_LONG
                                                     ).show();
