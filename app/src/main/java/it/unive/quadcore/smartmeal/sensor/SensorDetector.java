@@ -248,7 +248,7 @@ public class SensorDetector {
 
     public void endEntranceDetection(){
         if(!isEntranceDetecting)
-            throw new IllegalStateException("The shake hasn't already been detecting yet");
+            throw new IllegalStateException("The entrance hasn't already been detecting yet");
 
         geofencingClient.removeGeofences(getGeofencePendingIntent(geofenceActivity))
                 .addOnSuccessListener(geofenceActivity, new OnSuccessListener<Void>() {
