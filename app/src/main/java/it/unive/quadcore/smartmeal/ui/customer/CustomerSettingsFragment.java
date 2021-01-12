@@ -1,6 +1,7 @@
 package it.unive.quadcore.smartmeal.ui.customer;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -87,13 +88,19 @@ public class CustomerSettingsFragment extends Fragment {
                 notificationsSwitch.setChecked(false);
                 sensor.endEntranceDetection();
 
-                Snackbar.make(
-                        getActivity().findViewById(android.R.id.content),
-                        R.string.field_required_snackbar,
-                        BaseTransientBottomBar.LENGTH_LONG
-                ).show();
+                Activity activity = getActivity();
+                if (activity != null) {
+                    Snackbar.make(
+                            activity.findViewById(android.R.id.content),
+                            R.string.field_required_snackbar,
+                            BaseTransientBottomBar.LENGTH_LONG
+                    ).show();
+                }
             } else if (isChecked) {         // utente ha attivato notifiche e ha i permessi per farlo
-                sensor.startEntranceDetection(new SendWelcomeNotificationCallback(getActivity()));
+                Activity activity = getActivity();
+                if (activity != null) {
+                    sensor.startEntranceDetection(new SendWelcomeNotificationCallback(activity));
+                }
                 CustomerStorage.setNotificationMode(true);
             } else {                        // utente ha disattivato notifiche
                 sensor.endEntranceDetection();
@@ -109,11 +116,14 @@ public class CustomerSettingsFragment extends Fragment {
 
             if (isChecked && !PermissionHandler.hasSensorsPermissions(getContext())) {
                 sensorsSwitch.setChecked(false);
-                Snackbar.make(
-                        getActivity().findViewById(android.R.id.content),
-                        R.string.field_required_snackbar,
-                        BaseTransientBottomBar.LENGTH_LONG
-                ).show();
+                Activity activity = getActivity();
+                if (activity != null) {
+                    Snackbar.make(
+                            activity.findViewById(android.R.id.content),
+                            R.string.field_required_snackbar,
+                            BaseTransientBottomBar.LENGTH_LONG
+                    ).show();
+                }
                 return;
             }
 
@@ -159,7 +169,11 @@ public class CustomerSettingsFragment extends Fragment {
                     | Intent.FLAG_ACTIVITY_NEW_TASK
             );
             startActivity(intent);
-            getActivity().finish();
+
+            Activity activity = getActivity();
+            if (activity != null) {
+                activity.finish();
+            }
         });
 
         aboutTextView.setOnClickListener(v -> {

@@ -1,5 +1,6 @@
 package it.unive.quadcore.smartmeal.ui.customer.bottomnavigation.menu;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -34,15 +35,19 @@ public class MenuFragment extends Fragment {
 
     private void setupMenuRecyclerView(View root) {
         // TODO aggiungere sezioni a RecyclerView
+        Activity activity = getActivity();
+        if (activity == null) {
+            return;
+        }
 
         menuRecyclerView = root.findViewById(R.id.menu_recycler_view);
         RecyclerView.LayoutManager recyclerViewLayoutManager = new LinearLayoutManager(
-                getActivity(),
+                activity,
                 RecyclerView.VERTICAL,
                 false
         );
         menuRecyclerView.setLayoutManager(recyclerViewLayoutManager);
-        menuAdapter = new MenuAdapter(getActivity(), CustomerStorage.getLocalDescription().getMenu());
+        menuAdapter = new MenuAdapter(activity, CustomerStorage.getLocalDescription().getMenu());
         menuRecyclerView.setAdapter(menuAdapter);
     }
 }

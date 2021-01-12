@@ -20,15 +20,14 @@ public class SendWelcomeNotificationCallback implements Runnable {
 
     public static final String CHANNEL_ID = "";     // TODO
 
-    public SendWelcomeNotificationCallback(Activity activity) {
+    public SendWelcomeNotificationCallback(@NonNull Activity activity) {
         Objects.requireNonNull(activity);
         this.activity = activity;
     }
 
     @Override
     public void run() {
-        // TODO crea notifica
-
+        // crea notifica
         String notificationTitlePrefix = activity.getString(R.string.welcome_notification_title_prefix);                   // TODO strings.xml
         String localName = CustomerStorage.getLocalDescription().getName();
 

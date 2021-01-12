@@ -48,7 +48,7 @@ public class Storage {
     // chiamare tutti gli altri.
     // Si passa l'Activity per le shared preferences. Un'alternativa a ciò è passare l'Activity ad ogni metodo come input.
     // Si usa l'activity per creare le shared preferences.
-    public static void initializeStorage(Activity activity){ // Alter ego di getInstance
+    public static void initializeStorage(@NonNull Activity activity){ // Alter ego di getInstance
         if(initialized)
             throw new StorageException("The storage has alredy been initialized");
 

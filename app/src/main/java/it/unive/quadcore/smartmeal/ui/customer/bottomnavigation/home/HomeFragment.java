@@ -1,5 +1,6 @@
 package it.unive.quadcore.smartmeal.ui.customer.bottomnavigation.home;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -30,14 +31,16 @@ public class HomeFragment extends Fragment {
         descriptionTextView = root.findViewById(R.id.description_text_view);
         localImageView = root.findViewById(R.id.local_image_view);
 
-        if (!CustomerStorage.isInitialized()) {
-            CustomerStorage.initializeStorage(getActivity());
+        Activity activity = getActivity();
+        if (activity != null) {
+            if (!CustomerStorage.isInitialized()) {
+                CustomerStorage.initializeStorage(activity);
+            }
+            LocalDescription localDescription = CustomerStorage.getLocalDescription();
+            localNameTextView.setText(localDescription.getName());
+            descriptionTextView.setText(localDescription.getPresentation());
+            localImageView.setImageResource(R.drawable.localpicture);
         }
-        LocalDescription localDescription = CustomerStorage.getLocalDescription();
-        localNameTextView.setText(localDescription.getName());
-        descriptionTextView.setText(localDescription.getPresentation());
-        localImageView.setImageResource(R.drawable.localpicture);
-
         return root;
     }
 }

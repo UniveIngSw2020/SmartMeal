@@ -86,8 +86,12 @@ public class ChooseTableFragment extends Fragment {
             public void onClick(View v) {
                 CustomerCommunication.getInstance().leaveRoom();
                 Intent returnIntent = new Intent();
-                getActivity().setResult(Activity.RESULT_CANCELED, returnIntent);
-                getActivity().finish();
+
+                Activity activity = getActivity();
+                if (activity != null) {
+                    activity.setResult(Activity.RESULT_CANCELED, returnIntent);
+                    activity.finish();
+                }
             }
         });
         return root;
@@ -97,11 +101,11 @@ public class ChooseTableFragment extends Fragment {
         CustomerCommunication customerCommunication = CustomerCommunication.getInstance();
 
         customerCommunication.onTableChanged(table -> {
-            new CustomerLeaveRoomAction(getActivity(), getString(R.string.table_changed_snackbar));
+            new CustomerLeaveRoomAction(getActivity(), getString(R.string.table_changed_snackbar)).run();
             customerCommunication.leaveRoom();
         });
         customerCommunication.onTableRemoved(() -> {
-            new CustomerLeaveRoomAction(getActivity(), getString(R.string.table_removed_snackbar));
+            new CustomerLeaveRoomAction(getActivity(), getString(R.string.table_removed_snackbar)).run();
             customerCommunication.leaveRoom();
         });
 
@@ -109,22 +113,26 @@ public class ChooseTableFragment extends Fragment {
         if (customerCommunication.isNotConnected()) {
 
             // imposta la callback da eseguire nel caso il gestore chiuda la stanza
-            customerCommunication.onCloseRoom(() -> getActivity().runOnUiThread(() -> {
+            customerCommunication.onCloseRoom(() -> {
                 Sensor.getInstance().endShakeDetection();
 
-                // TODO da testare (potrebbe non essere la cosa giusta da fare)
-                startActivity(new Intent(
-                        getActivity(),
-                        CustomerBottomNavigationActivity.class
-                ));
+                Activity activity = getActivity();
+                if (activity != null) {
+                    activity.runOnUiThread(() -> {
+                        // TODO da testare (potrebbe non essere la cosa giusta da fare)
+                        startActivity(new Intent(
+                                activity,
+                                CustomerBottomNavigationActivity.class
+                        ));
 
-                // TODO forse getActvity() è piu safe di root
-                Snackbar.make(
-                        root.findViewById(android.R.id.content),
-                        R.string.manager_closed_virtual_room,
-                        BaseTransientBottomBar.LENGTH_LONG
-                ).show();
-            }));
+                        Snackbar.make(
+                                activity.findViewById(android.R.id.content),
+                                R.string.manager_closed_virtual_room,
+                                BaseTransientBottomBar.LENGTH_LONG
+                        ).show();
+                    });
+                }
+            });
 
             // TODO progress bar ?
 //            ProgressBar connectionProgressBar = new ProgressBar(getContext());
@@ -133,11 +141,15 @@ public class ChooseTableFragment extends Fragment {
 
             Log.i(TAG, "join room");
 
-            customerCommunication.joinRoom(
-                    getActivity(),
-                    () -> requestFreeTableList(root),
-                    new CustomerLeaveRoomAction(getActivity(), getString(R.string.timeout_error_snackbar))
-            );
+            // TODO capire se crea problemi (fa sempre la join room ?)
+            Activity activity = getActivity();
+            if (activity != null) {
+                customerCommunication.joinRoom(
+                        activity,
+                        () -> requestFreeTableList(root),
+                        new CustomerLeaveRoomAction(activity, getString(R.string.timeout_error_snackbar))
+                );
+            }
         }
     }
 
@@ -145,11 +157,14 @@ public class ChooseTableFragment extends Fragment {
         CustomerCommunication customerCommunication = CustomerCommunication.getInstance();
 
         customerCommunication.requestFreeTableList(
-                response -> {
+                response -> {       // callback eseguita quando arriva la risposta con la lista di tavoli dal manager
                     try {
                         TreeSet<Table> tableSet = response.getContent();
 
-                        getActivity().runOnUiThread(() -> setupTableRecyclerView(root, tableSet));
+                        Activity activity = getActivity();
+                        if (activity != null) {
+                            activity.runOnUiThread(() -> setupTableRecyclerView(root, tableSet));
+                        }
 
                     } catch (TableException e) {
                         e.printStackTrace();
@@ -160,14 +175,19 @@ public class ChooseTableFragment extends Fragment {
     }
 
     private void setupTableRecyclerView(View root, SortedSet<Table> tableSortedSet) {
+        Activity activity = getActivity();
+        if (activity == null) {
+            return;
+        }
+
         tableRecyclerView = root.findViewById(R.id.table_recycler_view);
         RecyclerView.LayoutManager recyclerViewLayoutManager = new LinearLayoutManager(
-                getActivity(),
+                activity,
                 RecyclerView.VERTICAL,
                 false
         );
         tableRecyclerView.setLayoutManager(recyclerViewLayoutManager);
-        tableAdapter = new TableAdapter(getActivity(), tableSortedSet);
+        tableAdapter = new TableAdapter(activity, tableSortedSet);
         tableRecyclerView.setAdapter(tableAdapter);
     }
 }

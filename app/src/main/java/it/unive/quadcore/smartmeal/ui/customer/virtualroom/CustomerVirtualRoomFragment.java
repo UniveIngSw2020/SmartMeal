@@ -4,7 +4,9 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -85,10 +87,14 @@ public class CustomerVirtualRoomFragment extends Fragment {
         menuButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO probabilmente si può fare meglio
+                FragmentActivity activity = getActivity();
+                if (activity == null) {
+                    return;
+                }
+
                 MenuFragment menuFragment = new MenuFragment();
 
-                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                FragmentManager fragmentManager = activity.getSupportFragmentManager();
                 fragmentManager
                         .beginTransaction()
                         .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
@@ -118,9 +124,12 @@ public class CustomerVirtualRoomFragment extends Fragment {
                 CustomerCommunication customerCommunication = CustomerCommunication.getInstance();
                 customerCommunication.leaveRoom();
 
-                Intent returnIntent = new Intent();
-                getActivity().setResult(Activity.RESULT_CANCELED, returnIntent);
-                getActivity().finish();
+                Activity activity = getActivity();
+                if (activity != null) {
+                    Intent returnIntent = new Intent();
+                    activity.setResult(Activity.RESULT_CANCELED, returnIntent);
+                    activity.finish();
+                }
             }
         });
 

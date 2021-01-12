@@ -33,11 +33,16 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.ProductViewHol
         }
     }
 
+    @NonNull
     private final Activity activity;
+
+    @NonNull
     private final Menu menu;
+
+    @NonNull
     private final List<Product> productList;
 
-    public MenuAdapter(Activity activity, Menu menu) {
+    public MenuAdapter(@NonNull Activity activity, @NonNull Menu menu) {
         this.activity = activity;
         this.menu = menu;
         this.productList = new ArrayList<>(menu.getProducts());
