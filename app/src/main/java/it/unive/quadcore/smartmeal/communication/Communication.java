@@ -14,6 +14,13 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 
+/**
+ * La classe astratta Communication ha lo scopo di mantenere il codice usato sia nella sottoclasse
+ * CustomerCommunication che nella sottoclasse ManagerCommunication in modo da ottimizzare il
+ * riutilizzo di codice.
+ * Le sottoclassi di questa classe saranno usate allo scopo di presentare un'interfaccia di
+ * comunicazione user-friendly basata su Nearby.
+ */
 abstract class Communication {
 
     /**

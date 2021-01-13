@@ -37,7 +37,9 @@ import static it.unive.quadcore.smartmeal.communication.RequestType.FREE_TABLE_L
 import static it.unive.quadcore.smartmeal.communication.RequestType.NOTIFY_WAITER;
 import static it.unive.quadcore.smartmeal.communication.RequestType.SELECT_TABLE;
 
-
+/**
+ * ManagerCommunication ha lo scopo di fornire un'interfaccia user-friendly per gestire i clienti e le loro richieste
+ */
 public class ManagerCommunication extends Communication {
     @NonNull
     private static final String TAG = "ManagerCommunication";
