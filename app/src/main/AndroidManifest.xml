@@ -3,7 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="it.unive.quadcore.smartmeal">
     <!-- Permessi richiesti per Nearby Connections -->
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
