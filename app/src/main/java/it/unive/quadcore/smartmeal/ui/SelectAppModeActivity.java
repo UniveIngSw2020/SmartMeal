@@ -106,13 +106,17 @@ public class SelectAppModeActivity extends AppCompatActivity {
 //
 //            }
 //        }
+        if(Storage.getApplicationMode()!=ApplicationMode.CUSTOMER){
+            Log.w(TAG, "Not a Customer");
+            return;
+        }
 
         if (PermissionHandler.hasNotificationsPermissions(this)) {
             CustomerStorage.setNotificationMode(true);
         }
 
         if (PermissionHandler.hasSensorsPermissions(this)) {
-            CustomerStorage.setNotificationMode(true);
+            CustomerStorage.setSensorMode(true);
         }
     }
 

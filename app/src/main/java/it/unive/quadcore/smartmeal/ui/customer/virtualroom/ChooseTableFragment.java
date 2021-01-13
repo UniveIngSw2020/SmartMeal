@@ -115,7 +115,12 @@ public class ChooseTableFragment extends Fragment {
             Activity activity = getActivity();
             // imposta la callback da eseguire nel caso il gestore chiuda la stanza
             customerCommunication.onCloseRoom(() -> {
-                SensorDetector.getInstance().endShakeDetection();
+                try {
+                    SensorDetector.getInstance().endShakeDetection();
+                }
+                catch (IllegalStateException e) {
+                    Log.w(TAG, "tried to stop detection but not activated yet");
+                }
 
                 new CustomerLeaveRoomAction(activity, activity.getString(R.string.manager_closed_virtual_room)).run();
             });
