@@ -112,26 +112,12 @@ public class ChooseTableFragment extends Fragment {
         // se il cliente non è connesso al gestore con nearby
         if (customerCommunication.isNotConnected()) {
 
+            Activity activity = getActivity();
             // imposta la callback da eseguire nel caso il gestore chiuda la stanza
             customerCommunication.onCloseRoom(() -> {
                 SensorDetector.getInstance().endShakeDetection();
 
-                Activity activity = getActivity();
-                if (activity != null) {
-                    activity.runOnUiThread(() -> {
-                        // TODO da testare (potrebbe non essere la cosa giusta da fare)
-                        startActivity(new Intent(
-                                activity,
-                                CustomerBottomNavigationActivity.class
-                        ));
-
-                        Snackbar.make(
-                                activity.findViewById(android.R.id.content),
-                                R.string.manager_closed_virtual_room,
-                                BaseTransientBottomBar.LENGTH_LONG
-                        ).show();
-                    });
-                }
+                new CustomerLeaveRoomAction(activity, activity.getString(R.string.manager_closed_virtual_room)).run();
             });
 
             // TODO progress bar ?
@@ -142,7 +128,6 @@ public class ChooseTableFragment extends Fragment {
             Log.i(TAG, "join room");
 
             // TODO capire se crea problemi (fa sempre la join room ?)
-            Activity activity = getActivity();
             if (activity != null) {
                 customerCommunication.joinRoom(
                         activity,
