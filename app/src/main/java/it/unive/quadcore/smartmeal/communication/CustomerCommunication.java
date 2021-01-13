@@ -104,7 +104,7 @@ public class CustomerCommunication extends Communication {
     }
 
     @Override
-    protected synchronized void sendMessage(String toEndpointId, Message message) {
+    protected synchronized void sendMessage(@NonNull String toEndpointId, @NonNull Message message) {
         if (!isInsideTheRoom()) {
             Log.w(TAG, "trying to send a message while not in the room");
             return;
@@ -358,6 +358,19 @@ public class CustomerCommunication extends Communication {
     }
 
 
+    /**
+     * Invia una notifica al gestore, richiedendo un cameriere al tavolo.
+     * Richiede due callback come parametri per gestire la conferma di ricezione
+     * da parte del gestore e l'eventuale errore di timeout causato dalla connessione
+     * Nearby.
+     *
+     * @param onNotifyWaiterConfirmationCallback callback che implementa la logica da attuare
+     *                                           quando il gestore conferma la ricezione
+     *                                           della notifica al cameriere
+     * @param onTimeoutCallback callback che implementa la logica da attuare quando la conferma
+     *                          della notifica cameriere dal gestore non arriva entro un tempo
+     *                          limite
+     */
     public synchronized void notifyWaiter(@NonNull Consumer<Confirmation<? extends WaiterNotificationException>> onNotifyWaiterConfirmationCallback, @NonNull Runnable onTimeoutCallback) {
         if (!isInsideTheRoom()) {
             Log.w(TAG, "trying to notify the waiter while not in the room");
@@ -377,6 +390,21 @@ public class CustomerCommunication extends Communication {
         sendMessage(managerEndpointId, new Message(RequestType.NOTIFY_WAITER, null));
     }
 
+
+    /**
+     * Invia il tavolo scelto dal cliente al gestore.
+     * Richiede due callback come parametri per gestire la conferma di ricezione
+     * da parte del gestore e l'eventuale errore di timeout causato dalla connessione
+     * Nearby.
+     *
+     * @param table il tavolo scelto
+     * @param onSelectTableConfirmationCallback callback che implementa la logica da attuare
+     *                                          quando il gestore conferma la ricezione
+     *                                          del messaggio di selezione tavolo
+     * @param onTimeoutCallback callback che implementa la logica da attuare quando la conferma
+     *                          della ricezione del messaggio di selezione tavolo dal gestore
+     *                          non arriva entro un tempo limite
+     */
     public synchronized void selectTable(@NonNull Table table, @NonNull Consumer<Confirmation<? extends TableException>> onSelectTableConfirmationCallback, @NonNull Runnable onTimeoutCallback) {
         if (!isInsideTheRoom()) {
             Log.w(TAG, "trying to select table while not in the room");
@@ -400,8 +428,22 @@ public class CustomerCommunication extends Communication {
         sendMessage(managerEndpointId, new Message(RequestType.SELECT_TABLE, table));
     }
 
-    public synchronized void requestFreeTableList(@NonNull Consumer<Response<TreeSet<Table>, ? extends TableException>> freeTableListCallback,
-                                     @NonNull Runnable onTimeoutCallback) {
+
+    /**
+     * Invia un messaggio al gestore, la lista dei tavoli liberi.
+     * Richiede due callback come parametri per gestire la risposta da parte del gestore
+     * e l'eventuale errore di timeout causato dalla connessione Nearby.
+     *
+     * @param freeTableListCallback callback che implementa la logica da attuare quando il gestore
+     *                              risponde con la lista dei tavoli liberi oppure con un'eventuale
+     *                              eccezione
+     * @param onTimeoutCallback callback che implementa la logica da attuare quando la risposta
+     *                          del gestore non arriva entro un tempo limite
+     */
+    public synchronized void requestFreeTableList(
+            @NonNull Consumer<Response<TreeSet<Table>, ? extends TableException>> freeTableListCallback,
+            @NonNull Runnable onTimeoutCallback) {
+
         if(!isInsideTheRoom()){
             Log.i(TAG, "trying to request free table list while not in the room");
             return;
@@ -420,11 +462,26 @@ public class CustomerCommunication extends Communication {
         sendMessage(managerEndpointId, new Message(RequestType.FREE_TABLE_LIST, null)); //TODO content
     }
 
+
+    /**
+     * La callback `onTableChangedCallback` verrà chiamata nel caso il gestore modifichi
+     * il tavolo asseganto al cliente.
+     *
+     * @param onTableChangedCallback callback che implementa la logica da attuare quando il
+     *                               gestore modifica il tavolo assegnato al cliente
+     */
     public synchronized void onTableChanged(@NonNull Consumer<Table> onTableChangedCallback) {
         Objects.requireNonNull(onTableChangedCallback);
         this.onTableChangedCallback = onTableChangedCallback;
     }
 
+    /**
+     * La callback `onTableRemovedCallback` verrà chiamata nel caso il gestore rimuova
+     * il tavolo asseganto al cliente.
+     *
+     * @param onTableRemovedCallback callback che implementa la logica da attuare quando il
+     *                               gestore rimuove il tavolo assegnato al cliente
+     */
     public synchronized void onTableRemoved(@NonNull Runnable onTableRemovedCallback) {
         Objects.requireNonNull(onTableRemovedCallback);
         this.onTableRemovedCallback = onTableRemovedCallback;
@@ -442,12 +499,6 @@ public class CustomerCommunication extends Communication {
         }, NEARBY_TIMEOUT);
 
         return timer;
-    }
-
-    private synchronized void ensureConnection() {
-        if (isNotConnected()) {
-            throw new IllegalStateException("Not connected with local");
-        }
     }
 
 
@@ -484,6 +535,7 @@ public class CustomerCommunication extends Communication {
         disconnect();
         activity = null;
     }
+
 
     private synchronized void disconnect() {
         if(connectionState() != ConnectionState.DISCONNECTED) {
@@ -526,5 +578,17 @@ public class CustomerCommunication extends Communication {
      */
     public synchronized boolean isNotConnected() {
         return connectionState() != ConnectionState.CONNECTED;
+    }
+
+
+    /**
+     * Metodo che permette di assicuarsi che la connessione tra cliente e gestore sia stabilita.
+     *
+     * @throws RuntimeException se la connessione non è stabilita
+     */
+    private synchronized void ensureConnection() {
+        if (isNotConnected()) {
+            throw new IllegalStateException("Not connected with local");
+        }
     }
 }

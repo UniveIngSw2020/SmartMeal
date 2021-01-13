@@ -61,7 +61,7 @@ abstract class Communication {
      * @param toEndpointId id che identifica il destinatario
      * @param message messaggio da inviare
      */
-    protected void sendMessage(String toEndpointId, Message message) {
+    protected void sendMessage(@NonNull String toEndpointId, @NonNull Message message) {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         try {
             // trasforma il messaggio in un array di byte e quindi in un Payload
