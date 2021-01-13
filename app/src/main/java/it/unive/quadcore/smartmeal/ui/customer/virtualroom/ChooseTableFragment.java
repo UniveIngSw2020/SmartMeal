@@ -100,19 +100,20 @@ public class ChooseTableFragment extends Fragment {
     private void joinRoom(View root) {
         CustomerCommunication customerCommunication = CustomerCommunication.getInstance();
 
+        Activity activity = getActivity();
+
         customerCommunication.onTableChanged(table -> {
-            new CustomerLeaveRoomAction(getActivity(), getString(R.string.table_changed_snackbar)).run();
+            new CustomerLeaveRoomAction(activity, activity.getString(R.string.table_changed_snackbar)).run();
             customerCommunication.leaveRoom();
         });
         customerCommunication.onTableRemoved(() -> {
-            new CustomerLeaveRoomAction(getActivity(), getString(R.string.table_removed_snackbar)).run();
+            new CustomerLeaveRoomAction(activity, activity.getString(R.string.table_removed_snackbar)).run();
             customerCommunication.leaveRoom();
         });
 
         // se il cliente non è connesso al gestore con nearby
         if (customerCommunication.isNotConnected()) {
 
-            Activity activity = getActivity();
             // imposta la callback da eseguire nel caso il gestore chiuda la stanza
             customerCommunication.onCloseRoom(() -> {
                 try {
