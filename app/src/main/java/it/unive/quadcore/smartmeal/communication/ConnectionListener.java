@@ -14,11 +14,25 @@ import com.google.android.gms.nearby.connection.PayloadCallback;
 
 import java.util.Objects;
 
+/**
+ * Classe che implementa le callback relative al lifecycle della connessione Nearby.
+ */
 public abstract class ConnectionListener extends ConnectionLifecycleCallback {
+
+    /**
+     * Tag per logging
+     */
     private static final String TAG = "ConnectionListener";
 
+    /**
+     * Activity utilizzata da nearby per compiere le sue funzioni
+     */
     @NonNull
     private final Activity activity;
+
+    /**
+     * PayloadCallback usata per gestire l'arrivo dei messaggi
+     */
     @NonNull
     private final PayloadCallback payloadCallback;
 
@@ -67,5 +81,11 @@ public abstract class ConnectionListener extends ConnectionLifecycleCallback {
         Log.d(TAG, "onDisconnected");
     }
 
+    /**
+     * Callback chiamata quando la connessione Nearby ha successo
+     *
+     * @param endpointId id nearby del dispositivo con cui la connessione ha
+     *                   avuto successo
+     */
     protected abstract void onConnectionSuccess(@NonNull String endpointId);
 }
