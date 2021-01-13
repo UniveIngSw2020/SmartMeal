@@ -28,6 +28,9 @@ import it.unive.quadcore.smartmeal.local.WaiterNotificationException;
 import it.unive.quadcore.smartmeal.model.Table;
 import it.unive.quadcore.smartmeal.storage.CustomerStorage;
 
+/**
+ * CustomerCommunication ha lo scopo di fornire un'interfaccia user-friendly per interagire con il locale lato Manager
+ */
 public class CustomerCommunication extends Communication {
 
     private enum ConnectionState{
@@ -45,25 +48,22 @@ public class CustomerCommunication extends Communication {
     @Nullable
     private Consumer<Response<TreeSet<Table>, ? extends TableException>> freeTableListCallback;
 
+    /**
+     * default: DISCONNECTED
+     * set to CONNECTED: handleCustomerNameConfirmation()
+     * set to DISCONNECTED: disconnect()
+     * set to CONNECTING: onConnectionInitiated() in ConnectionListener settato connectionLifecycleCallback()
+     * method wrapper: connectionState()
+     */
     @NonNull
     private ConnectionState connectionState;
-    // default: DISCONNECTED
-    // set to CONNECTED: handleCustomerNameConfirmation()
-    // set to DISCONNECTED: disconnect()
-    // set to CONNECTING: onConnectionInitiated() in ConnectionListener settato connectionLifecycleCallback()
-    // method wrapper isConnected()
 
+    /**
+     * default: false
+     * set to true: onSuccessListener di Nearby settato in joinRoom()
+     * set to false: stopDiscovery()
+     */
     private boolean isDiscovering;
-    // default: false
-    // set to true: onSuccessListener di Nearby settato in joinRoom()
-    // set to false: stopDiscovery()
-
-    // private boolean insideTheRoom;
-    // default: false
-    // set to true: joinRoom()
-    // set to false: leaveRoom()
-    // dipendenze: activity == null   <==>   insideTheRoom == false
-    // dipendenze: insideTheRoom == false   ==>   isDiscovering == false && connectionState == CONNECTED
 
     @Nullable
     private Runnable onConnectionSuccessCallback;
@@ -503,6 +503,14 @@ public class CustomerCommunication extends Communication {
         }
     }
 
+    /**
+     * default: false
+     * set to true: joinRoom()
+     * set to false: leaveRoom()
+     * dipendenze: insideTheRoom == false   ==>   isDiscovering == false && connectionState == DISCONNECTED
+     * @return true: quando è stato chiamato il metodo joinRoom() ma non leaveRoom(),
+     *         false: altrimenti
+     */
     private synchronized boolean isInsideTheRoom() {
         return activity != null;
     }

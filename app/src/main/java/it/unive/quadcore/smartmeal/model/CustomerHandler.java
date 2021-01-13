@@ -7,6 +7,14 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
+/**
+ * La classe CustomerHandler ha lo scopo di mantenere il codice usato sia nella sottoclasse
+ * LocalCustomerHandler che nella sottoclasse RemoteCustomer handler in modo da ottimizzare il
+ * riutilizzo di codice.
+ * @param <C> sottoclasse di Customer che dovrà essere implementata da ogni sottoclasse di
+ *           CustomerHandler avendo cura di tenerne il costruttore privato in modo da poter gestire
+ *           in modo esclusivo il proprio set di Customer C
+ */
 public abstract class CustomerHandler<C extends Customer> {
 
     @NonNull
