@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import it.unive.quadcore.smartmeal.R;
 import it.unive.quadcore.smartmeal.communication.CustomerCommunication;
+import it.unive.quadcore.smartmeal.ui.customer.bottomnavigation.menu.MenuFragment;
 
 public class CustomerVirtualRoomActivity extends AppCompatActivity {
 
@@ -38,6 +39,14 @@ public class CustomerVirtualRoomActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
+        // verifica di non essere nel menu
+        // TODO testare
+        Fragment currentFragment = getSupportFragmentManager()
+                .findFragmentById(R.id.customer_room_fragment_container);
+        if (currentFragment instanceof MenuFragment) {
+            // TODO se non funziona usare replace fragment
+            return;
+        }
 
         // mostra un Dialog di conferma
         TextView confirmTextView = new TextView(this);
