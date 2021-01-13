@@ -15,7 +15,6 @@ import com.google.android.gms.nearby.connection.ConnectionLifecycleCallback;
 import com.google.android.gms.nearby.connection.PayloadCallback;
 
 import java.io.Serializable;
-import java.util.Timer;
 import java.util.TreeSet;
 import java.util.Objects;
 
@@ -25,7 +24,6 @@ import it.unive.quadcore.smartmeal.communication.response.Response;
 import it.unive.quadcore.smartmeal.local.TableException;
 import it.unive.quadcore.smartmeal.local.WaiterNotificationException;
 import it.unive.quadcore.smartmeal.model.Customer;
-import it.unive.quadcore.smartmeal.model.ManagerTable;
 import it.unive.quadcore.smartmeal.model.Table;
 import it.unive.quadcore.smartmeal.model.WaiterNotification;
 import it.unive.quadcore.smartmeal.storage.ManagerStorage;
@@ -169,7 +167,6 @@ public class ManagerCommunication extends Communication {
             Message confirmationMessage = new Message(CUSTOMER_NAME, new Confirmation<CustomerNotRecognizedException>());
             sendMessage(endpointId, confirmationMessage);
         }
-
     }
 
     private void handleFreeTableListRequest(@NonNull String toEndpointId) {
@@ -179,11 +176,12 @@ public class ManagerCommunication extends Communication {
     }
 
 
-
-
-    // eventualmente prendere callback con costruttore
-
-    // TODO probabilmente andranno aggiunte callback onSuccess e onFail
+    /**
+     * Avvia la virtual room.
+     * Il dispositivo del gestore diventa rilevabile dagli altri dispositivi vicini.
+     *
+     * @param activity l'activity corrente
+     */
     public void startRoom(@NonNull Activity activity) {
         if(isRoomStarted()) {
             throw new IllegalStateException("Room has been already started");
@@ -200,32 +198,73 @@ public class ManagerCommunication extends Communication {
 
         final ConnectionLifecycleCallback connectionLifecycleCallback = connectionLifecycleCallback();
 
+        // avvia l'adverising
         AdvertisingOptions advertisingOptions = new AdvertisingOptions.Builder().setStrategy(STRATEGY).build();
         Nearby.getConnectionsClient(activity)
                 .startAdvertising(
-                        ManagerStorage.getName(),       // TODO forse da passare come parametro in crea stanza
+                        ManagerStorage.getName(),
                         SERVICE_ID,
                         connectionLifecycleCallback,
                         advertisingOptions
                 )
                 .addOnSuccessListener((Void unused) -> Log.i(TAG, "Successfully started advertising"))
                 .addOnFailureListener((Exception e) -> Log.e(TAG, "Advertising failed"));
-
-
     }
 
-    public void onNotifyWaiter(@NonNull Function<WaiterNotification, Confirmation<? extends WaiterNotificationException>> onNotifyWaiterCallback) {
+
+    /**
+     * La callback `onNotifyWaiterCallback` verrà chiamata nel caso un cliente
+     * invii una notifica di richiesta cameriere, con parametro l'oggetto della
+     * classe WaiterNotification che la rappresenta. Essa dovrà restitire una Confirmation
+     * in caso di successo, una ConfirmationDenied altrimenti.
+     *
+     * @param onNotifyWaiterCallback callback che implementa la logica da attuare quando un
+     *                               cliente invia una notifica di richiesta cameriere
+     */
+    public void onNotifyWaiter(
+            @NonNull Function<
+                    WaiterNotification,
+                    Confirmation<? extends WaiterNotificationException>>
+            onNotifyWaiterCallback) {
+
         Objects.requireNonNull(onNotifyWaiterCallback);
 
         this.onNotifyWaiterCallback = onNotifyWaiterCallback;
     }
 
-    public void onSelectTable(@NonNull BiFunction<Customer, Table, Confirmation<? extends TableException>> onSelectTableCallback) {
+
+    /**
+     * La callback `onSelectTableCallback` verrà chiamata nel caso un cliente
+     * invii un messaggio di selezione tavolo, con parametri:
+     * - l'oggetto della classe Customer identifica il cliente;
+     * - l'oggetto della classe Table che rappresenta il tavolo selezionato.
+     * Essa dovrà restitire una Confirmation in caso di successo, una ConfirmationDenied altrimenti.
+     *
+     * @param onSelectTableCallback callback che implementa la logica da attuare quando un
+     *                              cliente invia un messaggio di selezione tavolo
+     */
+    public void onSelectTable(
+            @NonNull BiFunction<
+                    Customer,
+                    Table,
+                    Confirmation<? extends TableException>>
+            onSelectTableCallback) {
+
         Objects.requireNonNull(onSelectTableCallback);
 
         this.onSelectTableCallback = onSelectTableCallback;
     }
 
+
+    /**
+     * La callback `onRequestFreeTableListCallback` verrà chiamata nel caso un cliente
+     * invii un messaggio di richiesta dei tavoli liberi.
+     * Essa dovrà restitire una SuccessResponse con la lista dei tavoli libri in caso di successo,
+     * una ErrorResponse con la relativa TableException altrimenti.
+     *
+     * @param onRequestFreeTableListCallback callback che implementa la logica da attuare
+     *                                       per recuperare la lista di tavoli liberi
+     */
     public void onRequestFreeTableList(@NonNull Supplier<Response<TreeSet<? extends Table>, ? extends TableException>> onRequestFreeTableListCallback) {
         Objects.requireNonNull(onRequestFreeTableListCallback);
 
@@ -249,27 +288,11 @@ public class ManagerCommunication extends Communication {
 
 
     /**
-     * Chiude la stanza e disconnette tutti i clienti ad essa collegati.
+     * Invia un messaggio al cliente avvisandolo del cambiamento del tavolo assegnato.
+     *
+     * @param customer il cliente da notificare
+     * @param newTable il nuovo tavolo
      */
-    public void closeRoom() {
-        if (!isRoomStarted()) {
-            throw new IllegalStateException("The room has not been started");
-        }
-
-        Nearby.getConnectionsClient(activity).stopAllEndpoints();
-        Nearby.getConnectionsClient(activity).stopAdvertising();
-
-        //TODO: customerHandler.removeAllCustomers();
-
-        activity = null;
-    }
-
-    //TODO: pensare se sincronizzare change of activity
-
-    public boolean isRoomStarted() {
-        return activity!=null;
-    }
-
     public void notifyTableChanged(@NonNull Customer customer, @NonNull Table newTable) {
         Objects.requireNonNull(customer);
         Objects.requireNonNull(newTable);
@@ -287,6 +310,12 @@ public class ManagerCommunication extends Communication {
         sendMessage(customer.getId(), new Message(RequestType.TABLE_CHANGED, newTable));
     }
 
+
+    /**
+     * Invia un messaggio al cliente avvisandolo della rimozione dell'assegnamento del tavolo.
+     *
+     * @param customer il cliente da notificare
+     */
     public void notifyTableRemoved(@NonNull Customer customer) {
         Objects.requireNonNull(customer);
 
@@ -301,5 +330,30 @@ public class ManagerCommunication extends Communication {
         }
 
         sendMessage(customer.getId(), new Message(RequestType.TABLE_REMOVED, null));
+    }
+
+
+    /**
+     * Chiude la stanza virtuale e disconnette tutti i clienti ad essa collegati.
+     * Il dispositivo del gestore non sarà più rilevabile da altri dispositivi
+     * nelle vicinanze.
+     */
+    public void closeRoom() {
+        if (!isRoomStarted()) {
+            throw new IllegalStateException("The room has not been started");
+        }
+
+        Nearby.getConnectionsClient(activity).stopAllEndpoints();
+        Nearby.getConnectionsClient(activity).stopAdvertising();
+
+        //TODO: customerHandler.removeAllCustomers();
+
+        activity = null;
+    }
+
+    //TODO: pensare se sincronizzare change of activity
+
+    public boolean isRoomStarted() {
+        return activity != null;
     }
 }

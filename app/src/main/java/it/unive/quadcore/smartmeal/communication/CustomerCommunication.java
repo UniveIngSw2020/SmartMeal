@@ -256,7 +256,7 @@ public class CustomerCommunication extends Communication {
             @Override
             protected void onConnectionSuccess(@NonNull String endpointId) {
                 synchronized (CustomerCommunication.this) {
-                    if(connectionState() != ConnectionState.CONNECTING) {
+                    if (connectionState() != ConnectionState.CONNECTING) {
                         Log.i(TAG, "Connection success but not connecting");
                         return;
                     }
@@ -430,7 +430,7 @@ public class CustomerCommunication extends Communication {
 
 
     /**
-     * Invia un messaggio al gestore, la lista dei tavoli liberi.
+     * Invia un messaggio al gestore, richiedendo la lista dei tavoli liberi.
      * Richiede due callback come parametri per gestire la risposta da parte del gestore
      * e l'eventuale errore di timeout causato dalla connessione Nearby.
      *
