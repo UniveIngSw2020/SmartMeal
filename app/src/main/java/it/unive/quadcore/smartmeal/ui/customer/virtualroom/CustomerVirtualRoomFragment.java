@@ -123,8 +123,6 @@ public class CustomerVirtualRoomFragment extends Fragment {
         exitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                CustomerCommunication.getInstance().leaveRoom();
-
                 // TODO testare che il metodo sotto funzioni prima di eliminare
 //                Activity activity = getActivity();
 //                if (activity != null) {

@@ -44,7 +44,8 @@ public class CustomerVirtualRoomActivity extends AppCompatActivity {
         Fragment currentFragment = getSupportFragmentManager()
                 .findFragmentById(R.id.customer_room_fragment_container);
         if (currentFragment instanceof MenuFragment) {
-            // TODO se non funziona usare replace fragment
+            Log.i(TAG, "Pressed back inside MenuFragment");
+            getSupportFragmentManager().popBackStack();
             return;
         }
 
