@@ -3,6 +3,7 @@ package it.unive.quadcore.smartmeal.model;
 import androidx.annotation.NonNull;
 
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
@@ -32,17 +33,18 @@ public class Menu {
         }
     }
 
-    @NonNull
+/*    @NonNull
     public Map<FoodCategory, Set<Product>> getCategoriesProductsMap() {
         return categoriesProductsMap;
     }
+*/
 
     @NonNull
     public Set<Product> getProducts() {
         Set<Product> res = new TreeSet<>();
         //categoryProductsMap.forEach(((foodCategory, products) -> res.addAll(products)));
         for (FoodCategory foodCategory : categoriesProductsMap.keySet())
-            res.addAll(categoriesProductsMap.get(foodCategory));
+            res.addAll(Objects.requireNonNull(categoriesProductsMap.get(foodCategory)));
         return res;
     }
 

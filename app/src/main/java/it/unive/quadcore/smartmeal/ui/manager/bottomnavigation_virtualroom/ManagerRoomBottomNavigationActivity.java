@@ -1,4 +1,4 @@
-package it.unive.quadcore.smartmeal.ui.manager;
+package it.unive.quadcore.smartmeal.ui.manager.bottomnavigation_virtualroom;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;

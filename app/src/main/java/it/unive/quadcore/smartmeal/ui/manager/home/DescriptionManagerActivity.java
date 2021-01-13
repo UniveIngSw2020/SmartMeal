@@ -1,4 +1,4 @@
-package it.unive.quadcore.smartmeal.ui.manager;
+package it.unive.quadcore.smartmeal.ui.manager.home;
 
 import androidx.appcompat.app.AppCompatActivity;
 

@@ -12,7 +12,7 @@ import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
 
 import it.unive.quadcore.smartmeal.R;
-import it.unive.quadcore.smartmeal.sensor.Sensor;
+import it.unive.quadcore.smartmeal.sensor.SensorDetector;
 import it.unive.quadcore.smartmeal.storage.ApplicationMode;
 import it.unive.quadcore.smartmeal.storage.CustomerStorage;
 import it.unive.quadcore.smartmeal.ui.customer.bottomnavigation.CustomerBottomNavigationActivity;
@@ -47,15 +47,15 @@ public class InsertPersonalDataActivity extends AppCompatActivity {
                 return;
             }
 
-            CustomerStorage.setName(customerName);
             CustomerStorage.setApplicationMode(ApplicationMode.CUSTOMER);
+            CustomerStorage.setName(customerName);
 
             Log.i(TAG, "Customer name stored: " + customerName);
 
 
             if (CustomerStorage.getNotificationMode()
                     && PermissionHandler.hasNotificationsPermissions(InsertPersonalDataActivity.this)) {
-                Sensor.getInstance().startEntranceDetection(new SendWelcomeNotificationCallback(InsertPersonalDataActivity.this));
+                SensorDetector.getInstance().startEntranceDetection(new SendWelcomeNotificationCallback(InsertPersonalDataActivity.this),this);
             }
 
             // avvia l'activity principale del Cliente

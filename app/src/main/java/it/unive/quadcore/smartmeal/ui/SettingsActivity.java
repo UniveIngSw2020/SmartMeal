@@ -3,7 +3,6 @@ package it.unive.quadcore.smartmeal.ui;
 import android.os.Bundle;
 import android.util.Log;
 
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -11,7 +10,7 @@ import androidx.fragment.app.FragmentManager;
 import it.unive.quadcore.smartmeal.R;
 import it.unive.quadcore.smartmeal.storage.Storage;
 import it.unive.quadcore.smartmeal.ui.customer.CustomerSettingsFragment;
-import it.unive.quadcore.smartmeal.ui.manager.ManagerSettingsFragment;
+import it.unive.quadcore.smartmeal.ui.manager.home.ManagerSettingsFragment;
 
 public class SettingsActivity extends AppCompatActivity {
 

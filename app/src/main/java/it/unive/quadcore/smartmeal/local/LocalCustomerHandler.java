@@ -6,6 +6,7 @@ import androidx.annotation.Nullable;
 import it.unive.quadcore.smartmeal.model.Customer;
 import it.unive.quadcore.smartmeal.model.CustomerHandler;
 
+// Classe che gestisce la costruzione di clienti, assegnandoli un ID progressivo
 class LocalCustomerHandler extends CustomerHandler<LocalCustomerHandler.LocalCustomer> {
     public static class LocalCustomer extends Customer {
         private LocalCustomer(@NonNull String name) {
@@ -26,7 +27,8 @@ class LocalCustomerHandler extends CustomerHandler<LocalCustomerHandler.LocalCus
     @Nullable
     private static LocalCustomerHandler instance;
 
-    public synchronized static LocalCustomerHandler getInstance() {
+    @NonNull
+    synchronized static LocalCustomerHandler getInstance() {
         if (instance == null) {
             instance = new LocalCustomerHandler();
         }
@@ -35,6 +37,7 @@ class LocalCustomerHandler extends CustomerHandler<LocalCustomerHandler.LocalCus
 
     private LocalCustomerHandler() {}
 
+    @NonNull
     synchronized LocalCustomer addCustomer(@NonNull String customerName) {
         LocalCustomer localCustomer = new LocalCustomerHandler.LocalCustomer(customerName);
         addCustomer(localCustomer);

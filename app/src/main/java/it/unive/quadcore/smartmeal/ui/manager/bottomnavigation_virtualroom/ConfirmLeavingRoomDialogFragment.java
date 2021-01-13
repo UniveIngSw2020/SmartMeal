@@ -1,4 +1,4 @@
-package it.unive.quadcore.smartmeal.ui.manager;
+package it.unive.quadcore.smartmeal.ui.manager.bottomnavigation_virtualroom;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -14,6 +14,7 @@ import androidx.fragment.app.DialogFragment;
 
 import it.unive.quadcore.smartmeal.R;
 import it.unive.quadcore.smartmeal.local.Local;
+import it.unive.quadcore.smartmeal.ui.manager.home.ManagerHomeActivity;
 
 
 // Dialog di uscita dalla stanza virtuale

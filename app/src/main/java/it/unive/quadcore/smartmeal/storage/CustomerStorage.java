@@ -2,6 +2,8 @@ package it.unive.quadcore.smartmeal.storage;
 
 import android.content.SharedPreferences;
 
+import java.util.Objects;
+
 public final class CustomerStorage extends Storage {
 
     private static final String SENSOR_MODE_SHARED_PREFERENCE_KEY = "SensorMode";
@@ -14,6 +16,11 @@ public final class CustomerStorage extends Storage {
     public static boolean getSensorMode() {
         if(!initialized)
             throw new StorageException("The storage hasn't been initialize yet");
+
+        if(getApplicationMode()!=ApplicationMode.CUSTOMER)
+            throw new StorageException("You must be a customer to do this operation");
+
+        Objects.requireNonNull(defaultSharedPreferences);
 
         // Preference non esistente (prima creazione della preference). Metto valore di default
         if(!defaultSharedPreferences.contains(SENSOR_MODE_SHARED_PREFERENCE_KEY)) {
@@ -30,6 +37,11 @@ public final class CustomerStorage extends Storage {
         if(!initialized)
             throw new StorageException("The storage hasn't been initialize yet");
 
+        if(getApplicationMode()!=ApplicationMode.CUSTOMER)
+            throw new StorageException("You must be a customer to do this operation");
+
+        Objects.requireNonNull(defaultSharedPreferences);
+
         SharedPreferences.Editor editor = defaultSharedPreferences.edit();
 
         // Se preference non esiste viene creata
@@ -40,6 +52,11 @@ public final class CustomerStorage extends Storage {
     public static boolean getNotificationMode() {
         if(!initialized)
             throw new StorageException("The storage hasn't been initialize yet");
+
+        if(getApplicationMode()!=ApplicationMode.CUSTOMER)
+            throw new StorageException("You must be a customer to do this operation");
+
+        Objects.requireNonNull(defaultSharedPreferences);
 
         // Preference non esistente (prima creazione della preference). Metto valore di default
         if(!defaultSharedPreferences.contains(NOTIFICATION_MODE_SHARED_PREFERENCE_KEY)) {
@@ -55,6 +72,11 @@ public final class CustomerStorage extends Storage {
     public static void setNotificationMode(boolean mode) {
         if(!initialized)
             throw new StorageException("The storage hasn't been initialize yet");
+
+        if(getApplicationMode()!=ApplicationMode.CUSTOMER)
+            throw new StorageException("You must be a customer to do this operation");
+
+        Objects.requireNonNull(defaultSharedPreferences);
 
         SharedPreferences.Editor editor = defaultSharedPreferences.edit();
 

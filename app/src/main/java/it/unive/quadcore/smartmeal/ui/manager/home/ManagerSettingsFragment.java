@@ -1,25 +1,20 @@
-package it.unive.quadcore.smartmeal.ui.manager;
+package it.unive.quadcore.smartmeal.ui.manager.home;
 
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.TextView;
 
-import androidx.appcompat.widget.SwitchCompat;
 import androidx.fragment.app.Fragment;
 
 import it.unive.quadcore.smartmeal.R;
-import it.unive.quadcore.smartmeal.storage.ApplicationMode;
-import it.unive.quadcore.smartmeal.storage.CustomerStorage;
 import it.unive.quadcore.smartmeal.storage.ManagerStorage;
 import it.unive.quadcore.smartmeal.ui.SelectAppModeActivity;
 
-// TODO da testare (mai testata)
+
 public class ManagerSettingsFragment extends Fragment {
 
     private static final String TAG = "ManagerSettingsFrag";
@@ -46,7 +41,7 @@ public class ManagerSettingsFragment extends Fragment {
 
         logoutTextView.setOnClickListener(v -> {
             // imposta modalità applicazione predefinita
-            ManagerStorage.setApplicationMode(ApplicationMode.UNDEFINED);
+            ManagerStorage.clear();
 
             // ritorna alla pagina di selezione modalità
             Intent intent = new Intent(getContext(), SelectAppModeActivity.class);

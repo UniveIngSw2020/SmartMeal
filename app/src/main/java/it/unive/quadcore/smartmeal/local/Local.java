@@ -6,6 +6,7 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import java.util.Objects;
 import java.util.Set;
 import java.util.SortedSet;
 
@@ -113,6 +114,8 @@ public class Local {
         if(!roomState) // La stanza non è aperta
             throw new RoomStateException(false);
 
+        Objects.requireNonNull(waiterNotificationHandler);
+
         return waiterNotificationHandler.getNotificationList();
     }
 
@@ -120,6 +123,8 @@ public class Local {
     public void removeWaiterNotification(@NonNull WaiterNotification waiterNotification) throws WaiterNotificationException {
         if(!roomState) // La stanza non è aperta
             throw new RoomStateException(false);
+
+        Objects.requireNonNull(waiterNotificationHandler);
 
         waiterNotificationHandler.removeNotification(waiterNotification);
     }
@@ -130,6 +135,8 @@ public class Local {
         if(!roomState) // La stanza non è aperta
             throw new RoomStateException(false);
 
+        Objects.requireNonNull(tableHandler);
+
         return tableHandler.getFreeTableList();
     }
 
@@ -139,6 +146,8 @@ public class Local {
         if(!roomState) // La stanza non è aperta
             throw new RoomStateException(false);
 
+        Objects.requireNonNull(tableHandler);
+
         return tableHandler.getAssignedTableList();
     }
 
@@ -146,6 +155,9 @@ public class Local {
     public void changeCustomerTable(@NonNull Customer customer,@NonNull Table newTable) throws TableException {
         if(!roomState) // La stanza non è aperta
             throw new RoomStateException(false);
+
+        Objects.requireNonNull(tableHandler);
+        Objects.requireNonNull(managerCommunication);
 
         tableHandler.changeCustomerTable(customer, newTable);
 
@@ -158,6 +170,8 @@ public class Local {
         if(!roomState) // La stanza non è aperta
             throw new RoomStateException(false);
 
+        Objects.requireNonNull(tableHandler);
+
         Customer newCustomer = LocalCustomerHandler.getInstance().addCustomer(customerName);
         tableHandler.assignTable(newCustomer, table);
     }
@@ -167,10 +181,19 @@ public class Local {
         if(!roomState) // La stanza non è aperta
             throw new RoomStateException(false);
 
+        Objects.requireNonNull(tableHandler);
+        Objects.requireNonNull(waiterNotificationHandler);
+        Objects.requireNonNull(managerCommunication);
+
+        Customer customer = getCustomerByTable(table);
+
         // Elimino tutte le notifiche effettuate da quel cliente
-        waiterNotificationHandler.removeCustomerNotifications(getCustomerByTable(table));
+        waiterNotificationHandler.removeCustomerNotifications(customer);
 
         tableHandler.freeTable(table);
+
+        if(!LocalCustomerHandler.getInstance().containsCustomer(customer))
+            managerCommunication.notifyTableRemoved(customer);
     }
 
     // Ritorna il tavolo associato ad un cliente
@@ -178,6 +201,8 @@ public class Local {
     public Table getTable(@NonNull Customer customer) throws TableException {
         if(!roomState) // La stanza non è aperta
             throw new RoomStateException(false);
+
+        Objects.requireNonNull(tableHandler);
 
         return tableHandler.getTable(customer);
     }
@@ -187,6 +212,8 @@ public class Local {
     public Customer getCustomerByTable(@NonNull Table table) throws TableException {
         if(!roomState) // La stanza non è aperta
             throw new RoomStateException(false);
+
+        Objects.requireNonNull(tableHandler);
 
         return tableHandler.getCustomer(table);
     }
@@ -201,6 +228,7 @@ public class Local {
         waiterNotificationHandler = null;
 
         // Chiudo stanza
+        Objects.requireNonNull(managerCommunication);
         managerCommunication.closeRoom();
 
         // Metto a null (non sarebbe necessario)

@@ -1,4 +1,4 @@
-package it.unive.quadcore.smartmeal.ui.manager.bottomnavigation.tableList.addTable;
+package it.unive.quadcore.smartmeal.ui.manager.bottomnavigation_virtualroom.tableList.addTable;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;

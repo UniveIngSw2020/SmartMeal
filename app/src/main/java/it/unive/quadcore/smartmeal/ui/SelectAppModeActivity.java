@@ -19,7 +19,7 @@ import it.unive.quadcore.smartmeal.ui.customer.bottomnavigation.CustomerBottomNa
 import it.unive.quadcore.smartmeal.ui.customer.InsertPersonalDataActivity;
 import it.unive.quadcore.smartmeal.ui.customer.virtualroom.callback.SendWelcomeNotificationCallback;
 import it.unive.quadcore.smartmeal.ui.manager.InsertPasswordActivity;
-import it.unive.quadcore.smartmeal.ui.manager.ManagerHomeActivity;
+import it.unive.quadcore.smartmeal.ui.manager.home.ManagerHomeActivity;
 
 import it.unive.quadcore.smartmeal.util.PermissionHandler;
 
@@ -42,7 +42,7 @@ public class SelectAppModeActivity extends AppCompatActivity {
 
         // TODO attenzione rimuovere per versione finale
         // commentare / decommentare per poter cambiare modalità app
-        Storage.setApplicationMode(ApplicationMode.UNDEFINED);
+        //Storage.setApplicationMode(ApplicationMode.UNDEFINED);
 
         switch (Storage.getApplicationMode()) {
             case UNDEFINED:

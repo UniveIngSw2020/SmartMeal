@@ -20,8 +20,7 @@ import com.google.android.material.snackbar.BaseTransientBottomBar;
 import com.google.android.material.snackbar.Snackbar;
 
 import it.unive.quadcore.smartmeal.R;
-import it.unive.quadcore.smartmeal.sensor.Sensor;
-import it.unive.quadcore.smartmeal.storage.ApplicationMode;
+import it.unive.quadcore.smartmeal.sensor.SensorDetector;
 import it.unive.quadcore.smartmeal.storage.CustomerStorage;
 import it.unive.quadcore.smartmeal.ui.SelectAppModeActivity;
 import it.unive.quadcore.smartmeal.ui.customer.virtualroom.callback.SendWelcomeNotificationCallback;
@@ -80,13 +79,13 @@ public class CustomerSettingsFragment extends Fragment {
 //            }
 
 
-            Sensor sensor = Sensor.getInstance();
+            SensorDetector sensorDetector = SensorDetector.getInstance();
 
             if (isChecked && !PermissionHandler.hasNotificationsPermissions(getContext())) {
                 // utente ha attivato notifiche ma non ha i permessi per farlo
 
                 notificationsSwitch.setChecked(false);
-                sensor.endEntranceDetection();
+                sensorDetector.endEntranceDetection();
 
                 Activity activity = getActivity();
                 if (activity != null) {
@@ -99,11 +98,11 @@ public class CustomerSettingsFragment extends Fragment {
             } else if (isChecked) {         // utente ha attivato notifiche e ha i permessi per farlo
                 Activity activity = getActivity();
                 if (activity != null) {
-                    sensor.startEntranceDetection(new SendWelcomeNotificationCallback(activity));
+                    sensorDetector.startEntranceDetection(new SendWelcomeNotificationCallback(activity));
                 }
                 CustomerStorage.setNotificationMode(true);
             } else {                        // utente ha disattivato notifiche
-                sensor.endEntranceDetection();
+                sensorDetector.endEntranceDetection();
                 CustomerStorage.setNotificationMode(false);
             }
 
@@ -158,7 +157,7 @@ public class CustomerSettingsFragment extends Fragment {
 
         logoutTextView.setOnClickListener(v -> {
             // imposta modalità applicazione predefinita
-            CustomerStorage.setApplicationMode(ApplicationMode.UNDEFINED);
+            CustomerStorage.clear();
 
             // ritorna alla pagina di selezione modalità
             Intent intent = new Intent(getContext(), SelectAppModeActivity.class);
