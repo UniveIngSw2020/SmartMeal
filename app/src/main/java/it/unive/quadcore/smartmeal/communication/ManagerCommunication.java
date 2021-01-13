@@ -343,8 +343,8 @@ public class ManagerCommunication extends Communication {
             throw new IllegalStateException("The room has not been started");
         }
 
-        Nearby.getConnectionsClient(activity).stopAllEndpoints();
         Nearby.getConnectionsClient(activity).stopAdvertising();
+        Nearby.getConnectionsClient(activity).stopAllEndpoints();
 
         //TODO: customerHandler.removeAllCustomers();
 

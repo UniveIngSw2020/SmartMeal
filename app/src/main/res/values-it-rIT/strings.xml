@@ -100,7 +100,7 @@
     <string name="error_modify_table_snackbar">Impossibile modificare questo tavolo ora: tutti i tavoli sono attualmente occupati</string>
     <string name="error_add_table_snackbar">Impossibile aggiungere un tavolo ora: tutti i tavoli sono attualmente occupati</string>
 
-    <string name="error_add_table_alert">Errore: è successo qualcosa durante l\' operazione</string>
+    <string name="error_add_table_alert">Errore: il tavolo è già occupato</string>
     <string name="title_add_table">Assegna un tavolo libero</string>
 
     <string name="table_removed_snackbar">Il gestore ha rimosso il tuo tavolo</string>

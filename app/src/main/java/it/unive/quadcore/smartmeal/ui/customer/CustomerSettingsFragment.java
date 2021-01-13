@@ -98,7 +98,7 @@ public class CustomerSettingsFragment extends Fragment {
             } else if (isChecked) {         // utente ha attivato notifiche e ha i permessi per farlo
                 Activity activity = getActivity();
                 if (activity != null) {
-                    sensorDetector.startEntranceDetection(new SendWelcomeNotificationCallback(activity));
+                    sensorDetector.startEntranceDetection(new SendWelcomeNotificationCallback(activity),getActivity());
                 }
                 CustomerStorage.setNotificationMode(true);
             } else {                        // utente ha disattivato notifiche

@@ -106,7 +106,7 @@
 
     <string name="assign_table">Assign</string>
     <string name="added_table_alert">Table added correctly!</string>
-    <string name="error_add_table_alert">Error: something happened during the operation</string>
+    <string name="error_add_table_alert">Error: the table is alredy assigned</string>
 
     <string name="error_add_table_snackbar">It is impossible to add a table right now: all the tables are alredy assigned</string>
     <string name="table_removed_snackbar">Manager removed your table</string>

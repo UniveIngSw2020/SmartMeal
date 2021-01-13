@@ -2,6 +2,8 @@ package it.unive.quadcore.smartmeal.storage;
 
 import android.content.SharedPreferences;
 
+import androidx.annotation.NonNull;
+
 import java.util.Objects;
 
 public final class CustomerStorage extends Storage {
@@ -12,6 +14,27 @@ public final class CustomerStorage extends Storage {
      * Rende non instanziabile questa classe.
      */
     private CustomerStorage() {}
+
+
+    public static void setName(@NonNull String name) {
+        if(!initialized)
+            throw new StorageException("The storage hasn't been initialize yet");
+
+        ApplicationMode applicationMode = getApplicationMode();
+
+        if(applicationMode==ApplicationMode.UNDEFINED)
+            throw new StorageException("In the application mode UNDEFINED does not exist a name");
+        else if(applicationMode==ApplicationMode.MANAGER) // Non si può cambiare nome lato Manager
+            throw new StorageException("The manager can't change the name");
+
+        Objects.requireNonNull(sharedPreferences);
+
+        // Scrivo il nome nello storage. Se non esiste tale preference viene creata.
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        editor.putString(NAME_SHARED_PREFERENCE_KEY, name);
+        editor.apply();
+    }
 
     public static boolean getSensorMode() {
         if(!initialized)

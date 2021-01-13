@@ -94,8 +94,11 @@ public class Local {
         });
         managerCommunication.onCustomerLeftRoom( customer -> { // Callback da eseguire quando cliente esce dalla stanza virtuale
             try{
+                if(!roomState)
+                    return ;
                 tableHandler.freeTable(tableHandler.getTable(customer));
-            }catch( TableException e){ // Eccezione
+                waiterNotificationHandler.removeCustomerNotifications(customer);
+            }catch( Exception e){ // Eccezione
                 Log.i(TAG,"Customer that left the room didn't have a table");
             }
         });

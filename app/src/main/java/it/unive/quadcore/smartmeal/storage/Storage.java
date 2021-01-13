@@ -43,7 +43,7 @@ public class Storage {
     @NonNull
     private static final String APPLICATION_MODE_SHARED_PREFERENCE_KEY = "ApplicationMode";
     @NonNull
-    private static final String NAME_SHARED_PREFERENCE_KEY = "Name";
+    protected static final String NAME_SHARED_PREFERENCE_KEY = "Name";
 
     @NonNull
     private static final String LOCAL_NAME = "The boat restourant";
@@ -141,26 +141,6 @@ public class Storage {
 
         // Prendo il nome dallo storage
         return sharedPreferences.getString(NAME_SHARED_PREFERENCE_KEY,"Username");
-    }
-
-    public static void setName(@NonNull String name) {
-        if(!initialized)
-            throw new StorageException("The storage hasn't been initialize yet");
-
-        ApplicationMode applicationMode = getApplicationMode();
-
-        if(applicationMode==ApplicationMode.UNDEFINED)
-            throw new StorageException("In the application mode UNDEFINED does not exist a name");
-        else if(applicationMode==ApplicationMode.MANAGER) // Non si può cambiare nome lato Manager
-            throw new StorageException("The manager can't change the name");
-
-        Objects.requireNonNull(sharedPreferences);
-
-        // Scrivo il nome nello storage. Se non esiste tale preference viene creata.
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-
-        editor.putString(NAME_SHARED_PREFERENCE_KEY, name);
-        editor.apply();
     }
 
 
