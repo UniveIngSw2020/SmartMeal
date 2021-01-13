@@ -1,4 +1,4 @@
-package it.unive.quadcore.smartmeal.ui.manager.bottomnavigation;
+package it.unive.quadcore.smartmeal.ui.manager.bottomnavigation_virtualroom;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
@@ -11,7 +11,6 @@ import android.os.Bundle;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import it.unive.quadcore.smartmeal.R;
-import it.unive.quadcore.smartmeal.ui.manager.ConfirmLeavingRoomDialogFragment;
 
 // Bottom navigation activity della stanza virtuale gestore
 public class ManagerRoomBottomNavigationActivity extends AppCompatActivity {

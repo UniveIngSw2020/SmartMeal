@@ -7,7 +7,7 @@
     android:layout_marginLeft="5dp"
     android:layout_marginRight="5dp"
     android:orientation="vertical"
-    tools:context=".ui.manager.bottomnavigation.tableList.addTable.AddTableActivity">
+    tools:context=".ui.manager.bottomnavigation_virtualroom.tableList.addTable.AddTableActivity">
 
     <TextView
         android:id="@+id/insert_new_costumer_hint_text_view"

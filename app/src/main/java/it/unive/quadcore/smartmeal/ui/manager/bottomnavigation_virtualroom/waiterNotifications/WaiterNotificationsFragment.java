@@ -1,4 +1,4 @@
-package it.unive.quadcore.smartmeal.ui.manager.bottomnavigation.waiterNotifications;
+package it.unive.quadcore.smartmeal.ui.manager.bottomnavigation_virtualroom.waiterNotifications;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -41,7 +41,6 @@ public class WaiterNotificationsFragment extends Fragment {
         reloadButton.setOnClickListener(v -> { // Aggiorna lista notifiche
             // Local.getInstance().testingUI_1(); // Testing
 
-            //setupWaiterNotificationRecyclerView(root);
             waiterNotificationsAdapter.reload();
         });
 

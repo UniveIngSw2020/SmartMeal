@@ -4,6 +4,7 @@ import android.location.Location;
 
 import androidx.annotation.NonNull;
 
+// Classe che rappresenta la descrizione del locale
 public class LocalDescription {
 
     @NonNull

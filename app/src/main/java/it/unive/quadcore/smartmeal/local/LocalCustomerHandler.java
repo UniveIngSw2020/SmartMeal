@@ -27,7 +27,8 @@ class LocalCustomerHandler extends CustomerHandler<LocalCustomerHandler.LocalCus
     @Nullable
     private static LocalCustomerHandler instance;
 
-    public synchronized static LocalCustomerHandler getInstance() {
+    @NonNull
+    synchronized static LocalCustomerHandler getInstance() {
         if (instance == null) {
             instance = new LocalCustomerHandler();
         }
@@ -36,6 +37,7 @@ class LocalCustomerHandler extends CustomerHandler<LocalCustomerHandler.LocalCus
 
     private LocalCustomerHandler() {}
 
+    @NonNull
     synchronized LocalCustomer addCustomer(@NonNull String customerName) {
         LocalCustomer localCustomer = new LocalCustomerHandler.LocalCustomer(customerName);
         addCustomer(localCustomer);

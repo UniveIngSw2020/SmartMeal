@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 
 import java.util.Objects;
 
+// Classe che rappresenta i clienti del locale
 public abstract class Customer {
 
     // id

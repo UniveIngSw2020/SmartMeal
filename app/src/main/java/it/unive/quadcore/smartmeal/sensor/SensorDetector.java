@@ -26,6 +26,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import it.unive.quadcore.smartmeal.storage.CustomerStorage;
 
@@ -38,6 +39,7 @@ public class SensorDetector {
 
 
     // Callback da eseguire quando si rileva entrata
+    @Nullable
     static Runnable onEntranceCallback;
     // Booleano che mi dice se sto rilevando entrata oppure no
     private boolean isDetectingEntrance;
@@ -52,6 +54,7 @@ public class SensorDetector {
 
 
     // Callback da eseguire quando si rileva lo shake
+    @Nullable
     private Runnable onShakeDetectedCallback;
     // Booleano che mi dice se sto rilevando shake oppure no
     private boolean isDetectingShake;
@@ -111,6 +114,7 @@ public class SensorDetector {
                         if (acceleration > SHAKE_THRESHOLD) { // SHAKE DETECTED
                             lastShakeTime = curTime;
                             Log.d(TAG, "Shake detected");
+                            Objects.requireNonNull(onShakeDetectedCallback);
                             onShakeDetectedCallback.run(); // Eseguo la callback
                         }
                     }

@@ -1,4 +1,4 @@
-package it.unive.quadcore.smartmeal.ui.manager.bottomnavigation.tableList.addTable;
+package it.unive.quadcore.smartmeal.ui.manager.bottomnavigation_virtualroom.tableList.addTable;
 
 import android.app.Activity;
 import android.view.LayoutInflater;
@@ -39,11 +39,13 @@ public class AddTableAdapter extends RecyclerView.Adapter<AddTableAdapter.TableV
         }
     }
 
+    @NonNull
     private final Activity activity;
     // Lista tavoli liberi
+    @NonNull
     private final List<ManagerTable> tableList;
 
-    public AddTableAdapter(Activity activity, Set<ManagerTable> freeTables) {
+    public AddTableAdapter(@NonNull Activity activity,@NonNull Set<ManagerTable> freeTables) {
         this.activity = activity;
         this.tableList = new ArrayList<>(freeTables);
     }
