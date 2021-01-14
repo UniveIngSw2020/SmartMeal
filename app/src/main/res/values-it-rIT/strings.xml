@@ -101,6 +101,7 @@
     <string name="error_add_table_snackbar">Impossibile aggiungere un tavolo ora : tutti i tavoli sono attualmente occupati</string>
 
     <string name="error_add_table_alert">Errore : è successo qualcosa durante l\' operazione</string>
+    <string name="geofence_entrance">Sei entrato in un\'area di un locale</string>
     <string name="title_add_table">Assegna un tavolo libero</string>
 
     <string name="table_removed_snackbar">Il gestore ha rimosso il tuo tavolo</string>
