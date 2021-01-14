@@ -1,4 +1,4 @@
-package it.unive.quadcore.smartmeal.ui.manager.bottomnavigation_virtualroom.tableList;
+package it.unive.quadcore.smartmeal.ui.manager.bottomnavigation.tableList;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -19,14 +19,14 @@ import com.google.android.material.snackbar.Snackbar;
 
 import it.unive.quadcore.smartmeal.R;
 import it.unive.quadcore.smartmeal.local.Local;
-import it.unive.quadcore.smartmeal.ui.manager.bottomnavigation_virtualroom.tableList.addTable.AddTableActivity;
+import it.unive.quadcore.smartmeal.ui.manager.bottomnavigation.tableList.addTable.AddTableActivity;
 
 // Fragment della stanza virtuale gestore che mostra lista tavoli occupati
 public class TableListFragment extends Fragment {
 
-    // Recycler view lista tavoli occupati
-    private RecyclerView assignedTableListRecyclerView;
-    // Adapter della recycler view lista tavoli occupati
+    // Recycler view lista tavoli
+    private RecyclerView tableListRecyclerView;
+    // Adapter della recycler view lista tavoli
     public AssignedTableListAdapter assignedTableListAdapter;
 
     private TableListViewModel tableListViewModel;
@@ -42,12 +42,13 @@ public class TableListFragment extends Fragment {
         View root = inflater.inflate(R.layout.fragment_table_list, container, false);
 
         // Setta recycler view
-        setupAssignedTableListRecyclerView(root);
+        setupTableListRecyclerView(root);
 
         reloadButton = root.findViewById(R.id.reload_button_table_list);
         reloadButton.setOnClickListener(v -> { // Ricarico la lista tavoli occupati
             // Local.getInstance().testingUI_2(); // Testing
 
+            //setupTableListRecyclerView(root);
             assignedTableListAdapter.reload();
         });
 
@@ -68,31 +69,47 @@ public class TableListFragment extends Fragment {
             Intent intent = new Intent(v.getContext(), AddTableActivity.class);
             startActivity(intent);
 
+            /*FragmentManager fragmentManager = ((FragmentActivity)v.getContext()).getSupportFragmentManager();
+
+            AddTableDialogFragment newFragment = new AddTableDialogFragment(Local.getInstance().getFreeTableList(),tableListAdapter);
+            newFragment.show(fragmentManager,"addTable");
+
+            //newFragment.getWindow().setLayout(600, 400);
+
+            /*FragmentTransaction transaction = fragmentManager.beginTransaction();
+            // For a little polish, specify a transition animation
+            transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+            // To make it fullscreen, use the 'content' root view as the container
+            // for the fragment, which is always the root view for the activity
+            transaction.add(R.id., newFragment)
+                    .addToBackStack(null).commit();*/
+
+            //newFragment.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
         });
 
         return root;
     }
 
     // Setto recycler view
-    private void setupAssignedTableListRecyclerView(View root) {
+    private void setupTableListRecyclerView(View root) {
         // TODO aggiungere sezioni a RecyclerView
 
-        assignedTableListRecyclerView = root.findViewById(R.id.table_list_recycler_view);
+        tableListRecyclerView = root.findViewById(R.id.table_list_recycler_view);
         RecyclerView.LayoutManager recyclerViewLayoutManager = new LinearLayoutManager(
                 getActivity(),
                 RecyclerView.VERTICAL,
                 false
         );
-        assignedTableListRecyclerView.setLayoutManager(recyclerViewLayoutManager);
+        tableListRecyclerView.setLayoutManager(recyclerViewLayoutManager);
 
 
         assignedTableListAdapter = new AssignedTableListAdapter(getActivity(), Local.getInstance().getAssignedTableList());
-        assignedTableListRecyclerView.setAdapter(assignedTableListAdapter);
+        tableListRecyclerView.setAdapter(assignedTableListAdapter);
     }
 
     @Override
     public void onResume() {
-        assignedTableListAdapter.reload(); // Aggiorna lista tavoli occupati
         super.onResume();
+        assignedTableListAdapter.reload(); // Aggiorna lista tavoli occupati
     }
 }

@@ -1,4 +1,4 @@
-package it.unive.quadcore.smartmeal.ui.manager.bottomnavigation_virtualroom.tableList;
+package it.unive.quadcore.smartmeal.ui.manager.bottomnavigation.tableList;
 
 import android.app.Activity;
 import android.view.LayoutInflater;
@@ -44,13 +44,11 @@ public class AssignedTableListAdapter extends RecyclerView.Adapter<AssignedTable
         }
     }
 
-    @NonNull
     private final Activity activity;
     // Lista tavoli occupati
-    @NonNull
     private final List<ManagerTable> tableList;
 
-    public AssignedTableListAdapter(@NonNull Activity activity,@NonNull Set<ManagerTable> tableSet) {
+    public AssignedTableListAdapter(Activity activity, Set<ManagerTable> tableSet) {
         this.activity = activity;
         this.tableList = new ArrayList<>(tableSet);
     }

@@ -7,7 +7,7 @@
     android:layout_marginLeft="5dp"
     android:layout_marginRight="5dp"
     android:orientation="vertical"
-    tools:context=".ui.manager.home.ManagerHomeActivity">
+    tools:context=".ui.manager.ManagerHomeActivity">
 
     <Space
         android:layout_width="match_parent"

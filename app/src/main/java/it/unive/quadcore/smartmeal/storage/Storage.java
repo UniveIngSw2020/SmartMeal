@@ -9,9 +9,6 @@ import android.preference.PreferenceManager;
 
 import androidx.annotation.NonNull;
 
-import org.jetbrains.annotations.Nullable;
-
-import java.util.Objects;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -21,7 +18,6 @@ import it.unive.quadcore.smartmeal.model.Menu;
 import it.unive.quadcore.smartmeal.model.Money;
 import it.unive.quadcore.smartmeal.model.Product;
 
-// Classe che raggruppa metodi statici per l'interazione con la memoria secondaria
 public class Storage {
     //private static final String TAG = "Storage";
 
@@ -29,25 +25,17 @@ public class Storage {
     protected static boolean initialized = false;
 
     // Shared Preferences. La prima di deafult, ovvero si mettono i settings dell'applicazione. La seconda di uso generico.
-    @Nullable
     protected static SharedPreferences defaultSharedPreferences;
-    @Nullable
     protected static SharedPreferences sharedPreferences;
 
-    @Nullable
     private static LocalDescription localDescription = null;
 
-    @NonNull
     private static final String SHARED_PREFERENCES_NAME = "SharedPreferences";
 
-    @NonNull
     private static final String APPLICATION_MODE_SHARED_PREFERENCE_KEY = "ApplicationMode";
-    @NonNull
     private static final String NAME_SHARED_PREFERENCE_KEY = "Name";
 
-    @NonNull
     private static final String LOCAL_NAME = "The boat restourant";
-    @NonNull
     private static final String LOCAL_PRESENTATION = "A delicious and friendly pub in a boat-like location" ;
     private static final double LOCAL_LATITUDE = 45.49140;
     private static final double LOCAL_LONGITUDE = 11.75941;
@@ -78,8 +66,6 @@ public class Storage {
         if(!initialized)
             throw new StorageException("The storage hasn't been initialize yet");
 
-        Objects.requireNonNull(defaultSharedPreferences);
-
         // Preference non esistente (primo uso della preference). Metto valore di default
         if(!defaultSharedPreferences.contains(APPLICATION_MODE_SHARED_PREFERENCE_KEY)) {
             /*SharedPreferences.Editor editor = defaultSharedPreferences.edit();
@@ -99,11 +85,9 @@ public class Storage {
         }
     }
 
-    public static void setApplicationMode(@NonNull ApplicationMode applicationMode) {
+    public static void setApplicationMode(ApplicationMode applicationMode) {
         if(!initialized)
             throw new StorageException("The storage hasn't been initialize yet");
-
-        Objects.requireNonNull(defaultSharedPreferences);
 
         SharedPreferences.Editor editor = defaultSharedPreferences.edit();
 
@@ -119,23 +103,19 @@ public class Storage {
         if(!initialized)
             throw new StorageException("The storage hasn't been initialize yet");
 
-        ApplicationMode applicationMode = getApplicationMode();
-
-        if(applicationMode==ApplicationMode.UNDEFINED)
-            throw new StorageException("In the application mode UNDEFINED does not exist a name");
-
-        Objects.requireNonNull(sharedPreferences);
-
         // Preference non esistente
         if(!sharedPreferences.contains(NAME_SHARED_PREFERENCE_KEY)) {
 
-            if(applicationMode==ApplicationMode.MANAGER){ // Se è gestore setto il nome al nome del locale
+            if(getApplicationMode()==ApplicationMode.MANAGER){ // Se è gestore setto il nome al nome del locale
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 editor.putString(NAME_SHARED_PREFERENCE_KEY, LOCAL_NAME);
                 editor.apply();
             }
             else {   // Lancio eccezione
-                throw new StorageException("The name of the client was not found in storage"); // Eccezione o valore di default?
+                /*SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putString("Name","Username");
+                editor.apply();*/
+                throw new StorageException("The name was not found in storage"); // Eccezione o valore di default?
             }
         }
 
@@ -143,18 +123,12 @@ public class Storage {
         return sharedPreferences.getString(NAME_SHARED_PREFERENCE_KEY,"Username");
     }
 
-    public static void setName(@NonNull String name) {
+    public static void setName(String name) {
         if(!initialized)
             throw new StorageException("The storage hasn't been initialize yet");
 
-        ApplicationMode applicationMode = getApplicationMode();
-
-        if(applicationMode==ApplicationMode.UNDEFINED)
-            throw new StorageException("In the application mode UNDEFINED does not exist a name");
-        else if(applicationMode==ApplicationMode.MANAGER) // Non si può cambiare nome lato Manager
-            throw new StorageException("The manager can't change the name");
-
-        Objects.requireNonNull(sharedPreferences);
+        if(getApplicationMode()==ApplicationMode.MANAGER) // Non si può cambiare nome lato Manager
+            return;
 
         // Scrivo il nome nello storage. Se non esiste tale preference viene creata.
         SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -189,23 +163,6 @@ public class Storage {
         localDescription = new LocalDescription(LOCAL_NAME,LOCAL_PRESENTATION, location ,menu);
 
         return localDescription;
-    }
-
-
-    public static void clear(){
-        if(!initialized)
-            throw new StorageException("The storage hasn't been initialize yet");
-
-        Objects.requireNonNull(defaultSharedPreferences);
-        Objects.requireNonNull(sharedPreferences);
-
-        SharedPreferences.Editor editor_def = defaultSharedPreferences.edit();
-        editor_def.clear();
-        editor_def.apply();
-
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.clear();
-        editor.apply();
     }
 
 

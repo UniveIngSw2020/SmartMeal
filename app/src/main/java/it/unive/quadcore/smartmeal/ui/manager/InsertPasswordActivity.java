@@ -14,7 +14,6 @@ import com.google.android.material.snackbar.Snackbar;
 import it.unive.quadcore.smartmeal.R;
 import it.unive.quadcore.smartmeal.storage.ApplicationMode;
 import it.unive.quadcore.smartmeal.storage.ManagerStorage;
-import it.unive.quadcore.smartmeal.ui.manager.home.ManagerHomeActivity;
 
 // Activity per inserimento password
 public class InsertPasswordActivity extends AppCompatActivity {

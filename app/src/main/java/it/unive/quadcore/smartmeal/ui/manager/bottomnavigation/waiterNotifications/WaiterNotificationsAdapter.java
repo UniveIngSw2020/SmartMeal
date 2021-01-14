@@ -1,4 +1,4 @@
-package it.unive.quadcore.smartmeal.ui.manager.bottomnavigation_virtualroom.waiterNotifications;
+package it.unive.quadcore.smartmeal.ui.manager.bottomnavigation.waiterNotifications;
 
 import android.app.Activity;
 import android.view.LayoutInflater;
@@ -41,13 +41,11 @@ public class WaiterNotificationsAdapter extends RecyclerView.Adapter<WaiterNotif
         }
     }
 
-    @NonNull
     private final Activity activity;
     // Lista notifiche
-    @NonNull
     private final List<WaiterNotification> waiterNotifications;
 
-    public WaiterNotificationsAdapter(@NonNull Activity activity,@NonNull SortedSet<WaiterNotification> waiterNotifications) {
+    public WaiterNotificationsAdapter(Activity activity, SortedSet<WaiterNotification> waiterNotifications) {
         this.activity = activity;
         this.waiterNotifications = new ArrayList<>(waiterNotifications);
     }

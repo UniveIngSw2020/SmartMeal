@@ -7,7 +7,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-// Classe che gestisce i clienti del locale
 public abstract class CustomerHandler<C extends Customer> {
 
     @NonNull

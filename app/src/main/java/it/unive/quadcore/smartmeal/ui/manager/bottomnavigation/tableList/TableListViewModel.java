@@ -1,4 +1,4 @@
-package it.unive.quadcore.smartmeal.ui.manager.bottomnavigation_virtualroom.tableList;
+package it.unive.quadcore.smartmeal.ui.manager.bottomnavigation.tableList;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;

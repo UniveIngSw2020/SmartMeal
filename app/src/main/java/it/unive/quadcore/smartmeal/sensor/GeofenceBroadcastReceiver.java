@@ -8,8 +8,6 @@ import android.util.Log;
 import com.google.android.gms.location.Geofence;
 import com.google.android.gms.location.GeofencingEvent;
 
-import java.util.Objects;
-
 // Classe per ricezione eventi geofence
 class GeofenceBroadcastReceiver extends BroadcastReceiver {
     private final static String TAG = "GeofenceReceiver";
@@ -31,7 +29,6 @@ class GeofenceBroadcastReceiver extends BroadcastReceiver {
         // Testo geofence transition type:  vedo se è quella che mi interessa. A me interessa solo entrata.
         if (geofenceTransition == Geofence.GEOFENCE_TRANSITION_ENTER) {
             // Esecuzione della callback onEntranceCallback
-            Objects.requireNonNull(SensorDetector.onEntranceCallback);
             SensorDetector.onEntranceCallback.run();
         }
     }

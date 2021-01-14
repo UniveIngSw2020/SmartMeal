@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.manager.bottomnavigation_virtualroom.tableList.TableListFragment" >
+    tools:context=".ui.manager.bottomnavigation.tableList.TableListFragment" >
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/table_list_recycler_view"

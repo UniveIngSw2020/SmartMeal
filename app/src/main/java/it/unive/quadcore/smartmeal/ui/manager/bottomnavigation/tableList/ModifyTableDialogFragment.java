@@ -1,4 +1,4 @@
-package it.unive.quadcore.smartmeal.ui.manager.bottomnavigation_virtualroom.tableList;
+package it.unive.quadcore.smartmeal.ui.manager.bottomnavigation.tableList;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -6,7 +6,6 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
 
-import androidx.annotation.NonNull;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentActivity;
 
@@ -26,17 +25,14 @@ import it.unive.quadcore.smartmeal.ui.manager.InformationDialogFragment;
 public class ModifyTableDialogFragment extends DialogFragment {
 
     // Cliente di cui modificare il tavolo
-    @NonNull
     private final Customer customer;
     // Adapter lista tavoli occupati (del fragment della stanza virtuale gestore di visualizzazione tavoli occupati)
-    @NonNull
     private final AssignedTableListAdapter adapter;
     // Lista tavoli liberi
-    @NonNull
     private final List<ManagerTable> freeTables;
 
 
-   public ModifyTableDialogFragment(@NonNull Customer customer,@NonNull Set<ManagerTable> freeTables,@NonNull AssignedTableListAdapter adapter){
+   public ModifyTableDialogFragment(Customer customer, Set<ManagerTable> freeTables, AssignedTableListAdapter adapter){
        super();
        this.customer = customer;
        this.adapter = adapter;

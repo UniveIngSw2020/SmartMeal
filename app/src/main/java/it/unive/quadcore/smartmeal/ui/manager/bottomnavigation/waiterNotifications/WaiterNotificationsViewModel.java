@@ -1,4 +1,4 @@
-package it.unive.quadcore.smartmeal.ui.manager.bottomnavigation_virtualroom.waiterNotifications;
+package it.unive.quadcore.smartmeal.ui.manager.bottomnavigation.waiterNotifications;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;

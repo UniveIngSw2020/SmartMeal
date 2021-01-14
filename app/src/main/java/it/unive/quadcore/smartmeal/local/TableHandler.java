@@ -5,7 +5,6 @@ import androidx.annotation.NonNull;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -57,7 +56,7 @@ class TableHandler {
 
     // Ritorna la lista di tavoli liberi
     @NonNull
-    synchronized TreeSet<ManagerTable> getFreeTableList() {
+    synchronized TreeSet<ManagerTable> getFreeTableList() { // SortedSet
         // La lista di tavoli liberi è vuota
         /*if(freeTableList==null || freeTableList.size()==0)
             throw new TableException("There aren't free tables");*/
@@ -95,6 +94,8 @@ class TableHandler {
         ManagerTable oldTable = getTable(customer);
         freeTable(oldTable);
         assignTable(customer, newTable);
+
+
 
     }
 
@@ -142,7 +143,7 @@ class TableHandler {
             throw new TableException("This customer doesn't have a table assigned"); //TODO: Forse null? altrimenti serve un metodo boolean hasTable(Customer customer)
 
         // Ritorno tavolo occupato (posso ritornarlo direttamente senza copiarlo perchè è immutable)
-        return Objects.requireNonNull(customerTableMap.get(customer));
+        return customerTableMap.get(customer);
     }
 
     // Ritorna il cliente che occupa un certo tavolo
@@ -169,12 +170,10 @@ class TableHandler {
         Customer customer = null;
         while(it.hasNext() && !found){
             customer = it.next();
-            /* if(customerTableMap.get(customer).equals(managerTable))
-                found = true;*/
-            if(getTable(customer).equals(managerTable))
+            if(customerTableMap.get(customer).equals(managerTable))
                 found = true;
         }
 
-        return Objects.requireNonNull(customer);
+        return customer;
     }
 }

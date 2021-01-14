@@ -5,7 +5,6 @@ import androidx.annotation.NonNull;
 import java.io.Serializable;
 import java.util.Objects;
 
-// Classe che rappresenta i tavoli del locale
 public abstract class Table implements Comparable<Table>, Serializable { // Togliere l'abstract ?
     // possibile costruttore package-private chiamato da un'altra classe
 

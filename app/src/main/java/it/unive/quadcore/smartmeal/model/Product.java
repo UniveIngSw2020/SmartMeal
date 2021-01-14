@@ -4,7 +4,6 @@ import androidx.annotation.NonNull;
 
 import java.util.Objects;
 
-// Classe che rappresenta i prodotti del locale
 public class Product implements Comparable<Product>{
     @NonNull
     private final String name;

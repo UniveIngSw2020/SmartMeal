@@ -1,4 +1,4 @@
-package it.unive.quadcore.smartmeal.ui.manager.home;
+package it.unive.quadcore.smartmeal.ui.manager;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -20,7 +20,7 @@ import it.unive.quadcore.smartmeal.R;
 import it.unive.quadcore.smartmeal.local.Local;
 import it.unive.quadcore.smartmeal.local.RoomStateException;
 import it.unive.quadcore.smartmeal.ui.SettingsActivity;
-import it.unive.quadcore.smartmeal.ui.manager.bottomnavigation_virtualroom.ManagerRoomBottomNavigationActivity;
+import it.unive.quadcore.smartmeal.ui.manager.bottomnavigation.ManagerRoomBottomNavigationActivity;
 
 // Activity home page gestore
 public class ManagerHomeActivity extends AppCompatActivity {

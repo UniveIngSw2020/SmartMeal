@@ -47,8 +47,8 @@ public class InsertPersonalDataActivity extends AppCompatActivity {
                 return;
             }
 
-            CustomerStorage.setApplicationMode(ApplicationMode.CUSTOMER);
             CustomerStorage.setName(customerName);
+            CustomerStorage.setApplicationMode(ApplicationMode.CUSTOMER);
 
             Log.i(TAG, "Customer name stored: " + customerName);
 

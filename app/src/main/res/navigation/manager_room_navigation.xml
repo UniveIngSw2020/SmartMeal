@@ -7,13 +7,13 @@
 
     <fragment
         android:id="@+id/manager_room_navigation_waiterNotifications"
-        android:name="it.unive.quadcore.smartmeal.ui.manager.bottomnavigation_virtualroom.waiterNotifications.WaiterNotificationsFragment"
+        android:name="it.unive.quadcore.smartmeal.ui.manager.bottomnavigation.waiterNotifications.WaiterNotificationsFragment"
         android:label="@string/title_manager_room_waiterNotifications_fragment"
         tools:layout="@layout/fragment_waiter_notifications" />
 
     <fragment
         android:id="@+id/manager_room_navigation_tableList"
-        android:name="it.unive.quadcore.smartmeal.ui.manager.bottomnavigation_virtualroom.tableList.TableListFragment"
+        android:name="it.unive.quadcore.smartmeal.ui.manager.bottomnavigation.tableList.TableListFragment"
         android:label="@string/title_manager_room_tableList_fragment"
         tools:layout="@layout/fragment_table_list" />
 

@@ -19,6 +19,7 @@ import com.google.android.material.snackbar.Snackbar;
 
 import it.unive.quadcore.smartmeal.R;
 import it.unive.quadcore.smartmeal.sensor.SensorDetector;
+import it.unive.quadcore.smartmeal.storage.ApplicationMode;
 import it.unive.quadcore.smartmeal.storage.CustomerStorage;
 import it.unive.quadcore.smartmeal.ui.SelectAppModeActivity;
 import it.unive.quadcore.smartmeal.ui.customer.virtualroom.callback.SendWelcomeNotificationCallback;
@@ -146,7 +147,7 @@ public class CustomerSettingsFragment extends Fragment {
 
         logoutTextView.setOnClickListener(v -> {
             // imposta modalità applicazione predefinita
-            CustomerStorage.clear();
+            CustomerStorage.setApplicationMode(ApplicationMode.UNDEFINED);
 
             // ritorna alla pagina di selezione modalità
             Intent intent = new Intent(getContext(), SelectAppModeActivity.class);
