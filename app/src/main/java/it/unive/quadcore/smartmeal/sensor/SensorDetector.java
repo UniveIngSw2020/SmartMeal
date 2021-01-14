@@ -29,7 +29,6 @@ import java.util.List;
 
 import it.unive.quadcore.smartmeal.storage.CustomerStorage;
 
-// Classe che gestisce la rilevazione di eventi legati ai sensori : rilevazione shake e rilevazione entrata
 public class SensorDetector {
     private final static String TAG = "Sensor";
 
@@ -40,12 +39,10 @@ public class SensorDetector {
     // Callback da eseguire quando si rileva entrata
     static Runnable onEntranceCallback;
     // Booleano che mi dice se sto rilevando entrata oppure no
-    private boolean isDetectingEntrance;
+    private boolean isEntranceDetecting;
     // Activity a cui sono legate le geofence
     private Activity geofenceActivity ;
 
-    // Raggio dell'area da rilevare con geofence
-    private static final float radius = 20;
     private GeofencingClient geofencingClient;
     private List<Geofence> geofenceList;
     private PendingIntent geofencePendingIntent;
@@ -54,7 +51,7 @@ public class SensorDetector {
     // Callback da eseguire quando si rileva lo shake
     private Runnable onShakeDetectedCallback;
     // Booleano che mi dice se sto rilevando shake oppure no
-    private boolean isDetectingShake;
+    private boolean isShakeDetecting;
 
     // Accelerazione minima del telefono perchè si possa definire shake
     private static final float SHAKE_THRESHOLD = 6.0f; // m/s^2
@@ -129,10 +126,10 @@ public class SensorDetector {
 
     // Inizio a rilevare shake, passando la callback da eseguire quando si rileva lo shake
     public void startShakeDetection(@NonNull Runnable onShakeDetectedCallback,@NonNull Activity activity){
-        if(isDetectingShake)
-            throw new IllegalStateException("The shake has already been detecting");
+        if(isShakeDetecting)
+            throw new IllegalStateException("The shake has alredy been detecting");
 
-        isDetectingShake = true;
+        isShakeDetecting = true;
 
         this.onShakeDetectedCallback = onShakeDetectedCallback;
 
@@ -152,19 +149,19 @@ public class SensorDetector {
             Log.d(TAG, "SensorEventListener registered");
         }
 
-        isDetectingShake = true;
+        isShakeDetecting = true;
 
     }
 
     // Smetto di rilevare shake
     public void endShakeDetection(){
-        if(!isDetectingShake)
+        if(!isShakeDetecting)
             throw new IllegalStateException("The shake hasn't been detecting yet");
 
         sensorManager.unregisterListener(sensorEventListener);
         Log.d(TAG, "SensorEventListener unregistered");
 
-        isDetectingShake = false;
+        isShakeDetecting = false;
     }
 
 
@@ -198,7 +195,7 @@ public class SensorDetector {
     }
 
     public void startEntranceDetection(@NonNull Runnable onEntranceCallback,@NonNull Activity activity) {
-        if(isDetectingEntrance)
+        if(isEntranceDetecting)
             throw new IllegalStateException("The entrance has alredy been detecting");
 
         SensorDetector.onEntranceCallback = onEntranceCallback;
@@ -211,13 +208,15 @@ public class SensorDetector {
 
         Location location = CustomerStorage.getLocalDescription().getLocation();
 
+        float radius = 20;
+
         geofenceList.add(new Geofence.Builder()
                 // Id geofence
                 .setRequestId("mygeofence")
                 .setCircularRegion(
-                        location.getLatitude(), // latitudine
-                        location.getLongitude(), // longitudine
-                        radius //geofence radius precision
+                        location.getLatitude(),
+                        location.getLongitude(),
+                        radius//geofence radius precision
                 )
                 .setExpirationDuration(Geofence.NEVER_EXPIRE)
                 .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER)
@@ -244,11 +243,11 @@ public class SensorDetector {
                     }
                 });
 
-        isDetectingEntrance = true;
+        isEntranceDetecting = true;
     }
 
     public void endEntranceDetection(){
-        if(!isDetectingEntrance)
+        if(!isEntranceDetecting)
             throw new IllegalStateException("The entrance hasn't already been detecting yet");
 
         geofencingClient.removeGeofences(getGeofencePendingIntent(geofenceActivity))
@@ -265,6 +264,6 @@ public class SensorDetector {
                     }
                 });
 
-        isDetectingEntrance = false;
+        isEntranceDetecting = false;
     }
 }

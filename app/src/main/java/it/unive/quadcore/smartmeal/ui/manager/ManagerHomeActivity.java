@@ -1,9 +1,13 @@
 package it.unive.quadcore.smartmeal.ui.manager;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -19,6 +23,7 @@ import java.util.Objects;
 import it.unive.quadcore.smartmeal.R;
 import it.unive.quadcore.smartmeal.local.Local;
 import it.unive.quadcore.smartmeal.local.RoomStateException;
+import it.unive.quadcore.smartmeal.sensor.SensorDetector;
 import it.unive.quadcore.smartmeal.ui.SettingsActivity;
 
 // Activity home page gestore
@@ -27,7 +32,7 @@ public class ManagerHomeActivity extends AppCompatActivity {
     private Button roomButton;
     private Button menuButton;
     private Button descriptionButton;
-    // private SensorDetector sensorDetector; Testing sensori
+    private SensorDetector sensorDetector;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,9 +47,9 @@ public class ManagerHomeActivity extends AppCompatActivity {
         descriptionButton = findViewById(R.id.button_home_manager_description);
 
 
-        // Testing
+        // TODO : rimuovere. Solo testing
 
-/*        sensorDetector = SensorDetector.getInstance();
+        sensorDetector = SensorDetector.getInstance();
         sensorDetector.startEntranceDetection(()->{
             Snackbar.make(
                     findViewById(android.R.id.content),
@@ -86,9 +91,9 @@ public class ManagerHomeActivity extends AppCompatActivity {
             // notificationId is a unique int for each notification that you must define
             notificationManager.notify(1234, builder.build());
         },this);
-*/
-        // Fine testing shake
 
+
+        // Fine testing shake
 
         roomButton.setOnClickListener(v -> { // Si vuole accedere alla stanza virtuale
 
@@ -112,19 +117,15 @@ public class ManagerHomeActivity extends AppCompatActivity {
         menuButton.setOnClickListener(v -> {
             // avvia l'activity che mostra menu
 
-            startActivity(new Intent(ManagerHomeActivity.this, MenuManagerActivity.class));
-
-            // Testing
-            // sensorDetector.endShakeDetection();
+            // startActivity(new Intent(ManagerHomeActivity.this, MenuManagerActivity.class)); // TODO : rimettere a posto
+            sensorDetector.endShakeDetection();
         });
 
         descriptionButton.setOnClickListener(v -> {
             // avvia l'activity che mostra descrizione
 
-            startActivity(new Intent(ManagerHomeActivity.this, DescriptionManagerActivity.class));
-
-            // Testing
-            /* sensorDetector.startShakeDetection(()->{
+            // startActivity(new Intent(ManagerHomeActivity.this, DescriptionManagerActivity.class)); // TODO : rimettere a posto
+            sensorDetector.startShakeDetection(()->{
                 Snackbar.make(
                         findViewById(android.R.id.content),
                         "snackbar shake",
@@ -140,7 +141,7 @@ public class ManagerHomeActivity extends AppCompatActivity {
                 NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
                 // notificationId is a unique int for each notification that you must define
                 notificationManager.notify(1234, builder.build());
-            },this); */
+            },this);
         });
 
     }

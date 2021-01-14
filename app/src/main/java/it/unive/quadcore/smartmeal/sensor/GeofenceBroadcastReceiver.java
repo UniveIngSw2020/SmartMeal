@@ -8,8 +8,8 @@ import android.util.Log;
 import com.google.android.gms.location.Geofence;
 import com.google.android.gms.location.GeofencingEvent;
 
-// Classe per ricezione eventi geofence
-class GeofenceBroadcastReceiver extends BroadcastReceiver {
+
+public class GeofenceBroadcastReceiver extends BroadcastReceiver {
     private final static String TAG = "GeofenceReceiver";
 
     // Ricevuto evento geofence
