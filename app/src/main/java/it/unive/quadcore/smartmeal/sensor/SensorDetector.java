@@ -29,7 +29,6 @@ import java.util.List;
 import java.util.Objects;
 
 import it.unive.quadcore.smartmeal.storage.CustomerStorage;
-import it.unive.quadcore.smartmeal.util.PermissionHandler;
 
 // Classe che gestisce la rilevazione di eventi legati ai sensori : rilevazione shake e rilevazione entrata
 public class SensorDetector {
@@ -134,9 +133,6 @@ public class SensorDetector {
 
     // Inizio a rilevare shake, passando la callback da eseguire quando si rileva lo shake
     public void startShakeDetection(@NonNull Runnable onShakeDetectedCallback,@NonNull Activity activity){
-        if(!CustomerStorage.getSensorMode() || !PermissionHandler.hasSensorsPermissions(activity))
-            throw new IllegalStateException("There aren't the required permissions");
-
         if(isDetectingShake)
             throw new IllegalStateException("The shake has already been detecting");
 
@@ -206,9 +202,6 @@ public class SensorDetector {
     }
 
     public void startEntranceDetection(@NonNull Runnable onEntranceCallback,@NonNull Activity activity) {
-        if(!CustomerStorage.getNotificationMode() || !PermissionHandler.hasNotificationsPermissions(activity))
-            throw new IllegalStateException("There aren't the required permissions");
-
         if(isDetectingEntrance)
             throw new IllegalStateException("The entrance has alredy been detecting");
 
