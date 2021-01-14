@@ -210,24 +210,30 @@ public class CustomerCommunication extends Communication {
                         // TODO continuare
                         switch (message.getRequestType()) {
                             case CUSTOMER_NAME:
+                                assert message.getContent() != null;
                                 handleCustomerNameConfirmation(message.getContent());
                                 break;
                             case FREE_TABLE_LIST:
+                                assert message.getContent() != null;
                                 handleFreeTableListResponse(message.getContent());
                                 break;
                             case SELECT_TABLE:
+                                assert message.getContent() != null;
                                 handleSelectTableResponse(message.getContent());
                                 break;
                             case NOTIFY_WAITER:
+                                assert message.getContent() != null;
                                 handleNotifyWaiterResponse(message.getContent());
                                 break;
                             case TABLE_CHANGED:
+                                assert message.getContent() != null;
                                 handleChangedTableMessage(message.getContent());
                                 break;
                             case TABLE_REMOVED:
                                 handleRemovedTableMessage();
+                                break;
                             default:
-                                throw new UnsupportedOperationException("Not implemented yet");
+                                throw new UnsupportedOperationException("Not implemented yet " + message.getRequestType());
                         }
                     }
                 }
@@ -309,14 +315,15 @@ public class CustomerCommunication extends Communication {
     }
 
     private synchronized void sendName() {
-        if(!isInsideTheRoom()){
-            Log.i(TAG, "trying to send name while not in the room");
+        if(connectionState() == ConnectionState.DISCONNECTED){
+            Log.i(TAG, "trying to send name while disconnected");
             return;
         }
+        assert managerEndpointId != null;
         sendMessage(managerEndpointId, new Message(RequestType.CUSTOMER_NAME, CustomerStorage.getName()));
     }
 
-    protected synchronized void handleCustomerNameConfirmation(@NonNull Serializable content) {
+    private synchronized void handleCustomerNameConfirmation(@NonNull Serializable content) {
         Objects.requireNonNull(content);
 
         if(isInsideTheRoom()) {
@@ -372,8 +379,8 @@ public class CustomerCommunication extends Communication {
      *                          limite
      */
     public synchronized void notifyWaiter(@NonNull Consumer<Confirmation<? extends WaiterNotificationException>> onNotifyWaiterConfirmationCallback, @NonNull Runnable onTimeoutCallback) {
-        if (!isInsideTheRoom()) {
-            Log.w(TAG, "trying to notify the waiter while not in the room");
+        if (connectionState() == ConnectionState.DISCONNECTED) {
+            Log.w(TAG, "trying to notify the waiter while disconnected");
             return;
         }
 
@@ -387,6 +394,7 @@ public class CustomerCommunication extends Communication {
             onNotifyWaiterConfirmationCallback.accept(response);
         };
 
+        assert managerEndpointId != null;
         sendMessage(managerEndpointId, new Message(RequestType.NOTIFY_WAITER, null));
     }
 
@@ -406,8 +414,8 @@ public class CustomerCommunication extends Communication {
      *                          non arriva entro un tempo limite
      */
     public synchronized void selectTable(@NonNull Table table, @NonNull Consumer<Confirmation<? extends TableException>> onSelectTableConfirmationCallback, @NonNull Runnable onTimeoutCallback) {
-        if (!isInsideTheRoom()) {
-            Log.w(TAG, "trying to select table while not in the room");
+        if (connectionState() == ConnectionState.DISCONNECTED) {
+            Log.w(TAG, "trying to select table while disconnected");
             return;
         }
 
@@ -425,6 +433,7 @@ public class CustomerCommunication extends Communication {
             onSelectTableConfirmationCallback.accept(response);
         };
 
+        assert managerEndpointId != null;
         sendMessage(managerEndpointId, new Message(RequestType.SELECT_TABLE, table));
     }
 
@@ -444,8 +453,8 @@ public class CustomerCommunication extends Communication {
             @NonNull Consumer<Response<TreeSet<Table>, ? extends TableException>> freeTableListCallback,
             @NonNull Runnable onTimeoutCallback) {
 
-        if(!isInsideTheRoom()){
-            Log.i(TAG, "trying to request free table list while not in the room");
+        if(connectionState() == ConnectionState.DISCONNECTED){
+            Log.i(TAG, "trying to request free table list while disconnected");
             return;
         }
 
@@ -459,6 +468,7 @@ public class CustomerCommunication extends Communication {
             freeTableListCallback.accept(response);
         };
 
+        assert managerEndpointId != null;
         sendMessage(managerEndpointId, new Message(RequestType.FREE_TABLE_LIST, null)); //TODO content
     }
 
