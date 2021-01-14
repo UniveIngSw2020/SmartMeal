@@ -85,7 +85,11 @@ public class CustomerSettingsFragment extends Fragment {
                 // utente ha attivato notifiche ma non ha i permessi per farlo
 
                 notificationsSwitch.setChecked(false);
-                sensorDetector.endEntranceDetection();
+                try {
+                    sensorDetector.endEntranceDetection();
+                } catch (IllegalStateException e) {
+                    Log.w(TAG, "Entrance detection was already stopped");
+                }
 
                 Activity activity = getActivity();
                 if (activity != null) {
@@ -102,7 +106,11 @@ public class CustomerSettingsFragment extends Fragment {
                 }
                 CustomerStorage.setNotificationMode(true);
             } else {                        // utente ha disattivato notifiche
-                sensorDetector.endEntranceDetection();
+                try {
+                    sensorDetector.endEntranceDetection();
+                } catch (IllegalStateException e) {
+                    Log.w(TAG, "Entrance detection was already stopped");
+                }
                 CustomerStorage.setNotificationMode(false);
             }
 
