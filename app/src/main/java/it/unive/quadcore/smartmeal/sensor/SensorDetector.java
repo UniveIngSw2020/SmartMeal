@@ -109,7 +109,7 @@ public class SensorDetector {
                         double acceleration = Math.sqrt(Math.pow(x, 2) +
                                 Math.pow(y, 2) +
                                 Math.pow(z, 2)) - SensorManager.GRAVITY_EARTH;
-                        Log.d(TAG, "Acceleration is " + acceleration + "m/s^2");
+                        //Log.d(TAG, "Acceleration is " + acceleration + "m/s^2");
 
                         // Si tratta di uno shake
                         if (acceleration > SHAKE_THRESHOLD) { // SHAKE DETECTED
