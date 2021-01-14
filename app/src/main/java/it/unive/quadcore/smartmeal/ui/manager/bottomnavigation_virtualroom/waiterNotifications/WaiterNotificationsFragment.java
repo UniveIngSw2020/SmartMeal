@@ -49,7 +49,6 @@ public class WaiterNotificationsFragment extends Fragment {
 
     // Setto recycler view
     private void setupWaiterNotificationRecyclerView(View root) {
-        // TODO aggiungere sezioni a RecyclerView
 
         waiterNotificationRecyclerView = root.findViewById(R.id.waiter_notification_recycler_view);
         RecyclerView.LayoutManager recyclerViewLayoutManager = new LinearLayoutManager(
@@ -62,6 +61,12 @@ public class WaiterNotificationsFragment extends Fragment {
 
         waiterNotificationsAdapter = new WaiterNotificationsAdapter(getActivity(), Local.getInstance().getWaiterNotificationList());
         waiterNotificationRecyclerView.setAdapter(waiterNotificationsAdapter);
+    }
+
+    @Override
+    public void onResume() {
+        waiterNotificationsAdapter.reload(); // Aggiorna lista notifiche
+        super.onResume();
     }
 
 }

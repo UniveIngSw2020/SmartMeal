@@ -18,8 +18,12 @@ import it.unive.quadcore.smartmeal.model.ManagerTable;
 
 public final class ManagerStorage extends Storage {
 
+    @NonNull
     private static final String TABLES_SHARED_PREFERENCE_KEY = "Tables";
+    @NonNull
     private static final String MAX_NOTIFICATION_NUMBER_SHARED_PREFERENCE_KEY = "MaxNotificationNumber";
+
+    private static final int MAX_NOTIFICATION_NUMBER = 5;
 
     /**
      * Rende non instanziabile questa classe.
@@ -69,10 +73,6 @@ public final class ManagerStorage extends Storage {
         return tables;
     }
 
-    // Genera il numero di default
-    private static int generateMaxNotificationNumber(){
-        return 5;
-    }
 
     // Ritorna il numero massimo di notifiche in coda di uno stesso utente
     // Possibilità di non tenere tale numero in memoria secondaria ma generarlo e basta
@@ -88,11 +88,11 @@ public final class ManagerStorage extends Storage {
         // Preference non esistente. Primo accesso a tale preference. Scrivo valore di deafult
         if(!sharedPreferences.contains(MAX_NOTIFICATION_NUMBER_SHARED_PREFERENCE_KEY)){
             SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putInt(MAX_NOTIFICATION_NUMBER_SHARED_PREFERENCE_KEY,generateMaxNotificationNumber());
+            editor.putInt(MAX_NOTIFICATION_NUMBER_SHARED_PREFERENCE_KEY,MAX_NOTIFICATION_NUMBER);
             editor.apply();
         }
 
-        return sharedPreferences.getInt(MAX_NOTIFICATION_NUMBER_SHARED_PREFERENCE_KEY,generateMaxNotificationNumber());
+        return sharedPreferences.getInt(MAX_NOTIFICATION_NUMBER_SHARED_PREFERENCE_KEY,MAX_NOTIFICATION_NUMBER);
     }
 
     // Ritorna la password reale cifrata

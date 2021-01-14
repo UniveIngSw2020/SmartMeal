@@ -42,55 +42,6 @@ public class ManagerHomeActivity extends AppCompatActivity {
         menuButton = findViewById(R.id.button_home_manager_menu);
         descriptionButton = findViewById(R.id.button_home_manager_description);
 
-
-        // Testing
-
-/*        sensorDetector = SensorDetector.getInstance();
-        sensorDetector.startEntranceDetection(()->{
-            Snackbar.make(
-                    findViewById(android.R.id.content),
-                    R.string.geofence_entrance,
-                    BaseTransientBottomBar.LENGTH_LONG
-            ).show();
-
-           // Mostra una notifica
-            NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
-                    .setSmallIcon(R.drawable.common_google_signin_btn_text_dark)
-                    .setContentTitle("Notifica geofencing")
-                    .setContentText("Testo notifica")
-                    .setPriority(NotificationCompat.PRIORITY_DEFAULT);
-            NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
-            // notificationId is a unique int for each notification that you must define
-            notificationManager.notify(1234, builder.build());
-
-        },this);
-
-        // Fine testing geofencing
-
-
-        // Inizio testing shake
-
-        sensorDetector.startShakeDetection(()->{
-            Snackbar.make(
-                    findViewById(android.R.id.content),
-                    "snackbar shake",
-                    BaseTransientBottomBar.LENGTH_LONG
-            ).show();
-
-            // Mostra una notifica
-            NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
-                    .setSmallIcon(R.drawable.common_google_signin_btn_text_dark)
-                    .setContentTitle("Notifica shake")
-                    .setContentText("Testo notifica")
-                    .setPriority(NotificationCompat.PRIORITY_DEFAULT);
-            NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
-            // notificationId is a unique int for each notification that you must define
-            notificationManager.notify(1234, builder.build());
-        },this);
-*/
-        // Fine testing shake
-
-
         roomButton.setOnClickListener(v -> { // Si vuole accedere alla stanza virtuale
 
             // Avvio la stanza virtuale
@@ -114,34 +65,12 @@ public class ManagerHomeActivity extends AppCompatActivity {
             // avvia l'activity che mostra menu
 
             startActivity(new Intent(ManagerHomeActivity.this, MenuManagerActivity.class));
-
-            // Testing
-            // sensorDetector.endShakeDetection();
         });
 
         descriptionButton.setOnClickListener(v -> {
             // avvia l'activity che mostra descrizione
 
             startActivity(new Intent(ManagerHomeActivity.this, DescriptionManagerActivity.class));
-
-            // Testing
-            /* sensorDetector.startShakeDetection(()->{
-                Snackbar.make(
-                        findViewById(android.R.id.content),
-                        "snackbar shake",
-                        BaseTransientBottomBar.LENGTH_LONG
-                ).show();
-
-                // Mostra una notifica
-                NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
-                        .setSmallIcon(R.drawable.common_google_signin_btn_text_dark)
-                        .setContentTitle("Notifica shake")
-                        .setContentText("Testo notifica")
-                        .setPriority(NotificationCompat.PRIORITY_DEFAULT);
-                NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
-                // notificationId is a unique int for each notification that you must define
-                notificationManager.notify(1234, builder.build());
-            },this); */
         });
 
     }

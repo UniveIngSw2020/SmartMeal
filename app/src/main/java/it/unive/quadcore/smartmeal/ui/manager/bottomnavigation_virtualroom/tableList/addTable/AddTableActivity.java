@@ -43,7 +43,7 @@ public class AddTableActivity extends AppCompatActivity {
 
     // Setta recycler view
     private void setupAddTableRecyclerView() {
-        // TODO aggiungere sezioni a RecyclerView
+
         addTableRecyclerView = findViewById(R.id.add_table_recycler_view);
         RecyclerView.LayoutManager recyclerViewLayoutManager = new LinearLayoutManager(
                 this,
@@ -66,5 +66,11 @@ public class AddTableActivity extends AppCompatActivity {
                     BaseTransientBottomBar.LENGTH_INDEFINITE
             ).show();
         }
+    }
+
+    @Override
+    public void onResume() {
+        addTableAdapter.reload(); // Aggiorna lista tavoli liberi
+        super.onResume();
     }
 }

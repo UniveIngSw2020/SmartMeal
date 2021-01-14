@@ -72,6 +72,7 @@ public class SensorDetector {
     private SensorEventListener sensorEventListener;
 
 
+    @NonNull
     public synchronized static SensorDetector getInstance() {
         if (instance == null) {
             instance = new SensorDetector();
@@ -139,8 +140,6 @@ public class SensorDetector {
 
         if(isDetectingShake)
             throw new IllegalStateException("The shake has already been detecting");
-
-        isDetectingShake = true;
 
         this.onShakeDetectedCallback = onShakeDetectedCallback;
 

@@ -110,7 +110,7 @@ public class AddTableAdapter extends RecyclerView.Adapter<AddTableAdapter.TableV
     }
 
     // Ricarica la lista tavoli
-    private void reload(){
+    public void reload(){
         tableList.clear();
         tableList.addAll(Local.getInstance().getFreeTableList());
         notifyDataSetChanged();

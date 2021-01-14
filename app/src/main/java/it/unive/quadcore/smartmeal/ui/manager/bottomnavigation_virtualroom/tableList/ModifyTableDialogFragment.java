@@ -68,12 +68,11 @@ public class ModifyTableDialogFragment extends DialogFragment {
                             ManagerTable newTable = freeTables.get(which);
                             Local.getInstance().changeCustomerTable(customer, newTable); // Modifico il tavolo associato al cliente
 
-                            adapter.reload();
-
                         } catch (TableException e) { // Errore nel modificare il tavolo
                             new InformationDialogFragment(getActivity().getString(R.string.modify_table_error_alert))
                                     .show(((FragmentActivity)getContext()).getSupportFragmentManager(),"errorSelectedTable");
                         }
+                        adapter.reload();
                     }
                 });
 

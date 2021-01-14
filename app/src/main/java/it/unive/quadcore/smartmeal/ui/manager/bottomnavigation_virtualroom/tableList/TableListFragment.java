@@ -75,7 +75,6 @@ public class TableListFragment extends Fragment {
 
     // Setto recycler view
     private void setupAssignedTableListRecyclerView(View root) {
-        // TODO aggiungere sezioni a RecyclerView
 
         assignedTableListRecyclerView = root.findViewById(R.id.table_list_recycler_view);
         RecyclerView.LayoutManager recyclerViewLayoutManager = new LinearLayoutManager(
