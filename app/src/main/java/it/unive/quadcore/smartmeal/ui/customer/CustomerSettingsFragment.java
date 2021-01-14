@@ -171,6 +171,13 @@ public class CustomerSettingsFragment extends Fragment {
             // imposta modalità applicazione predefinita
             CustomerStorage.clear();
 
+            // ferma la rilevazione dell'ingresso
+            try {
+                SensorDetector.getInstance().endEntranceDetection();
+            } catch (IllegalStateException e) {
+                Log.w(TAG, "Entrance detection was already stopped");
+            }
+
             // ritorna alla pagina di selezione modalità
             Intent intent = new Intent(getContext(), SelectAppModeActivity.class);
             // svuota il backstack

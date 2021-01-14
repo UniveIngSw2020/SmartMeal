@@ -3,6 +3,7 @@ package it.unive.quadcore.smartmeal.ui.customer.bottomnavigation;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -25,8 +26,11 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import it.unive.quadcore.smartmeal.R;
+import it.unive.quadcore.smartmeal.sensor.SensorDetector;
+import it.unive.quadcore.smartmeal.storage.CustomerStorage;
 import it.unive.quadcore.smartmeal.ui.SettingsActivity;
 import it.unive.quadcore.smartmeal.ui.customer.virtualroom.CustomerVirtualRoomActivity;
+import it.unive.quadcore.smartmeal.ui.customer.virtualroom.callback.SendWelcomeNotificationCallback;
 import it.unive.quadcore.smartmeal.util.PermissionHandler;
 
 public class CustomerBottomNavigationActivity extends AppCompatActivity {
@@ -89,6 +93,20 @@ public class CustomerBottomNavigationActivity extends AppCompatActivity {
                 ));
             }
         });
+
+        if (CustomerStorage.getNotificationMode()
+                && PermissionHandler.hasNotificationsPermissions(this)) {
+            try {
+                SensorDetector
+                        .getInstance()
+                        .startEntranceDetection(
+                                new SendWelcomeNotificationCallback(this),
+                                this
+                        );
+            } catch (IllegalStateException e) {
+                Log.w(TAG, "Entrance detection was already activated");
+            }
+        }
     }
 
     @Override
