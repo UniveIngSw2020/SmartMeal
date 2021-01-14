@@ -100,18 +100,22 @@ public class CustomerSettingsFragment extends Fragment {
                     ).show();
                 }
             } else if (isChecked) {         // utente ha attivato notifiche e ha i permessi per farlo
+                CustomerStorage.setNotificationMode(true);
                 Activity activity = getActivity();
                 if (activity != null) {
-                    sensorDetector.startEntranceDetection(new SendWelcomeNotificationCallback(activity),getActivity());
+                    try {
+                        sensorDetector.startEntranceDetection(new SendWelcomeNotificationCallback(activity), activity);
+                    } catch (IllegalStateException e) {
+                        Log.w(TAG, "Entrance detection was already activated");
+                    }
                 }
-                CustomerStorage.setNotificationMode(true);
             } else {                        // utente ha disattivato notifiche
+                CustomerStorage.setNotificationMode(false);
                 try {
                     sensorDetector.endEntranceDetection();
                 } catch (IllegalStateException e) {
                     Log.w(TAG, "Entrance detection was already stopped");
                 }
-                CustomerStorage.setNotificationMode(false);
             }
 
             Log.i(TAG, "Customer changed notifications settings: " + isChecked);

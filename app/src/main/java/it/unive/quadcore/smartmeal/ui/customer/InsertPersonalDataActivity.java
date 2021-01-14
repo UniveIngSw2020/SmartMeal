@@ -55,7 +55,16 @@ public class InsertPersonalDataActivity extends AppCompatActivity {
 
             if (CustomerStorage.getNotificationMode()
                     && PermissionHandler.hasNotificationsPermissions(InsertPersonalDataActivity.this)) {
-                SensorDetector.getInstance().startEntranceDetection(new SendWelcomeNotificationCallback(InsertPersonalDataActivity.this),this);
+                try {
+                    SensorDetector
+                            .getInstance()
+                            .startEntranceDetection(
+                                    new SendWelcomeNotificationCallback(InsertPersonalDataActivity.this),
+                                    InsertPersonalDataActivity.this
+                            );
+                } catch (IllegalStateException e) {
+                    Log.w(TAG, "Entrance detection was already activated");
+                }
             }
 
             // avvia l'activity principale del Cliente

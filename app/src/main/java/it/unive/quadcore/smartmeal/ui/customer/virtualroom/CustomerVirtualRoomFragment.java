@@ -139,7 +139,11 @@ public class CustomerVirtualRoomFragment extends Fragment {
         CustomerCommunication.getInstance().onTableChanged(table -> tableNumberTextView.setText(table.getId()));
 
         if (CustomerStorage.getSensorMode() && PermissionHandler.hasSensorsPermissions(getContext())) {
-            SensorDetector.getInstance().startShakeDetection(new NotifyWaiterCallback(getActivity()),getActivity());
+            try {
+                SensorDetector.getInstance().startShakeDetection(new NotifyWaiterCallback(getActivity()), getActivity());
+            } catch (IllegalStateException e) {
+                Log.w(TAG, "Shake detection was already activated");
+            }
         }
 
         return root;
