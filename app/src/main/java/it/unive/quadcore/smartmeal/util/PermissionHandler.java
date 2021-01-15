@@ -11,8 +11,27 @@ import androidx.core.content.ContextCompat;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+/**
+ * Classe che gestisce i permessi richiesti per utilizzare le vaie funzioni dell'applicazione.
+ * Classe non instanziabile.
+ */
 public class PermissionHandler {
 
+    private static final int REQUEST_CODE_REQUIRED_PERMISSIONS = 1;
+
+    /**
+     * Costruttore privato: non instanziabile
+     */
+    private PermissionHandler() {
+        throw new AssertionError("Non-instantiable class");
+    }
+
+
+    /**
+     * Restituisce i permessi necessari per Nearby.
+     *
+     * @return i permessi necessari per Nearby
+     */
     private static String[] getNearbyRequiredPermissions() {
         return new String[] {
                 Manifest.permission.BLUETOOTH,
@@ -24,6 +43,12 @@ public class PermissionHandler {
         };
     }
 
+
+    /**
+     * Restituisce i permessi necessari per le notifiche.
+     *
+     * @return i permessi necessari per le notifiche
+     */
     private static String[] getNotificationsRequiredPermissions() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             return new String[] {
@@ -37,11 +62,18 @@ public class PermissionHandler {
         }
     }
 
+
+    /**
+     * Restituisce i permessi necessari per i sensori.
+     *
+     * @return i permessi necessari per i sensori
+     */
     private static String[] getSensorsRequiredPermissions() {
         return new String[] {
                 // TODO capire che permessi servono
         };
     }
+
 
     private static String[] getAllRequiredPermissions() {
         ArrayList<String> requiredPermissions = new ArrayList<>();
@@ -52,12 +84,22 @@ public class PermissionHandler {
         return requiredPermissions.toArray(new String[0]);
     }
 
-    private static final int REQUEST_CODE_REQUIRED_PERMISSIONS = 1;
 
+    /**
+     * Restituisce il codice della richiesta di permessi.
+     *
+     * @return il codice della richiesta di permessi
+     */
     public static int getRequestCodeRequiredPermissions() {
         return REQUEST_CODE_REQUIRED_PERMISSIONS;
     }
 
+
+    /**
+     * Verifica se l'applicazione ha i permessi per usare Nearby.
+     *
+     * @param context il contesto da cui sono richiesti
+     */
     public static boolean hasNearbyPermissions(Context context) {
         return hasPermission(
                 context,
@@ -65,6 +107,12 @@ public class PermissionHandler {
         );
     }
 
+
+    /**
+     * Richiede tutti i permessi per usare le Nearby.
+     *
+     * @param activity l'activity da cui sono richiesti
+     */
     public static void requestNearbyPermissions(Activity activity) {
         requestPermissions(
                 activity,
@@ -72,6 +120,12 @@ public class PermissionHandler {
         );
     }
 
+
+    /**
+     * Verifica se l'applicazione ha i permessi per usare le notifiche.
+     *
+     * @param context il contesto da cui sono richiesti
+     */
     public static boolean hasNotificationsPermissions(Context context) {
         return hasPermission(
                 context,
@@ -79,6 +133,12 @@ public class PermissionHandler {
         );
     }
 
+
+    /**
+     * Richiede tutti i permessi per usare le notifiche.
+     *
+     * @param activity l'activity da cui sono richiesti
+     */
     public static void requestNotificationsPermissions(Activity activity) {
         requestPermissions(
                 activity,
@@ -86,6 +146,12 @@ public class PermissionHandler {
         );
     }
 
+
+    /**
+     * Richiede tutti i permessi per usare i sensori.
+     *
+     * @param context l'activity da cui sono richiesti
+     */
     public static boolean hasSensorsPermissions(Context context) {
         return hasPermission(
                 context,
@@ -93,6 +159,12 @@ public class PermissionHandler {
         );
     }
 
+
+    /**
+     * Richiede tutti i permessi per usare i sensori.
+     *
+     * @param activity l'activity da cui sono richiesti
+     */
     public static void requestSensorsPermissions(Activity activity) {
         requestPermissions(
                 activity,
@@ -100,6 +172,12 @@ public class PermissionHandler {
         );
     }
 
+
+    /**
+     * Richiede tutti i permessi.
+     *
+     * @param activity l'activity da cui sono richiesti
+     */
     public static void requestAllPermissions(Activity activity) {
         requestPermissions(
                 activity,
@@ -107,6 +185,15 @@ public class PermissionHandler {
         );
     }
 
+
+    /**
+     * Verifica se l'applicazione ha i permessi.
+     *
+     * @param context il ccontesto da cui sono richiesti
+     * @param permissions i permessi da verificare
+     *
+     * @return true se l'applicazione ha tutti i permessi, false altrimenti
+     */
     private static boolean hasPermission(Context context, String... permissions) {
         for (String permission : permissions) {
             if (ContextCompat.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED) {
@@ -116,6 +203,13 @@ public class PermissionHandler {
         return true;
     }
 
+
+    /**
+     * Richiede i permessi specificati.
+     *
+     * @param activity l'activity da cui sono richiesti
+     * @param permissions i permessi da richiedere
+     */
     private static void requestPermissions(Activity activity, String[] permissions) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (!hasPermission(activity, permissions)) {
