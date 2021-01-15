@@ -7,7 +7,9 @@ import androidx.annotation.NonNull;
 import java.util.Date;
 import java.util.Objects;
 
-// Classe che rappresenta le notifiche al cameriere
+/**
+ * Classe che rappresenta le notifiche al cameriere
+ */
 public class WaiterNotification implements Comparable<WaiterNotification> {
 
     // Tipo per la data e ora

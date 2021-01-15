@@ -83,6 +83,7 @@ public class ManagerCommunication extends Communication {
                 RequestType requestType = message.getRequestType();
 
                 if (requestType == RequestType.CUSTOMER_NAME) {
+                    assert message.getContent() != null;
                     handleCustomerNameMessage(endpointId, message.getContent());
                     return;
                 }
@@ -98,6 +99,7 @@ public class ManagerCommunication extends Communication {
                         handleFreeTableListRequest(endpointId);
                         break;
                     case SELECT_TABLE:
+                        assert message.getContent() != null;
                         handleSelectTableRequest(endpointId, message.getContent());
                         break;
                     case NOTIFY_WAITER:
@@ -112,7 +114,7 @@ public class ManagerCommunication extends Communication {
         };
 
 
-        return new ConnectionListener(activity, payloadCallback) {
+        return new ConnectionListener(Objects.requireNonNull(activity), payloadCallback) {
 
             @Override
             protected void onConnectionSuccess(@NonNull String endpointId) {
@@ -182,7 +184,7 @@ public class ManagerCommunication extends Communication {
      *
      * @param activity l'activity corrente
      */
-    public void startRoom(@NonNull Activity activity) {
+    public synchronized void startRoom(@NonNull Activity activity) {
         if(isRoomStarted()) {
             throw new IllegalStateException("Room has been already started");
         }
@@ -338,11 +340,12 @@ public class ManagerCommunication extends Communication {
      * Il dispositivo del gestore non sarà più rilevabile da altri dispositivi
      * nelle vicinanze.
      */
-    public void closeRoom() {
+    public synchronized void closeRoom() {
         if (!isRoomStarted()) {
             throw new IllegalStateException("The room has not been started");
         }
 
+        assert activity != null;
         Nearby.getConnectionsClient(activity).stopAdvertising();
         Nearby.getConnectionsClient(activity).stopAllEndpoints();
 
@@ -353,6 +356,13 @@ public class ManagerCommunication extends Communication {
 
     //TODO: pensare se sincronizzare change of activity
 
+    /**
+     * initialized: false
+     * becomes true after: startRoom()
+     * becomes false after: closeRoom()
+     * @return true: quando è stato chiamato il metodo startRoom() ma non closeRoom(),
+     *         false: altrimenti
+     */
     public boolean isRoomStarted() {
         return activity != null;
     }

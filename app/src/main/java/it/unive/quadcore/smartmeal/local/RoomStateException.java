@@ -1,7 +1,9 @@
 package it.unive.quadcore.smartmeal.local;
 
-// Classe che rappresenta le eccezioni riguardanti lo stato invalido della stanza virtuale.
-// E' un tipo di eccezione a controllo obbligatorio.
+/**
+ * Classe che rappresenta le eccezioni riguardanti lo stato invalido della stanza virtuale.
+ * E' un tipo di eccezione a controllo obbligatorio.
+ */
 public class RoomStateException extends RuntimeException{ // unchecked
     // private boolean roomState;
 

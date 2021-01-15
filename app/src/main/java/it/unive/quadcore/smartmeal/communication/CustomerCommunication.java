@@ -67,7 +67,7 @@ public class CustomerCommunication extends Communication {
     private Consumer<Response<TreeSet<Table>, ? extends TableException>> freeTableListCallback;
 
     /**
-     * default: DISCONNECTED
+     * initialized: DISCONNECTED
      * set to CONNECTED: handleCustomerNameConfirmation()
      * set to DISCONNECTED: disconnect()
      * set to CONNECTING: onConnectionInitiated() in ConnectionListener settato connectionLifecycleCallback()
@@ -77,7 +77,7 @@ public class CustomerCommunication extends Communication {
     private ConnectionState connectionState;
 
     /**
-     * default: false
+     * initialized: false
      * set to true: onSuccessListener di Nearby settato in joinRoom()
      * set to false: stopDiscovery()
      */
@@ -617,9 +617,9 @@ public class CustomerCommunication extends Communication {
     }
 
     /**
-     * default: false
-     * set to true: joinRoom()
-     * set to false: leaveRoom()
+     * initialized: false
+     * becomes true after: joinRoom()
+     * becomes false after: leaveRoom()
      * dipendenze: insideTheRoom == false   ==>   isDiscovering == false && connectionState == DISCONNECTED
      * @return true: quando è stato chiamato il metodo joinRoom() ma non leaveRoom(),
      *         false: altrimenti

@@ -21,7 +21,9 @@ import it.unive.quadcore.smartmeal.model.Menu;
 import it.unive.quadcore.smartmeal.model.Money;
 import it.unive.quadcore.smartmeal.model.Product;
 
-// Classe che raggruppa metodi statici per l'interazione con la memoria secondaria
+/**
+ * Classe che raggruppa metodi statici per l'interazione con la memoria secondaria
+ */
 public class Storage {
     //private static final String TAG = "Storage";
 

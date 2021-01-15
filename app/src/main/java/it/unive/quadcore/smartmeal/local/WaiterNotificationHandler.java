@@ -10,10 +10,9 @@ import it.unive.quadcore.smartmeal.model.Customer;
 import it.unive.quadcore.smartmeal.model.WaiterNotification;
 import it.unive.quadcore.smartmeal.storage.ManagerStorage;
 
-// Gestione RACE CONDITION
-// Si può semplicemente mettere tutti i metodi syncrhonized (per ora gestito così)
-
-// Classe visibile solo a Local
+/**
+ * Classe visibile solo a Local
+ */
 class WaiterNotificationHandler {
 
     // Set ordinato delle notifiche cameriere. E' ordinato sulla base dell'ordinamento naturale della classe WaiterNotification.

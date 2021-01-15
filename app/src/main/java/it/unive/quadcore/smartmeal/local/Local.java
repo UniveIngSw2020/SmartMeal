@@ -20,10 +20,9 @@ import it.unive.quadcore.smartmeal.model.ManagerTable;
 import it.unive.quadcore.smartmeal.model.Table;
 import it.unive.quadcore.smartmeal.model.WaiterNotification;
 
-// Gestione RACE CONDITION
-// In realtà nella versione base (un solo dispositivo gestore) non ce ne dovrebbero essere di tali problemi
-
-// Classe che rappresenta locale
+/**
+ * Classe che rappresenta locale
+ */
 public class Local {
     private static final String TAG = "Local";
 

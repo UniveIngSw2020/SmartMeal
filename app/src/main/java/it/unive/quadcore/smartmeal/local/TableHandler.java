@@ -15,10 +15,9 @@ import it.unive.quadcore.smartmeal.model.ManagerTable;
 import it.unive.quadcore.smartmeal.model.Table;
 import it.unive.quadcore.smartmeal.storage.ManagerStorage;
 
-// Gestione RACE CONDITION
-// Per ora gestisco con synchronized. Si potrebbe usare approcio più efficente tramite Lock lettori-scrittori.
-
-// Visibile solo alla classe Locale (package-private)
+/**
+ * Visibile solo alla classe Locale (package-private)
+ */
 class TableHandler {
 
     // Mappa clienti-tavoli

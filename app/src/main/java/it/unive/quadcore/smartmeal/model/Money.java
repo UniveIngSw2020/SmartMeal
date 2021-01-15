@@ -3,7 +3,9 @@ package it.unive.quadcore.smartmeal.model;
 
 import androidx.annotation.NonNull;
 
-// Classe che rappresenta i prezzi
+/**
+ * Classe che rappresenta i prezzi
+ */
 public class Money {
     private final int value;
 

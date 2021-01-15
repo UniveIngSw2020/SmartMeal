@@ -6,7 +6,12 @@ import androidx.annotation.Nullable;
 import it.unive.quadcore.smartmeal.model.Customer;
 import it.unive.quadcore.smartmeal.model.CustomerHandler;
 
-// Classe che gestisce la costruzione di clienti, assegnandoli un ID progressivo
+/**
+ * Sottoclasse di CustomerHandler, serve alla classe Local per gestire i
+ * LocalCustomer, ovvero i Customer che vengono inseriti manualmente dal gestore.
+ * Dal momento che LocalCustomerHandler è l'unica classe a poter instanziare un LocalCustomer,
+ * garantisce un mantenimento dell'insieme dei LocalCustomer senza rischio di duplicati.
+ */
 class LocalCustomerHandler extends CustomerHandler<LocalCustomerHandler.LocalCustomer> {
     public static class LocalCustomer extends Customer {
         private LocalCustomer(@NonNull String name) {
