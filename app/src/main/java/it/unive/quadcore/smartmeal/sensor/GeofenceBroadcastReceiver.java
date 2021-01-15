@@ -10,7 +10,9 @@ import com.google.android.gms.location.GeofencingEvent;
 
 import java.util.Objects;
 
-// Classe per ricezione eventi geofence
+/**
+ * Classe per ricezione eventi geofence
+ */
 class GeofenceBroadcastReceiver extends BroadcastReceiver {
     private final static String TAG = "GeofenceReceiver";
 

@@ -8,8 +8,10 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
-// Classe che rappresenta Menù. Nella versione più semplice è un insieme di prodotti. In generale è una mappa tra tipi di prodotto
-// (tipi di pasto) e insieme di prodotti di quella categoria.
+/**
+ * Classe che rappresenta Menù. Nella versione più semplice è un insieme di prodotti.
+ * In generale è una mappa tra tipi di prodotto(tipi di pasto) e insieme di prodotti di quella categoria.
+ */
 public class Menu {
 
     // Mappa tra le categorie di pasto e i prodotti

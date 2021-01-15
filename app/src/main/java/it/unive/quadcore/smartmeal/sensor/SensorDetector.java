@@ -31,7 +31,9 @@ import java.util.Objects;
 import it.unive.quadcore.smartmeal.storage.CustomerStorage;
 import it.unive.quadcore.smartmeal.util.PermissionHandler;
 
-// Classe che gestisce la rilevazione di eventi legati ai sensori : rilevazione shake e rilevazione entrata
+/**
+ * Classe che gestisce la rilevazione di eventi legati ai sensori: rilevazione shake e rilevazione entrata
+ */
 public class SensorDetector {
     private final static String TAG = "Sensor";
 

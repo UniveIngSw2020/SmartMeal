@@ -6,6 +6,12 @@ import androidx.annotation.Nullable;
 import it.unive.quadcore.smartmeal.model.Customer;
 import it.unive.quadcore.smartmeal.model.CustomerHandler;
 
+/**
+ * Sottoclasse di CustomerHandler, serve alla classe ManagerCommunication per gestire i
+ * RemoteCustomer, ovvero i Customer che si connettono da CustomerCommunication tramite Nearby.
+ * Dal momento che RemoteCustomerHandler è l'unica classe a poter instanziare un RemoteCustomer,
+ * garantisce un mantenimento dell'insieme dei RemoteCustomer senza rischio di duplicati.
+ */
 class RemoteCustomerHandler extends CustomerHandler<RemoteCustomerHandler.RemoteCustomer> {
     public static class RemoteCustomer extends Customer {
         private RemoteCustomer(String id, String name) {

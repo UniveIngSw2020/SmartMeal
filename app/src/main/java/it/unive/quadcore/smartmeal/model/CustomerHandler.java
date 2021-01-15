@@ -13,7 +13,7 @@ import java.util.Objects;
  * riutilizzo di codice.
  * @param <C> sottoclasse di Customer che dovrà essere implementata da ogni sottoclasse di
  *           CustomerHandler avendo cura di tenerne il costruttore privato in modo da poter gestire
- *           in modo esclusivo il proprio set di Customer C
+ *           in modo esclusivo il proprio insieme di Customer C
  */
 public abstract class CustomerHandler<C extends Customer> {
 

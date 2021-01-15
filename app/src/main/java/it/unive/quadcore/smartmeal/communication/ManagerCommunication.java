@@ -356,6 +356,13 @@ public class ManagerCommunication extends Communication {
 
     //TODO: pensare se sincronizzare change of activity
 
+    /**
+     * initialized: false
+     * becomes true after: startRoom()
+     * becomes false after: closeRoom()
+     * @return true: quando è stato chiamato il metodo startRoom() ma non closeRoom(),
+     *         false: altrimenti
+     */
     public boolean isRoomStarted() {
         return activity != null;
     }
