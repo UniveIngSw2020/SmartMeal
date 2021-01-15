@@ -81,6 +81,7 @@ public abstract class ConnectionListener extends ConnectionLifecycleCallback {
         Log.d(TAG, "onDisconnected");
     }
 
+
     /**
      * Callback chiamata quando la connessione Nearby ha successo
      *

@@ -33,9 +33,27 @@ import it.unive.quadcore.smartmeal.storage.CustomerStorage;
  */
 public class CustomerCommunication extends Communication {
 
-    private enum ConnectionState{
-        DISCONNECTED,   // <==>   managerEndPointID == null
+    /**
+     * Enum che rappresenta i possibili stati della connessione
+     */
+    private enum ConnectionState {
+        /**
+         * Il cliente è disconnesso (dal gestore).
+         * Impostato su `disconnect`.
+         */
+        DISCONNECTED,   // <==> managerEndPointID == null
+
+        /**
+         * Il cliente si sta connettendo al gestore.
+         * Impostato su `onConnectionInitiated`.
+         */
         CONNECTING,
+
+        /**
+         * Il cliente è connesso al gestore (ha ricevuto conferma dal gestore
+         * dopo avergli inviato il nome).
+         * Impostato su `handleCustomerNameConfirmation.
+         */
         CONNECTED
     }
 
@@ -103,24 +121,25 @@ public class CustomerCommunication extends Communication {
         this.isDiscovering = false;
     }
 
-    @Override
-    protected synchronized void sendMessage(@NonNull String toEndpointId, @NonNull Message message) {
-        if (!isInsideTheRoom()) {
-            Log.w(TAG, "trying to send a message while not in the room");
-            return;
-        }
-        super.sendMessage(toEndpointId, message);
-    }
 
-    // eventualmente prendere callback con costruttore
-
-
+    /**
+     * Prova a connettersi alla stanza virtuale del gestore.
+     *
+     * @param activity contesto
+     * @param onConnectionSuccessCallback callback che implementa la logica da attuare
+     *                                    quando la connessione con il getsore ha successo
+     * @param onConnectionFailureCallback callback che implementa la logica da attuare
+     *                                    quando la connessione con il getsore fallisce
+     */
     public synchronized void joinRoom(@NonNull Activity activity, @NonNull Runnable onConnectionSuccessCallback,
                                       @NonNull Runnable onConnectionFailureCallback) {
+
+        // verifica di non essere già all'interno della stanza
         if (isInsideTheRoom()) {
             Log.w(TAG, "joinRoom called, but already inside the room");
             return;
         }
+        // validazione parametri
         Objects.requireNonNull(onConnectionSuccessCallback);
         Objects.requireNonNull(onConnectionFailureCallback);
         Objects.requireNonNull(onCloseRoomCallback);
@@ -130,8 +149,10 @@ public class CustomerCommunication extends Communication {
 
         final EndpointDiscoveryCallback endpointDiscoveryCallback = endpointDiscoveryCallback();
 
+        // timer per fermare la ricerca del gestore
         nearbyTimer(() -> {
             synchronized (CustomerCommunication.this) {
+                // se scade lascia la stanza e esegui segnala il fallimento con la callback
                 if (isNotConnected() && isInsideTheRoom()) {
                     leaveRoom();
                     onConnectionFailureCallback.run();
@@ -140,6 +161,7 @@ public class CustomerCommunication extends Communication {
             }
         });
 
+        // avvia la ricerca del gestore
         DiscoveryOptions discoveryOptions = new DiscoveryOptions.Builder().setStrategy(STRATEGY).build();
         Nearby.getConnectionsClient(activity)
                 .startDiscovery(
@@ -193,7 +215,6 @@ public class CustomerCommunication extends Communication {
     }
 
     private synchronized ConnectionLifecycleCallback connectionLifecycleCallback() {
-
         if(!isInsideTheRoom()) {
             throw new IllegalStateException("connectionLifeCycleCallback should be called only when inside the room");
         }
@@ -282,6 +303,10 @@ public class CustomerCommunication extends Communication {
         };
     }
 
+
+    /* Sezione di codice in cui vengono gestiti i messaggi in ingresso */
+
+
     private void handleRemovedTableMessage() {
         assert onTableRemovedCallback != null;
         onTableRemovedCallback.run();
@@ -294,7 +319,6 @@ public class CustomerCommunication extends Communication {
         Table table = (Table) content;
         onTableChangedCallback.accept(table);
     }
-
 
     private synchronized void handleNotifyWaiterResponse(@NonNull Serializable content) {
         Objects.requireNonNull(content);
@@ -312,15 +336,6 @@ public class CustomerCommunication extends Communication {
         @SuppressWarnings("unchecked")
         Confirmation<? extends TableException> confirmation = (Confirmation<? extends TableException>) content;
         onSelectTableConfirmationCallback.accept(confirmation);
-    }
-
-    private synchronized void sendName() {
-        if(connectionState() == ConnectionState.DISCONNECTED){
-            Log.i(TAG, "trying to send name while disconnected");
-            return;
-        }
-        assert managerEndpointId != null;
-        sendMessage(managerEndpointId, new Message(RequestType.CUSTOMER_NAME, CustomerStorage.getName()));
     }
 
     private synchronized void handleCustomerNameConfirmation(@NonNull Serializable content) {
@@ -362,6 +377,34 @@ public class CustomerCommunication extends Communication {
         @SuppressWarnings("unchecked")
         Response<TreeSet<Table>, TableException> response = (Response<TreeSet<Table>, TableException>) content;
         freeTableListCallback.accept(response);
+    }
+
+
+    /* Fine sezione di codice in cui vengono gestiti i messaggi in ingresso */
+
+
+    /**
+     * Invia un messaggio al dispositivo identificato da `toEndpointId`
+     *
+     * @param toEndpointId id che identifica il destinatario
+     * @param message messaggio da inviare
+     */
+    @Override
+    protected synchronized void sendMessage(@NonNull String toEndpointId, @NonNull Message message) {
+        if (!isInsideTheRoom()) {
+            Log.w(TAG, "trying to send a message while not in the room");
+            return;
+        }
+        super.sendMessage(toEndpointId, message);
+    }
+
+    private synchronized void sendName() {
+        if(connectionState() == ConnectionState.DISCONNECTED){
+            Log.i(TAG, "trying to send name while disconnected");
+            return;
+        }
+        assert managerEndpointId != null;
+        sendMessage(managerEndpointId, new Message(RequestType.CUSTOMER_NAME, CustomerStorage.getName()));
     }
 
 
@@ -497,7 +540,15 @@ public class CustomerCommunication extends Communication {
         this.onTableRemovedCallback = onTableRemovedCallback;
     }
 
-    private Timer nearbyTimer(Runnable onTimeoutCallback) {
+    /**
+     * Esegue `onTimeoutCallback` se scade il timer.
+     * Il timer è pari a 60 secondi.
+     *
+     * @param onTimeoutCallback callback che implementa la logica da attuare se il timer scade
+     *
+     * @return restituisce un nuovo {@link Timer}
+     */
+    private Timer nearbyTimer(@NonNull Runnable onTimeoutCallback) {
         final long NEARBY_TIMEOUT = 60 * 1000;      // 60 secondi
 
         Timer timer = new Timer();
