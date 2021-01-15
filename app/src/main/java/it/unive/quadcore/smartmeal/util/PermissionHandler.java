@@ -69,9 +69,7 @@ public class PermissionHandler {
      * @return i permessi necessari per i sensori
      */
     private static String[] getSensorsRequiredPermissions() {
-        return new String[] {
-                // TODO capire che permessi servono
-        };
+        return new String[] {};
     }
 
 
