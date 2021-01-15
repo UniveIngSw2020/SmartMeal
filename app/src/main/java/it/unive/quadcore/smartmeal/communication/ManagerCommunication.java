@@ -70,7 +70,6 @@ public class ManagerCommunication extends Communication {
     }
 
 
-    // TODO
     private ConnectionLifecycleCallback connectionLifecycleCallback() {
 
         final PayloadCallback payloadCallback = new MessageListener() {
@@ -93,7 +92,6 @@ public class ManagerCommunication extends Communication {
                     return;
                 }
 
-                // TODO continuare
                 switch (message.getRequestType()) {
                     case FREE_TABLE_LIST:
                         handleFreeTableListRequest(endpointId);
@@ -118,7 +116,7 @@ public class ManagerCommunication extends Communication {
 
             @Override
             protected void onConnectionSuccess(@NonNull String endpointId) {
-                // TODO
+                Log.i(TAG, "Connection success");
             }
 
             @Override
@@ -158,7 +156,6 @@ public class ManagerCommunication extends Communication {
     }
 
     private void handleCustomerNameMessage(@NonNull String endpointId, @NonNull Serializable content) {
-        // TODO check exception instead of if & else
         Objects.requireNonNull(content);
         String name = (String) content;
         if(customerHandler.containsCustomer(endpointId)){
@@ -305,7 +302,7 @@ public class ManagerCommunication extends Communication {
         }
 
         if(!customerHandler.containsCustomer(customer)){
-            Log.w(TAG, "trying to notify a not connected customer"); //TODO: forse eccezione
+            Log.w(TAG, "trying to notify a not connected customer");
             return;
         }
 
@@ -327,7 +324,7 @@ public class ManagerCommunication extends Communication {
         }
 
         if(!customerHandler.containsCustomer(customer)){
-            Log.w(TAG, "trying to notify a not connected customer"); //TODO: forse eccezione
+            Log.w(TAG, "trying to notify a not connected customer");
             return;
         }
 
@@ -349,12 +346,9 @@ public class ManagerCommunication extends Communication {
         Nearby.getConnectionsClient(activity).stopAdvertising();
         Nearby.getConnectionsClient(activity).stopAllEndpoints();
 
-        //TODO: customerHandler.removeAllCustomers();
-
         activity = null;
     }
 
-    //TODO: pensare se sincronizzare change of activity
 
     /**
      * initialized: false

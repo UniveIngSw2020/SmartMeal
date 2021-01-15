@@ -37,31 +37,13 @@ public class ChooseTableFragment extends Fragment {
 
     private Button cancelButton;
 
-    // TODO remove (solo per testing)
-    private SortedSet<Table> fakeTableSortedSet;
-
     public ChooseTableFragment() {
         // Required empty public constructor
     }
 
-//    /**
-//     * Use this factory method to create a new instance of
-//     * this fragment using the provided parameters.
-//     *
-//     * @return A new instance of fragment ChooseTableFragment.
-//     */
-//    public static ChooseTableFragment newInstance() {
-//        ChooseTableFragment fragment = new ChooseTableFragment();
-//        return fragment;
-//    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        if (getArguments() != null) {
-//            mParam1 = getArguments().getString(ARG_PARAM1);
-//            mParam2 = getArguments().getString(ARG_PARAM2);
-//        }
     }
 
     @Override
@@ -73,25 +55,15 @@ public class ChooseTableFragment extends Fragment {
 
         joinRoom(root);
 
-        // TODO remove (solo per testing)
-//        fakeTableSortedSet = new TreeSet<>();
-//        fakeTableSortedSet.add(new ManagerTable("a"));
-//        fakeTableSortedSet.add(new ManagerTable("b"));
-//        fakeTableSortedSet.add(new ManagerTable("c"));
-//        setupTableRecyclerView(root, fakeTableSortedSet);
-
         cancelButton = root.findViewById(R.id.cancellation_button);
-        cancelButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                CustomerCommunication.getInstance().leaveRoom();
-                Intent returnIntent = new Intent();
+        cancelButton.setOnClickListener(v -> {
+            CustomerCommunication.getInstance().leaveRoom();
+            Intent returnIntent = new Intent();
 
-                Activity activity = getActivity();
-                if (activity != null) {
-                    activity.setResult(Activity.RESULT_CANCELED, returnIntent);
-                    activity.finish();
-                }
+            Activity activity = getActivity();
+            if (activity != null) {
+                activity.setResult(Activity.RESULT_CANCELED, returnIntent);
+                activity.finish();
             }
         });
         return root;
@@ -126,14 +98,8 @@ public class ChooseTableFragment extends Fragment {
                 new CustomerLeaveRoomAction(activity, activity.getString(R.string.manager_closed_virtual_room)).run();
             });
 
-            // TODO progress bar ?
-//            ProgressBar connectionProgressBar = new ProgressBar(getContext());
-//            connectionProgressBar.setIndeterminate(true);
-//            connectionProgressBar.setVisibility(View.VISIBLE);
-
             Log.i(TAG, "join room");
 
-            // TODO capire se crea problemi (fa sempre la join room ?)
             if (activity != null) {
                 customerCommunication.joinRoom(
                         activity,

@@ -40,7 +40,6 @@ public class CustomerVirtualRoomActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         // verifica di non essere nel menu
-        // TODO testare
         Fragment currentFragment = getSupportFragmentManager()
                 .findFragmentById(R.id.customer_room_fragment_container);
         if (currentFragment instanceof MenuFragment) {

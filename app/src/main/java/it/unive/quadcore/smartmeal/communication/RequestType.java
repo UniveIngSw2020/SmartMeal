@@ -1,7 +1,5 @@
 package it.unive.quadcore.smartmeal.communication;
 
-// TODO Possibile rename in MessageType ?
-
 /**
  * Enum che rappresenta la tipologia del messaggo trasmesso.
  */

@@ -40,10 +40,6 @@ public class SelectAppModeActivity extends AppCompatActivity {
             Storage.initializeStorage(this);
         }
 
-        // TODO attenzione rimuovere per versione finale
-        // commentare / decommentare per poter cambiare modalità app
-        //Storage.setApplicationMode(ApplicationMode.UNDEFINED);
-
         switch (Storage.getApplicationMode()) {
             case UNDEFINED:
                 setContentView(R.layout.activity_select_app_mode);
@@ -78,8 +74,6 @@ public class SelectAppModeActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-
-        // TODO testare, in teoria le altre versioni hanno permessi in automatico
         PermissionHandler.requestAllPermissions(this);
 
         createWelcomeNotificationChannel();
@@ -93,19 +87,6 @@ public class SelectAppModeActivity extends AppCompatActivity {
             return;
         }
 
-//        for (int i = 0; i < permissions.length; i++) {
-//            if (permissions[i] = P)
-//        }
-//
-//
-//        for (int grantResult : grantResults) {
-//            if
-//
-//
-//            if (grantResult == PackageManager.PERMISSION_DENIED) {
-//
-//            }
-//        }
         if(Storage.getApplicationMode()!=ApplicationMode.CUSTOMER){
             Log.w(TAG, "Not a Customer");
             return;

@@ -34,7 +34,6 @@ public class InsertPersonalDataActivity extends AppCompatActivity {
         confirmationButton = findViewById(R.id.confirmation_button);
 
         confirmationButton.setOnClickListener(v -> {
-            // TODO eventaulmente aggiungere controlli validità nome
 
             String customerName = nameEditText.getText().toString().trim();
 

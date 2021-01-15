@@ -228,7 +228,6 @@ public class CustomerCommunication extends Communication {
                         Objects.requireNonNull(endpointId);
                         Objects.requireNonNull(message);
 
-                        // TODO continuare
                         switch (message.getRequestType()) {
                             case CUSTOMER_NAME:
                                 assert message.getContent() != null;
@@ -287,7 +286,7 @@ public class CustomerCommunication extends Communication {
                         Log.i(TAG, "Connection success but not connecting");
                         return;
                     }
-                    stopDiscovery();        // TODO provare a spostare in onConnectionInitiated per performance
+                    stopDiscovery();
                     sendName();
                 }
             }
@@ -356,23 +355,17 @@ public class CustomerCommunication extends Communication {
                 connectionState = ConnectionState.CONNECTED;
                 onConnectionSuccessCallback.run();
 
-                // TODO eventuale stopDiscovery()
-
                 Log.i(TAG, "Connection confirmed");
             } catch (CustomerNotRecognizedException e) {
                 Log.e(TAG, "Connection not confirmed");
                 sendName();
-
-                // TODO eventualmente limitare i tentativi di connessione
             }
         }
     }
 
     private synchronized void handleFreeTableListResponse(@NonNull Serializable content) {
-        //TODO: probabilmente dovremo sincronizzare più cose perché il requireNonNull è soggetto alla concorrenza
         Objects.requireNonNull(content);
         assert freeTableListCallback != null;
-        // if (content instanceof SortedSet) TODO pensarci
 
         @SuppressWarnings("unchecked")
         Response<TreeSet<Table>, TableException> response = (Response<TreeSet<Table>, TableException>) content;
@@ -512,7 +505,7 @@ public class CustomerCommunication extends Communication {
         };
 
         assert managerEndpointId != null;
-        sendMessage(managerEndpointId, new Message(RequestType.FREE_TABLE_LIST, null)); //TODO content
+        sendMessage(managerEndpointId, new Message(RequestType.FREE_TABLE_LIST, null));
     }
 
 
@@ -590,7 +583,6 @@ public class CustomerCommunication extends Communication {
     public synchronized void leaveRoom() {
         if(!isInsideTheRoom()) {
             Log.w(TAG, "trying to leave the Room while not in the Room");
-            // TODO eventuale return
         }
         stopDiscovery();
         disconnect();

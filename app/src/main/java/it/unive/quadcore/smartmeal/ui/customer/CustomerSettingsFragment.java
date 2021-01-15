@@ -197,7 +197,6 @@ public class CustomerSettingsFragment extends Fragment {
         aboutTextView.setOnClickListener(v -> {
             TextView innerAboutTextView = new TextView(getContext());
             innerAboutTextView.setPadding(48, 0, 48, 0);
-            // TODO miglior testo di about
             innerAboutTextView.setText("\nSmartMeal\nDesigned by Quadcore\n");
 
             new AlertDialog.Builder(getContext())

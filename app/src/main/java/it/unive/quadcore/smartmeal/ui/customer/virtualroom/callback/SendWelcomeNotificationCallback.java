@@ -18,7 +18,7 @@ public class SendWelcomeNotificationCallback implements Runnable {
     @NonNull
     private final Activity activity;
 
-    public static final String CHANNEL_ID = "";     // TODO
+    public static final String CHANNEL_ID = "WELCOME_NOTIFICATION_CHANNEL";
 
     public SendWelcomeNotificationCallback(@NonNull Activity activity) {
         Objects.requireNonNull(activity);
@@ -28,13 +28,12 @@ public class SendWelcomeNotificationCallback implements Runnable {
     @Override
     public void run() {
         // crea notifica
-        String notificationTitlePrefix = activity.getString(R.string.welcome_notification_title_prefix);                   // TODO strings.xml
+        String notificationTitlePrefix = activity.getString(R.string.welcome_notification_title_prefix);
         String localName = CustomerStorage.getLocalDescription().getName();
 
 
         // Create an explicit intent for an Activity in your app
         Intent intent = new Intent(activity, CustomerVirtualRoomActivity.class);
-        // TODO capire se vanno bene i flags
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         PendingIntent pendingIntent = PendingIntent.getActivity(activity, 0, intent, 0);
 

@@ -111,8 +111,6 @@ public class CustomerVirtualRoomFragment extends Fragment {
             public void onClick(View v) {
                 CustomerCommunication customerCommunication = CustomerCommunication.getInstance();
 
-
-                // TODO eventualmente se dopo tot secondi non è arrivata la conferma, inviare nuovamente
                 customerCommunication.notifyWaiter(
                         new NotifyWaiterConfirmationCallback(getActivity()),
                         new CustomerLeaveRoomAction(getActivity(), getString(R.string.timeout_error_snackbar))
@@ -123,14 +121,6 @@ public class CustomerVirtualRoomFragment extends Fragment {
         exitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO testare che il metodo sotto funzioni prima di eliminare
-//                Activity activity = getActivity();
-//                if (activity != null) {
-//                    Intent returnIntent = new Intent();
-//                    activity.setResult(Activity.RESULT_CANCELED, returnIntent);
-//                    activity.finish();
-//                }
-
                 showLeaveRoomConfirmationDialog();
 
             }
