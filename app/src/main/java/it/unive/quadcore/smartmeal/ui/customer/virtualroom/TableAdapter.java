@@ -93,7 +93,6 @@ public class TableAdapter extends RecyclerView.Adapter<TableAdapter.TableViewHol
 
                                 CustomerCommunication customerCommunication = CustomerCommunication.getInstance();
 
-                                // TODO pensare alla cosa migliore da fare
                                 if (customerCommunication.isNotConnected()) {
                                     Log.w(TAG, "Trying to select table, while not connected");
                                     new CustomerLeaveRoomAction(activity, activity.getString(R.string.unexpected_error_snackbar)).run();
@@ -127,7 +126,6 @@ public class TableAdapter extends RecyclerView.Adapter<TableAdapter.TableViewHol
                                                             BaseTransientBottomBar.LENGTH_LONG
                                                     ).show();
                                                 } else if (e instanceof AlreadyAssignedTableException) {
-                                                    // TODO: needs to have priority in Local over AlreadyOccupiedException
 
                                                     // 3. Il cliente ha già il tavolo che ha richiesto
                                                     // 4. Il cliente ha già un tavolo (diverso da quello richiesto)

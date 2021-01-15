@@ -100,13 +100,13 @@ class TableHandler {
             throw new NoSuchTableException("The selected table doesn't exist");
         ManagerTable managerTable = tablesMap.get(table) ;
 
-        // Tavolo già occupato
-        if(!freeTableList.contains(managerTable))
-            throw new AlreadyOccupiedTableException("This table is already occupied");
-
         // Cliente ha già un tavolo
         if(customerTableMap.containsKey(customer))
             throw new AlreadyAssignedTableException("This customer already has a table");
+
+        // Tavolo già occupato
+        if(!freeTableList.contains(managerTable))
+            throw new AlreadyOccupiedTableException("This table is already occupied");
 
         // Assegno tavolo al cliente
         customerTableMap.put(customer, managerTable);
