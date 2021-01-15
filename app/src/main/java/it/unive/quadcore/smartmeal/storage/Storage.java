@@ -27,7 +27,6 @@ import it.unive.quadcore.smartmeal.model.Product;
 public class Storage {
     //private static final String TAG = "Storage";
 
-
     protected static boolean initialized = false;
 
     // Shared Preferences. La prima di deafult, ovvero si mettono i settings dell'applicazione. La seconda di uso generico.
@@ -50,9 +49,10 @@ public class Storage {
     @NonNull
     private static final String LOCAL_NAME = "The boat restourant";
     @NonNull
-    private static final String LOCAL_PRESENTATION = "A delicious and friendly pub in a boat-like location" ;
+    private static final String LOCAL_PRESENTATION = "A delicious and friendly pub in a boat-like location.";
     private static final double LOCAL_LATITUDE = 45.49140;
     private static final double LOCAL_LONGITUDE = 11.75941;
+
     /**
      * Rende non instanziabile questa classe.
      */
