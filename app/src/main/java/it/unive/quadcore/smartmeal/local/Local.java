@@ -11,7 +11,6 @@ import java.util.Set;
 import java.util.SortedSet;
 
 import it.unive.quadcore.smartmeal.communication.ManagerCommunication;
-//import it.unive.quadcore.smartmeal.communication.ManagerCommunicationSTUB;
 import it.unive.quadcore.smartmeal.communication.confirmation.Confirmation;
 import it.unive.quadcore.smartmeal.communication.confirmation.ConfirmationDenied;
 import it.unive.quadcore.smartmeal.communication.response.SuccessResponse;
@@ -66,7 +65,6 @@ public class Local {
         waiterNotificationHandler = new WaiterNotificationHandler();
 
         // Creazione oggetto comunicazione
-//        managerCommunication = ManagerCommunicationSTUB.getInstance(); // Per testing
         managerCommunication = ManagerCommunication.getInstance();
 
         // Passo le varie callback allgestore della comunicazione
@@ -107,7 +105,6 @@ public class Local {
 
         // Setto la stanza come aperta
         roomState = true;
-
     }
 
     // Ritorna la lista delle chiamate cameriere
@@ -238,83 +235,4 @@ public class Local {
 
         roomState = false;
     }
-/*
-
-    // TESTING
-
-    public void testingTableHandler(){
-        ((ManagerCommunicationSTUB)managerCommunication).beginTableHandler();
-    }
-
-    public void testingWaiterNotificationHandler(){
-        ((ManagerCommunicationSTUB)managerCommunication).beginWaiterNotificationHandler();
-    }
-
-
-
-
-    public void testingUI() {
-        Customer customer = LocalCustomerHandler.getInstance().addCustomer("Enrico");
-        try {
-            Table table = tableHandler.getFreeTableList().first();
-            tableHandler.assignTable(customer,table);
-        } catch (TableException | NoSuchElementException e ) {
-            e.printStackTrace();
-        }
-        try {
-            waiterNotificationHandler.addNotification(new WaiterNotification(customer));
-        } catch (WaiterNotificationException e) {
-            e.printStackTrace();
-        }
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        Customer customer1 = LocalCustomerHandler.getInstance().addCustomer("Matteo");
-        try {
-            Table table = tableHandler.getFreeTableList().first();
-            tableHandler.assignTable(customer1,table);
-        } catch (TableException | NoSuchElementException e) {
-            e.printStackTrace();
-        }
-        try {
-            waiterNotificationHandler.addNotification(new WaiterNotification(customer1));
-        } catch (WaiterNotificationException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void testingUI_1() {
-        Customer customer = LocalCustomerHandler.getInstance().addCustomer("Giacomo");
-        try {
-            Table table = tableHandler.getFreeTableList().last();
-            tableHandler.assignTable(customer,table);
-        } catch (TableException | NoSuchElementException e) {
-            e.printStackTrace();
-        }
-        try {
-            waiterNotificationHandler.addNotification(new WaiterNotification(customer));
-        } catch (WaiterNotificationException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void testingUI_2() {
-        Customer customer = LocalCustomerHandler.getInstance().addCustomer("Davide");
-        try {
-            Table table = tableHandler.getFreeTableList().last();
-            tableHandler.assignTable(customer,table);
-        } catch (TableException | NoSuchElementException e) {
-            e.printStackTrace();
-        }
-        try {
-            waiterNotificationHandler.addNotification(new WaiterNotification(customer));
-        } catch (WaiterNotificationException e) {
-            e.printStackTrace();
-        }
-    }
-
-
- */
 }
