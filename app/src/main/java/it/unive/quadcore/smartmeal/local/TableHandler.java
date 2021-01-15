@@ -16,7 +16,8 @@ import it.unive.quadcore.smartmeal.model.Table;
 import it.unive.quadcore.smartmeal.storage.ManagerStorage;
 
 /**
- * Visibile solo alla classe Locale (package-private)
+ * Classe che gestisce i tavoli.
+ * (visibile solo a Local)
  */
 class TableHandler {
 

@@ -11,7 +11,8 @@ import it.unive.quadcore.smartmeal.model.WaiterNotification;
 import it.unive.quadcore.smartmeal.storage.ManagerStorage;
 
 /**
- * Classe visibile solo a Local
+ * Classe che gestisce le notifiche cameriere.
+ * (visibile solo a Local)
  */
 class WaiterNotificationHandler {
 
