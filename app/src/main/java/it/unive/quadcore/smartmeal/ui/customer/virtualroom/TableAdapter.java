@@ -73,7 +73,6 @@ public class TableAdapter extends RecyclerView.Adapter<TableAdapter.TableViewHol
         String tableString = activity.getString(R.string.table);
         holder.tableTextView.setText(String.format("%s %s", tableString, table.getId()));
 
-        // TODO migliorare formato codice, ci sono troppi blocchi innestati
         holder.itemView.setOnClickListener(v -> {
             Log.i(TAG, "Table item clicked: " + table.getId());
 
@@ -90,9 +89,6 @@ public class TableAdapter extends RecyclerView.Adapter<TableAdapter.TableViewHol
                             R.string.confirmation_button_text,
                             (dialog, which) -> {
                                 Log.i(TAG, "Table selection confirmed: " + table.getId());
-
-
-                               // startCustomerVirtualRoomFragment(table);    // TODO da rimuovere (solo per testing)
 
 
                                 CustomerCommunication customerCommunication = CustomerCommunication.getInstance();
@@ -166,7 +162,6 @@ public class TableAdapter extends RecyclerView.Adapter<TableAdapter.TableViewHol
     }
 
     private void startCustomerVirtualRoomFragment(Table table) {
-        // TODO probabilmente si può fare meglio (ma va bene anche così)
         CustomerVirtualRoomFragment customerVirtualRoomFragment =
                 CustomerVirtualRoomFragment.newInstance(table.getId());
 

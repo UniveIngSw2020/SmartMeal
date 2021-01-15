@@ -57,10 +57,6 @@ class TableHandler {
     // Ritorna la lista di tavoli liberi
     @NonNull
     synchronized TreeSet<ManagerTable> getFreeTableList() {
-        // La lista di tavoli liberi è vuota
-        /*if(freeTableList==null || freeTableList.size()==0)
-            throw new TableException("There aren't free tables");*/
-
         // Ritorna lista tavoli liberi (una copia)
         return new TreeSet<>(freeTableList) ;
     }
@@ -72,8 +68,6 @@ class TableHandler {
         // Tutti i tavoli nella mappa customer-tables
 
         // Non c'è nessun tavolo occupato
-       /* if(assignedTableList.size() == 0)
-            throw new TableException("There aren't assigned tables");*/
 
         return new TreeSet<>(customerTableMap.values());
     }
@@ -138,8 +132,7 @@ class TableHandler {
     synchronized ManagerTable getTable(@NonNull Customer customer) throws TableException {
         // Cliente non ha un tavolo
         if(!customerTableMap.containsKey(customer))
-            throw new TableException("This customer doesn't have a table assigned"); //TODO: Forse null? altrimenti serve un metodo boolean hasTable(Customer customer)
-
+            throw new TableException("This customer doesn't have a table assigned");
         // Ritorno tavolo occupato (posso ritornarlo direttamente senza copiarlo perchè è immutable)
         return Objects.requireNonNull(customerTableMap.get(customer));
     }
@@ -154,13 +147,8 @@ class TableHandler {
 
         // Tavolo non è occupato da nessun cliente
         if(freeTableList.contains(managerTable))
-            throw new TableException("This table isn't assigned"); //TODO: Forse null? altrimenti serve un metodo boolean hasCustomer(Table table)
+            throw new TableException("This table isn't assigned");
 
-        /*Customer customer = null;
-        for(Customer supp : customerTableMap.keySet()){
-            if(customerTableMap.get(supp).equals(managerTable))
-                customer = supp ;
-        }*/
         // Itero la mappa per trovare cliente con quel tavolo associato
         // Uso Iterator e non smart for perchè così posso fermarmi anticipatamente (più efficente)
         Iterator<Customer> it = customerTableMap.keySet().iterator();
@@ -168,8 +156,6 @@ class TableHandler {
         Customer customer = null;
         while(it.hasNext() && !found){
             customer = it.next();
-            /* if(customerTableMap.get(customer).equals(managerTable))
-                found = true;*/
             if(getTable(customer).equals(managerTable))
                 found = true;
         }

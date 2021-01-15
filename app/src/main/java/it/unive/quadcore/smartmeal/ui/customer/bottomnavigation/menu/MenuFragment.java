@@ -34,7 +34,6 @@ public class MenuFragment extends Fragment {
     }
 
     private void setupMenuRecyclerView(View root) {
-        // TODO aggiungere sezioni a RecyclerView
         Activity activity = getActivity();
         if (activity == null) {
             return;
